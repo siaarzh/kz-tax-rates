@@ -26,6 +26,63 @@ KATO_CSV = REPO_ROOT / "data" / "kato.csv"
 
 KATO_RE = re.compile(r"^\d{9}$")
 
+# A file extension at the end of the value: no person's name ends ".py" or
+# ".json", so this is a strong, narrow signal that the value is a path rather
+# than an attribution.
+FILENAME_RE = re.compile(r"\.[A-Za-z0-9]{1,5}$")
+
+# What a person's name is allowed to be made of: letters (Latin or Cyrillic),
+# spaces, a hyphen, an apostrophe, or a dot used as an initial. Nothing else --
+# in particular, no digits, no slashes, no underscores.
+PERSON_NAME_RE = re.compile(r"^[A-Za-zА-Яа-яЁё\-\.\' ]+$")
+
+# Describes a PROCESS, not a PERSON, wherever it appears as a whole word. Kept
+# open on the underlying idea rather than on today's known phrasings: this is
+# the same guard that was reopened twice already by a fix that matched only the
+# two sentences known at the time ("machine-extracted", "NOT human-verified")
+# -- \w* lets each root catch its own inflections (extract/extracted/
+# extraction, auto/auto-extracted, reader/readers) instead of needing a new
+# entry per form.
+PROCESS_WORD_RE = re.compile(
+    r"\b(machine|extract\w*|agent|auto\w*|script\w*|bot|model|deterministic\w*|reader\w*)\b",
+    re.IGNORECASE,
+)
+
+# Known AI/tool product names. Unlike PROCESS_WORD_RE this is a bounded,
+# rarely-changing list of proper nouns -- not an attempt to cover every way a
+# status sentence could be phrased, which is the trap this guard was reopened
+# by twice already. SPEC.md: verified_by is never an agent identifier.
+TOOL_NAME_RE = re.compile(
+    r"\b(claude|gpt\w*|chatgpt|gemini|llama|copilot|codex|sonnet|opus|haiku"
+    r"|anthropic|openai|deepseek|mistral)\b",
+    re.IGNORECASE,
+)
+
+
+def _verified_by_problem(value: str) -> str | None:
+    """None when `value` could plausibly be a person's name; a noun phrase when not.
+
+    Refuses when unsure rather than accepting: every branch below rejects a
+    *class* of non-person value (path, filename, process description, tool
+    name, or a character a name would not contain), so a new value need only
+    fall into one of those classes to be caught -- it does not need to match a
+    phrasing seen before.
+    """
+    if "/" in value or "\\" in value:
+        return "a path"
+    if FILENAME_RE.search(value):
+        return "a filename"
+    if any(char.isdigit() for char in value):
+        return "a version or identifier (it contains a digit)"
+    if PROCESS_WORD_RE.search(value):
+        return "a description of a process"
+    if TOOL_NAME_RE.search(value):
+        return "a known AI/tool product name"
+    if not PERSON_NAME_RE.match(value):
+        return "something with characters a person's name would not have"
+    return None
+
+
 # The statutory band. НК РК art. 726 sets a 0.04 base which a maslikhat may move
 # by +-50%, so nothing outside 0.02..0.06 can be a real rate.
 RATE_MIN = 0.02
@@ -42,6 +99,7 @@ FIELDS = [
     "valid_to",
     "decision_ref",
     "source_url",
+    "extraction_method",
     "verified_by",
     "verified_at",
 ]
@@ -133,9 +191,18 @@ def validate_row(row: dict[str, str], line: int) -> list[str]:
     if not KATO_RE.match(kato):
         fail(f"kato {kato!r} is not nine digits")
 
-    for field in ("decision_ref", "source_url", "verified_by", "kato_version"):
+    for field in ("decision_ref", "source_url", "extraction_method", "kato_version"):
         if not (row.get(field) or "").strip():
             fail(f"{field} is empty")
+
+    # verified_by is optional (empty until a person actually checks the row),
+    # but whatever is there must plausibly BE a person's name: never a status
+    # sentence, a filename, a path, or an agent/tool identifier (SPEC.md).
+    verified_by = (row.get("verified_by") or "").strip()
+    if verified_by:
+        problem = _verified_by_problem(verified_by)
+        if problem:
+            fail(f"verified_by {verified_by!r} looks like {problem}, not a person's name")
 
     raw_rate = (row.get("rate") or "").strip()
     try:

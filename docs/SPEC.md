@@ -73,8 +73,8 @@ kz-tax-rates/
 ### `data/rates.csv`
 
 ```csv
-kato,kato_version,name_ru,name_kk,rate,base_rate,valid_from,valid_to,decision_ref,source_url,verified_by,verified_at
-750000000,NK RK 11-2025,г. Алматы,Алматы қаласы,0.03,0.04,2026-01-01,2026-12-31,Решение маслихата г. Алматы №256 от 28.11.2025,https://adilet.zan.kz/rus/docs/...,serzhan,2026-08-12
+kato,kato_version,name_ru,name_kk,rate,base_rate,valid_from,valid_to,decision_ref,source_url,extraction_method,verified_by,verified_at
+750000000,NK RK 11-2025,г. Алматы,Алматы қаласы,0.03,0.04,2026-01-01,2026-12-31,Решение маслихата г. Алматы №256 от 28.11.2025,https://adilet.zan.kz/rus/docs/...,deterministic-readers,serzhan,2026-08-12
 ```
 
 | Field | Type | Notes |
@@ -86,7 +86,8 @@ kato,kato_version,name_ru,name_kk,rate,base_rate,valid_from,valid_to,decision_re
 | `valid_from` / `valid_to` | ISO date | Decisions are enacted per calendar year. |
 | `decision_ref` | string | Human-readable citation, verbatim from the act. |
 | `source_url` | url | Direct link to the primary source. **Required.** No row without one. |
-| `verified_by` | string | Who eyeballed the source. Never an agent. |
+| `extraction_method` | string | How the number was obtained, e.g. `deterministic-readers`. **Required**, and distinct from `verified_by`: a row can be extracted without being verified. |
+| `verified_by` | string | Who eyeballed the source. Never an agent, never a status sentence — a person's name, or empty when nobody has checked the row yet. |
 | `verified_at` | ISO date | When. |
 
 Primary key: `(kato, kato_version, valid_from)`.
@@ -267,7 +268,9 @@ opened.
 - `rate` is a fraction, not a percentage — reject anything > 1
 - `kato` matches `^\d{9}$` and exists in `data/kato.csv`
 - No overlapping `valid_from`/`valid_to` for the same `(kato, kato_version)`
-- `verified_by` is not empty
+- `extraction_method` is not empty; `verified_by` may be empty but, if set, may
+  never be the old status sentence (`machine-extracted, NOT human-verified`) —
+  that fact now lives in `extraction_method` (plan 9)
 
 The `rate > 1` check exists because the single most likely data-entry error is storing `3`
 instead of `0.03`. This is not hypothetical — the exact bug appeared in the owner's own tax

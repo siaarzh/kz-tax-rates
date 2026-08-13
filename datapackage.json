@@ -72,11 +72,15 @@
             }
           },
           {
-            "name": "verified_by",
+            "name": "extraction_method",
             "type": "string",
             "constraints": {
               "required": true
             }
+          },
+          {
+            "name": "verified_by",
+            "type": "string"
           },
           {
             "name": "verified_at",

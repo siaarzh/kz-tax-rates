@@ -75,11 +75,20 @@ TAX_CODE_NAME = (
 )
 TAX_CODE_URL = "https://adilet.zan.kz/rus/docs/K2500000214"
 
-# What scripts/extract_rates.py writes into verified_by for a row it read by
-# rule rather than a person reading it. The footer and llms.txt say which of the
-# two a reader is looking at, and they count rather than assert it, so the
-# sentence changes by itself the day a person verifies a row.
-MACHINE_MARKER = "machine-extracted"
+# extract_rates.py writes "deterministic-readers" into extraction_method for
+# a row it read by rule rather than a person reading it (plan 9 split this out
+# of verified_by, which now holds a person's name or stays empty — never a
+# status sentence). The footer and llms.txt say which of the two a reader is
+# looking at, and they count from extraction_method and verified_by rather
+# than assert it, so the sentence changes by itself the day a person verifies
+# a row or a new extraction method is added.
+#
+# extraction_method values an automated reader actually writes. New methods
+# must be added here explicitly (plan 9, F2): counting `machine_extracted`
+# from the ABSENCE of a verifier let a human-transcribed, unverified row
+# publish as machine-extracted with nothing going red, because "human
+# verified" and "how the number was obtained" are two different questions.
+MACHINE_EXTRACTION_METHODS = {"deterministic-readers"}
 
 # Searchable in both languages, because the reader typing «упрощенка ставка
 # район» and the crawler indexing "Kazakhstan tax rate dataset" are looking for
@@ -220,13 +229,27 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
         }
 
     # Counted, never asserted. A consumer reading rates.json alone cannot see
-    # verified_by (it is a CSV column and not part of a rate entry), so without
-    # this they would have no way to tell a row a person read from a row a
-    # parser produced — and that difference is the whole subject of the project.
+    # verified_by or extraction_method (they are CSV columns, not part of a
+    # rate entry), so without this they would have no way to tell a row a
+    # person checked from a row a machine produced — and that difference is
+    # the whole subject of the project.
+    #
+    # human_verified: a row is human-verified when verified_by actually names
+    # someone. machine_extracted: read from extraction_method itself, not from
+    # the absence of a verifier — the two are independent questions (a machine
+    # can extract a row a person later verifies; a person can transcribe a row
+    # nobody has separately verified), and conflating them let a row obtained
+    # by a method never added to MACHINE_EXTRACTION_METHODS publish as
+    # "machine-extracted" purely because nobody had checked it yet.
     #
     # Additive and top level, so schema_version stays 1.0: a consumer reading
     # the keys it already knows is unaffected.
-    human = sum(1 for row in rows if MACHINE_MARKER not in row.get("verified_by", ""))
+    human = sum(1 for row in rows if (row.get("verified_by") or "").strip())
+    machine = sum(
+        1
+        for row in rows
+        if (row.get("extraction_method") or "").strip() in MACHINE_EXTRACTION_METHODS
+    )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -238,7 +261,7 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
         "verification": {
             "rows": len(rows),
             "human_verified": human,
-            "machine_extracted": len(rows) - human,
+            "machine_extracted": machine,
         },
         "years": years,
     }
@@ -634,7 +657,14 @@ RATES_FIELDS: list[dict[str, Any]] = [
     {"name": "valid_to", "type": "date"},
     {"name": "decision_ref", "type": "string"},
     {"name": "source_url", "type": "string", "format": "uri", "constraints": {"required": True}},
-    {"name": "verified_by", "type": "string", "constraints": {"required": True}},
+    # How the number was obtained. Always set — unlike verified_by below, this
+    # one is required, because every row has a method even before anyone has
+    # checked it (plan 9).
+    {"name": "extraction_method", "type": "string", "constraints": {"required": True}},
+    # A person's name, or empty until someone has actually checked the row.
+    # Not required: the schema promises a name here, never a status sentence,
+    # and "nobody has verified this yet" is a legitimate, common state.
+    {"name": "verified_by", "type": "string"},
     {"name": "verified_at", "type": "date"},
 ]
 
@@ -766,14 +796,18 @@ def render_llms_txt(payload: dict[str, Any]) -> str:
         "## Provenance",
         "",
         "Every row carries source_url, a link to the maslikhat decision the rate was read from,",
-        "and verified_by, naming who read it. No rate is invented, inferred or filled in.",
+        "a decision_ref naming that decision, and an extraction_method saying how the number was",
+        "obtained. verified_by names a person only once one has actually checked the row against",
+        "source_url; until then it stays empty, and it is empty on every row today. No rate is",
+        "invented, inferred or filled in.",
         "",
         f"Rows: {counts['rows']}. Read by a person: {counts['human_verified']}. "
         f"Extracted from the decision by rule: {counts['machine_extracted']}.",
         "",
         "A machine-extracted row was parsed out of the published decision text by",
-        "scripts/extract_rates.py, not produced by a language model. It is still unverified by",
-        "a human being: open source_url before relying on the number.",
+        "scripts/extract_rates.py, not produced by a language model, and extraction_method says",
+        "so. That is not the same claim as verification: open source_url and check the row",
+        "yourself before relying on it, whatever verified_by holds.",
         "",
         f"Base rate and the ±50% a maslikhat may apply: {TAX_CODE_NAME}",
         f"{TAX_CODE_URL}",
