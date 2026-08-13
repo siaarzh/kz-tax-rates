@@ -1,8 +1,7 @@
 {
   "rule": "oblast from two agreeing sources, then exactly one district inside it",
   "counts": {
-    "mapped": 151,
-    "unmapped-no-oblast-named-in-text": 4,
+    "mapped": 155,
     "unmapped-no-district-matched": 6,
     "unmapped-jurisdiction-type-not-stated": 2
   },
@@ -20,7 +19,8 @@
       "name_ru": "г.Астана",
       "candidates": [
         "г.Астана"
-      ]
+      ],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25BA00262M",
@@ -34,6 +34,7 @@
       "candidates": [
         "Кокшетау Г.А."
       ],
+      "oblast_source": "both",
       "kato": "111000000",
       "name_ru": "Кокшетау Г.А.",
       "name_kk": "Көкшетау Қ.Ә.",
@@ -51,6 +52,7 @@
       "candidates": [
         "Степногорск Г.А."
       ],
+      "oblast_source": "both",
       "kato": "111800000",
       "name_ru": "Степногорск Г.А.",
       "name_kk": "Степногор Қ.Ә.",
@@ -68,6 +70,7 @@
       "candidates": [
         "Аккольский район"
       ],
+      "oblast_source": "both",
       "kato": "113200000",
       "name_ru": "Аккольский район",
       "name_kk": "Ақкөл ауданы",
@@ -85,6 +88,7 @@
       "candidates": [
         "Аршалынский район"
       ],
+      "oblast_source": "both",
       "kato": "113400000",
       "name_ru": "Аршалынский район",
       "name_kk": "Аршалы ауданы",
@@ -102,6 +106,7 @@
       "candidates": [
         "Атбасарский район"
       ],
+      "oblast_source": "both",
       "kato": "113800000",
       "name_ru": "Атбасарский район",
       "name_kk": "Атбасар ауданы",
@@ -119,6 +124,7 @@
       "candidates": [
         "Астраханский район"
       ],
+      "oblast_source": "both",
       "kato": "113600000",
       "name_ru": "Астраханский район",
       "name_kk": "Астрахан ауданы",
@@ -136,6 +142,7 @@
       "candidates": [
         "Буландынский район"
       ],
+      "oblast_source": "both",
       "kato": "114000000",
       "name_ru": "Буландынский район",
       "name_kk": "Бұланды ауданы",
@@ -153,6 +160,7 @@
       "candidates": [
         "Егиндыкольский район"
       ],
+      "oblast_source": "both",
       "kato": "114400000",
       "name_ru": "Егиндыкольский район",
       "name_kk": "Егіндікөл ауданы",
@@ -170,6 +178,7 @@
       "candidates": [
         "Ерейментауский район"
       ],
+      "oblast_source": "both",
       "kato": "114600000",
       "name_ru": "Ерейментауский район",
       "name_kk": "Ерейментау ауданы",
@@ -187,6 +196,7 @@
       "candidates": [
         "район Биржан сал"
       ],
+      "oblast_source": "both",
       "kato": "114500000",
       "name_ru": "район Биржан сал",
       "name_kk": "Біржан сал ауданы",
@@ -204,6 +214,7 @@
       "candidates": [
         "Есильский район"
       ],
+      "oblast_source": "both",
       "kato": "114800000",
       "name_ru": "Есильский район",
       "name_kk": "Есіл ауданы",
@@ -221,6 +232,7 @@
       "candidates": [
         "Жаркаинский район"
       ],
+      "oblast_source": "both",
       "kato": "115400000",
       "name_ru": "Жаркаинский район",
       "name_kk": "Жарқайың ауданы",
@@ -238,6 +250,7 @@
       "candidates": [
         "Зерендинский район"
       ],
+      "oblast_source": "both",
       "kato": "115600000",
       "name_ru": "Зерендинский район",
       "name_kk": "Зеренді ауданы",
@@ -255,6 +268,7 @@
       "candidates": [
         "Коргалжынский район"
       ],
+      "oblast_source": "both",
       "kato": "116000000",
       "name_ru": "Коргалжынский район",
       "name_kk": "Қорғалжын ауданы",
@@ -272,6 +286,7 @@
       "candidates": [
         "Сандыктауский район"
       ],
+      "oblast_source": "both",
       "kato": "116400000",
       "name_ru": "Сандыктауский район",
       "name_kk": "Сандықтау ауданы",
@@ -289,6 +304,7 @@
       "candidates": [
         "Целиноградский район"
       ],
+      "oblast_source": "both",
       "kato": "116600000",
       "name_ru": "Целиноградский район",
       "name_kk": "Целиноград ауданы",
@@ -300,8 +316,17 @@
       "year": 2026,
       "decision_ref": null,
       "source_url": "https://adilet.zan.kz/rus/docs/G25BR08443M",
-      "outcome": "unmapped-no-oblast-named-in-text",
-      "body": "Акмолинская область"
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "Шортандинский район"
+      ],
+      "oblast_source": "body-only",
+      "kato": "116800000",
+      "name_ru": "Шортандинский район",
+      "name_kk": "Шортанды ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BS08362M",
@@ -315,6 +340,7 @@
       "candidates": [
         "Бурабайский район"
       ],
+      "oblast_source": "both",
       "kato": "117000000",
       "name_ru": "Бурабайский район",
       "name_kk": "Бурабай ауданы",
@@ -332,6 +358,7 @@
       "candidates": [
         "Косшы Г.А."
       ],
+      "oblast_source": "both",
       "kato": "111600000",
       "name_ru": "Косшы Г.А.",
       "name_kk": "Қосшы Қ.Ә.",
@@ -349,6 +376,7 @@
       "candidates": [
         "Актобе Г.А."
       ],
+      "oblast_source": "both",
       "kato": "151000000",
       "name_ru": "Актобе Г.А.",
       "name_kk": "Ақтөбе Қ.Ә.",
@@ -366,6 +394,7 @@
       "candidates": [
         "Айтекебийский район"
       ],
+      "oblast_source": "both",
       "kato": "153400000",
       "name_ru": "Айтекебийский район",
       "name_kk": "Әйтеке би ауданы",
@@ -383,6 +412,7 @@
       "candidates": [
         "Алгинский район"
       ],
+      "oblast_source": "both",
       "kato": "153200000",
       "name_ru": "Алгинский район",
       "name_kk": "Алға ауданы",
@@ -400,6 +430,7 @@
       "candidates": [
         "Байганинский район"
       ],
+      "oblast_source": "both",
       "kato": "153600000",
       "name_ru": "Байганинский район",
       "name_kk": "Байғанин ауданы",
@@ -417,6 +448,7 @@
       "candidates": [
         "Каргалинский район"
       ],
+      "oblast_source": "both",
       "kato": "154000000",
       "name_ru": "Каргалинский район",
       "name_kk": "Қарғалы ауданы",
@@ -431,7 +463,8 @@
       "outcome": "unmapped-no-district-matched",
       "oblast_kato": "150000000",
       "oblast_name": "Актюбинская область",
-      "candidates": []
+      "candidates": [],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25CH00266M",
@@ -445,6 +478,7 @@
       "candidates": [
         "Мартукский район"
       ],
+      "oblast_source": "both",
       "kato": "154600000",
       "name_ru": "Мартукский район",
       "name_kk": "Мәртөк ауданы",
@@ -462,6 +496,7 @@
       "candidates": [
         "Мугалжарский район"
       ],
+      "oblast_source": "both",
       "kato": "154800000",
       "name_ru": "Мугалжарский район",
       "name_kk": "Мұғалжар ауданы",
@@ -479,6 +514,7 @@
       "candidates": [
         "Темирский район"
       ],
+      "oblast_source": "both",
       "kato": "155600000",
       "name_ru": "Темирский район",
       "name_kk": "Темір ауданы",
@@ -496,6 +532,7 @@
       "candidates": [
         "Уилский район"
       ],
+      "oblast_source": "both",
       "kato": "155200000",
       "name_ru": "Уилский район",
       "name_kk": "Ойыл ауданы",
@@ -513,6 +550,7 @@
       "candidates": [
         "Хромтауский район"
       ],
+      "oblast_source": "both",
       "kato": "156000000",
       "name_ru": "Хромтауский район",
       "name_kk": "Хромтау ауданы",
@@ -530,6 +568,7 @@
       "candidates": [
         "Шалкарский район"
       ],
+      "oblast_source": "both",
       "kato": "156400000",
       "name_ru": "Шалкарский район",
       "name_kk": "Шалқар ауданы",
@@ -547,6 +586,7 @@
       "candidates": [
         "Қонаев Г.А."
       ],
+      "oblast_source": "both",
       "kato": "191000000",
       "name_ru": "Қонаев Г.А.",
       "name_kk": "Қонаев Қ.Ә.",
@@ -564,6 +604,7 @@
       "candidates": [
         "Жамбылский район"
       ],
+      "oblast_source": "both",
       "kato": "194200000",
       "name_ru": "Жамбылский район",
       "name_kk": "Жамбыл ауданы",
@@ -581,6 +622,7 @@
       "candidates": [
         "Енбекшиказахский район"
       ],
+      "oblast_source": "both",
       "kato": "194000000",
       "name_ru": "Енбекшиказахский район",
       "name_kk": "Еңбекшіқазақ ауданы",
@@ -598,6 +640,7 @@
       "candidates": [
         "Илийский район"
       ],
+      "oblast_source": "both",
       "kato": "196800000",
       "name_ru": "Илийский район",
       "name_kk": "Іле ауданы",
@@ -615,6 +658,7 @@
       "candidates": [
         "Карасайский район"
       ],
+      "oblast_source": "both",
       "kato": "195200000",
       "name_ru": "Карасайский район",
       "name_kk": "Қарасай ауданы",
@@ -632,6 +676,7 @@
       "candidates": [
         "Талгарский район"
       ],
+      "oblast_source": "both",
       "kato": "196200000",
       "name_ru": "Талгарский район",
       "name_kk": "Талғар ауданы",
@@ -649,6 +694,7 @@
       "candidates": [
         "Уйгурский район"
       ],
+      "oblast_source": "both",
       "kato": "196600000",
       "name_ru": "Уйгурский район",
       "name_kk": "Ұйғыр ауданы",
@@ -666,6 +712,7 @@
       "candidates": [
         "Алатау Г.А."
       ],
+      "oblast_source": "both",
       "kato": "191800000",
       "name_ru": "Алатау Г.А.",
       "name_kk": "Алатау Қ.Ә.",
@@ -684,7 +731,8 @@
       "name_ru": "г.Шымкент",
       "candidates": [
         "г.Шымкент"
-      ]
+      ],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25FA51272M",
@@ -698,6 +746,7 @@
       "candidates": [
         "Семей Г.А."
       ],
+      "oblast_source": "both",
       "kato": "101000000",
       "name_ru": "Семей Г.А.",
       "name_kk": "Семей Қ.Ә.",
@@ -715,6 +764,7 @@
       "candidates": [
         "Курчатов Г.А."
       ],
+      "oblast_source": "both",
       "kato": "101800000",
       "name_ru": "Курчатов Г.А.",
       "name_kk": "Курчатов Қ.Ә.",
@@ -729,7 +779,8 @@
       "outcome": "unmapped-no-district-matched",
       "oblast_kato": "100000000",
       "oblast_name": "область Абай",
-      "candidates": []
+      "candidates": [],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25FD00333M",
@@ -743,6 +794,7 @@
       "candidates": [
         "Абайский район"
       ],
+      "oblast_source": "both",
       "kato": "103200000",
       "name_ru": "Абайский район",
       "name_kk": "Абай ауданы",
@@ -760,6 +812,7 @@
       "candidates": [
         "Аягозский район"
       ],
+      "oblast_source": "both",
       "kato": "103600000",
       "name_ru": "Аягозский район",
       "name_kk": "Аягөз ауданы",
@@ -777,6 +830,7 @@
       "candidates": [
         "Бескарагайский район"
       ],
+      "oblast_source": "both",
       "kato": "103800000",
       "name_ru": "Бескарагайский район",
       "name_kk": "Бесқарағай ауданы",
@@ -794,6 +848,7 @@
       "candidates": [
         "Бородулихинский район"
       ],
+      "oblast_source": "both",
       "kato": "104000000",
       "name_ru": "Бородулихинский район",
       "name_kk": "Бородулиха ауданы",
@@ -811,6 +866,7 @@
       "candidates": [
         "Жарминский район"
       ],
+      "oblast_source": "both",
       "kato": "104200000",
       "name_ru": "Жарминский район",
       "name_kk": "Жарма ауданы",
@@ -828,6 +884,7 @@
       "candidates": [
         "Кокпектинский район"
       ],
+      "oblast_source": "both",
       "kato": "104400000",
       "name_ru": "Кокпектинский район",
       "name_kk": "Көкпекті ауданы",
@@ -845,6 +902,7 @@
       "candidates": [
         "район Жаңасемей"
       ],
+      "oblast_source": "both",
       "kato": "104100000",
       "name_ru": "район Жаңасемей",
       "name_kk": "Жаңасемей ауданы",
@@ -862,6 +920,7 @@
       "candidates": [
         "Жуалынский район"
       ],
+      "oblast_source": "both",
       "kato": "314200000",
       "name_ru": "Жуалынский район",
       "name_kk": "Жуалы ауданы",
@@ -879,6 +938,7 @@
       "candidates": [
         "Мойынкумский район"
       ],
+      "oblast_source": "both",
       "kato": "315600000",
       "name_ru": "Мойынкумский район",
       "name_kk": "Мойынқұм ауданы",
@@ -890,8 +950,17 @@
       "year": 2026,
       "decision_ref": null,
       "source_url": "https://adilet.zan.kz/rus/docs/G25GH00415M",
-      "outcome": "unmapped-no-oblast-named-in-text",
-      "body": "Жамбылская область"
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "район Турара Рыскулова"
+      ],
+      "oblast_source": "body-only",
+      "kato": "315000000",
+      "name_ru": "район Турара Рыскулова",
+      "name_kk": "Тұрар Рысқұлов ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25GI00454M",
@@ -905,6 +974,7 @@
       "candidates": [
         "Сарысуский район"
       ],
+      "oblast_source": "both",
       "kato": "316000000",
       "name_ru": "Сарысуский район",
       "name_kk": "Сарысу ауданы",
@@ -922,6 +992,7 @@
       "candidates": [
         "Жезказган Г.А."
       ],
+      "oblast_source": "both",
       "kato": "621000000",
       "name_ru": "Жезказган Г.А.",
       "name_kk": "Жезқазған Қ.Ә.",
@@ -939,6 +1010,7 @@
       "candidates": [
         "Сатпаев Г.А."
       ],
+      "oblast_source": "both",
       "kato": "622000000",
       "name_ru": "Сатпаев Г.А.",
       "name_kk": "Сәтбаев Қ.Ә.",
@@ -956,6 +1028,7 @@
       "candidates": [
         "Каражал Г.А."
       ],
+      "oblast_source": "both",
       "kato": "621800000",
       "name_ru": "Каражал Г.А.",
       "name_kk": "Қаражал Қ.Ә.",
@@ -973,6 +1046,7 @@
       "candidates": [
         "Улытауский район"
       ],
+      "oblast_source": "both",
       "kato": "623800000",
       "name_ru": "Улытауский район",
       "name_kk": "Ұлытау ауданы",
@@ -990,6 +1064,7 @@
       "candidates": [
         "Талдыкорган Г.А."
       ],
+      "oblast_source": "both",
       "kato": "331000000",
       "name_ru": "Талдыкорган Г.А.",
       "name_kk": "Талдықорған Қ.Ә.",
@@ -1007,6 +1082,7 @@
       "candidates": [
         "Текели Г.А."
       ],
+      "oblast_source": "both",
       "kato": "331800000",
       "name_ru": "Текели Г.А.",
       "name_kk": "Текелі Қ.Ә.",
@@ -1024,6 +1100,7 @@
       "candidates": [
         "Аксуский район"
       ],
+      "oblast_source": "both",
       "kato": "333200000",
       "name_ru": "Аксуский район",
       "name_kk": "Ақсу ауданы",
@@ -1041,6 +1118,7 @@
       "candidates": [
         "Алакольский район"
       ],
+      "oblast_source": "both",
       "kato": "333400000",
       "name_ru": "Алакольский район",
       "name_kk": "Алакөл ауданы",
@@ -1058,6 +1136,7 @@
       "candidates": [
         "Ескельдинский район"
       ],
+      "oblast_source": "both",
       "kato": "333600000",
       "name_ru": "Ескельдинский район",
       "name_kk": "Ескелді ауданы",
@@ -1075,6 +1154,7 @@
       "candidates": [
         "Каратальский район"
       ],
+      "oblast_source": "both",
       "kato": "334400000",
       "name_ru": "Каратальский район",
       "name_kk": "Қаратал ауданы",
@@ -1092,6 +1172,7 @@
       "candidates": [
         "Кербулакский район"
       ],
+      "oblast_source": "both",
       "kato": "334000000",
       "name_ru": "Кербулакский район",
       "name_kk": "Кербұлақ ауданы",
@@ -1109,6 +1190,7 @@
       "candidates": [
         "Коксуский район"
       ],
+      "oblast_source": "both",
       "kato": "334200000",
       "name_ru": "Коксуский район",
       "name_kk": "Көксу ауданы",
@@ -1126,6 +1208,7 @@
       "candidates": [
         "Панфиловский район"
       ],
+      "oblast_source": "both",
       "kato": "334600000",
       "name_ru": "Панфиловский район",
       "name_kk": "Панфилов ауданы",
@@ -1143,6 +1226,7 @@
       "candidates": [
         "Сарканский район"
       ],
+      "oblast_source": "both",
       "kato": "334800000",
       "name_ru": "Сарканский район",
       "name_kk": "Сарқан ауданы",
@@ -1154,8 +1238,17 @@
       "year": 2026,
       "decision_ref": "Решение Карагандинского городского маслихата от 28 ноября 2025 года № 318",
       "source_url": "https://adilet.zan.kz/rus/docs/G25KA00318M",
-      "outcome": "unmapped-no-oblast-named-in-text",
-      "body": "Карагандинская область"
+      "outcome": "mapped",
+      "oblast_kato": "350000000",
+      "oblast_name": "Карагандинская область",
+      "candidates": [
+        "Караганда Г.А."
+      ],
+      "oblast_source": "body-only",
+      "kato": "351000000",
+      "name_ru": "Караганда Г.А.",
+      "name_kk": "Қарағанды Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KC00364M",
@@ -1169,6 +1262,7 @@
       "candidates": [
         "Темиртау Г.А."
       ],
+      "oblast_source": "both",
       "kato": "352400000",
       "name_ru": "Темиртау Г.А.",
       "name_kk": "Теміртау Қ.Ә.",
@@ -1186,6 +1280,7 @@
       "candidates": [
         "Балхаш Г.А."
       ],
+      "oblast_source": "both",
       "kato": "351600000",
       "name_ru": "Балхаш Г.А.",
       "name_kk": "Балқаш Қ.Ә.",
@@ -1203,6 +1298,7 @@
       "candidates": [
         "Сарань Г.А."
       ],
+      "oblast_source": "both",
       "kato": "352200000",
       "name_ru": "Сарань Г.А.",
       "name_kk": "Саран Қ.Ә.",
@@ -1220,6 +1316,7 @@
       "candidates": [
         "Шахтинск Г.А."
       ],
+      "oblast_source": "both",
       "kato": "352800000",
       "name_ru": "Шахтинск Г.А.",
       "name_kk": "Шахтинск Қ.Ә.",
@@ -1237,6 +1334,7 @@
       "candidates": [
         "Абайский район"
       ],
+      "oblast_source": "both",
       "kato": "353200000",
       "name_ru": "Абайский район",
       "name_kk": "Абай ауданы",
@@ -1254,6 +1352,7 @@
       "candidates": [
         "Актогайский район"
       ],
+      "oblast_source": "both",
       "kato": "353600000",
       "name_ru": "Актогайский район",
       "name_kk": "Ақтоғай ауданы",
@@ -1271,6 +1370,7 @@
       "candidates": [
         "Бухар-Жырауский район"
       ],
+      "oblast_source": "both",
       "kato": "354000000",
       "name_ru": "Бухар-Жырауский район",
       "name_kk": "Бұқар жырау ауданы",
@@ -1288,6 +1388,7 @@
       "candidates": [
         "Каркаралинский район"
       ],
+      "oblast_source": "both",
       "kato": "354800000",
       "name_ru": "Каркаралинский район",
       "name_kk": "Қарқаралы ауданы",
@@ -1305,6 +1406,7 @@
       "candidates": [
         "Нуринский район"
       ],
+      "oblast_source": "both",
       "kato": "355200000",
       "name_ru": "Нуринский район",
       "name_kk": "Нұра ауданы",
@@ -1322,6 +1424,7 @@
       "candidates": [
         "Осакаровский район"
       ],
+      "oblast_source": "both",
       "kato": "355600000",
       "name_ru": "Осакаровский район",
       "name_kk": "Осакаров ауданы",
@@ -1339,6 +1442,7 @@
       "candidates": [
         "Приозерск Г.А."
       ],
+      "oblast_source": "both",
       "kato": "352100000",
       "name_ru": "Приозерск Г.А.",
       "name_kk": "Приозерск Қ.Ә.",
@@ -1350,8 +1454,17 @@
       "year": 2026,
       "decision_ref": "Решение Кызылординского городского маслихата от 27 ноября 2025 года № 309-44/3",
       "source_url": "https://adilet.zan.kz/rus/docs/G25LA30944M",
-      "outcome": "unmapped-no-oblast-named-in-text",
-      "body": "Кызылординская область"
+      "outcome": "mapped",
+      "oblast_kato": "430000000",
+      "oblast_name": "Кызылординская область",
+      "candidates": [
+        "Кызылорда Г.А."
+      ],
+      "oblast_source": "body-only",
+      "kato": "431000000",
+      "name_ru": "Кызылорда Г.А.",
+      "name_kk": "Қызылорда Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25LD00480M",
@@ -1365,6 +1478,7 @@
       "candidates": [
         "Казалинский район"
       ],
+      "oblast_source": "both",
       "kato": "434400000",
       "name_ru": "Казалинский район",
       "name_kk": "Қазалы ауданы",
@@ -1382,6 +1496,7 @@
       "candidates": [
         "Кармакшинский район"
       ],
+      "oblast_source": "both",
       "kato": "434600000",
       "name_ru": "Кармакшинский район",
       "name_kk": "Қармақшы ауданы",
@@ -1399,6 +1514,7 @@
       "candidates": [
         "Жанакорганский район"
       ],
+      "oblast_source": "both",
       "kato": "434000000",
       "name_ru": "Жанакорганский район",
       "name_kk": "Жаңақорған ауданы",
@@ -1416,6 +1532,7 @@
       "candidates": [
         "Сырдарьинский район"
       ],
+      "oblast_source": "both",
       "kato": "434800000",
       "name_ru": "Сырдарьинский район",
       "name_kk": "Сырдария ауданы",
@@ -1433,6 +1550,7 @@
       "candidates": [
         "Актау Г.А."
       ],
+      "oblast_source": "both",
       "kato": "471000000",
       "name_ru": "Актау Г.А.",
       "name_kk": "Ақтау Г.А.",
@@ -1450,6 +1568,7 @@
       "candidates": [
         "Жанаозен Г.А."
       ],
+      "oblast_source": "both",
       "kato": "471800000",
       "name_ru": "Жанаозен Г.А.",
       "name_kk": "Жаңаөзен Қ.Ә.",
@@ -1467,6 +1586,7 @@
       "candidates": [
         "Бейнеуский район"
       ],
+      "oblast_source": "both",
       "kato": "473600000",
       "name_ru": "Бейнеуский район",
       "name_kk": "Бейнеу ауданы",
@@ -1484,6 +1604,7 @@
       "candidates": [
         "Каракиянский район"
       ],
+      "oblast_source": "both",
       "kato": "474200000",
       "name_ru": "Каракиянский район",
       "name_kk": "Қарақия ауданы",
@@ -1501,6 +1622,7 @@
       "candidates": [
         "Мангистауский район"
       ],
+      "oblast_source": "both",
       "kato": "474600000",
       "name_ru": "Мангистауский район",
       "name_kk": "Маңғыстау ауданы",
@@ -1518,6 +1640,7 @@
       "candidates": [
         "Тупкараганский район"
       ],
+      "oblast_source": "both",
       "kato": "475200000",
       "name_ru": "Тупкараганский район",
       "name_kk": "Түпқараған ауданы",
@@ -1535,6 +1658,7 @@
       "candidates": [
         "Мунайлинский район"
       ],
+      "oblast_source": "both",
       "kato": "475000000",
       "name_ru": "Мунайлинский район",
       "name_kk": "Мұнайлы ауданы",
@@ -1552,7 +1676,8 @@
       "candidates": [
         "Костанай Г.А.",
         "Костанайский район"
-      ]
+      ],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25NB00249M",
@@ -1566,6 +1691,7 @@
       "candidates": [
         "Рудный Г.А."
       ],
+      "oblast_source": "both",
       "kato": "392400000",
       "name_ru": "Рудный Г.А.",
       "name_kk": "Рудный Қ.Ә.",
@@ -1583,6 +1709,7 @@
       "candidates": [
         "Лисаковск Г.А."
       ],
+      "oblast_source": "both",
       "kato": "392000000",
       "name_ru": "Лисаковск Г.А.",
       "name_kk": "Лисаков Қ.Ә.",
@@ -1600,6 +1727,7 @@
       "candidates": [
         "Аулиекольский район"
       ],
+      "oblast_source": "both",
       "kato": "393600000",
       "name_ru": "Аулиекольский район",
       "name_kk": "Әулиекөл ауданы",
@@ -1617,6 +1745,7 @@
       "candidates": [
         "Житикаринский район"
       ],
+      "oblast_source": "both",
       "kato": "394400000",
       "name_ru": "Житикаринский район",
       "name_kk": "Жітіқара ауданы",
@@ -1634,7 +1763,8 @@
       "candidates": [
         "Костанай Г.А.",
         "Костанайский район"
-      ]
+      ],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25NQ00359M",
@@ -1648,6 +1778,7 @@
       "candidates": [
         "Сарыкольский район"
       ],
+      "oblast_source": "both",
       "kato": "396200000",
       "name_ru": "Сарыкольский район",
       "name_kk": "Сарыкөл ауданы",
@@ -1665,6 +1796,7 @@
       "candidates": [
         "Павлодар Г.А."
       ],
+      "oblast_source": "both",
       "kato": "551000000",
       "name_ru": "Павлодар Г.А.",
       "name_kk": "Павлодар Қ.Ә.",
@@ -1679,7 +1811,8 @@
       "outcome": "unmapped-no-district-matched",
       "oblast_kato": "550000000",
       "oblast_name": "Павлодарская область",
-      "candidates": []
+      "candidates": [],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25PC28937M",
@@ -1693,6 +1826,7 @@
       "candidates": [
         "Экибастуз Г.А."
       ],
+      "oblast_source": "both",
       "kato": "552200000",
       "name_ru": "Экибастуз Г.А.",
       "name_kk": "Екібастұз Қ.Ә.",
@@ -1710,6 +1844,7 @@
       "candidates": [
         "Актогайский район"
       ],
+      "oblast_source": "both",
       "kato": "553200000",
       "name_ru": "Актогайский район",
       "name_kk": "Ақтоғай ауданы",
@@ -1727,6 +1862,7 @@
       "candidates": [
         "Баянаульский район"
       ],
+      "oblast_source": "both",
       "kato": "553600000",
       "name_ru": "Баянаульский район",
       "name_kk": "Баянауыл ауданы",
@@ -1744,6 +1880,7 @@
       "candidates": [
         "Иртышский район"
       ],
+      "oblast_source": "both",
       "kato": "554600000",
       "name_ru": "Иртышский район",
       "name_kk": "Ертіс ауданы",
@@ -1761,6 +1898,7 @@
       "candidates": [
         "район Тереңкөл"
       ],
+      "oblast_source": "both",
       "kato": "554800000",
       "name_ru": "район Тереңкөл",
       "name_kk": "Тереңкөл ауданы",
@@ -1778,6 +1916,7 @@
       "candidates": [
         "район Аққулы"
       ],
+      "oblast_source": "both",
       "kato": "555200000",
       "name_ru": "район Аққулы",
       "name_kk": "Аққулы ауданы",
@@ -1795,6 +1934,7 @@
       "candidates": [
         "Майский район"
       ],
+      "oblast_source": "both",
       "kato": "555600000",
       "name_ru": "Майский район",
       "name_kk": "Май ауданы",
@@ -1812,6 +1952,7 @@
       "candidates": [
         "Павлодарский район"
       ],
+      "oblast_source": "both",
       "kato": "556000000",
       "name_ru": "Павлодарский район",
       "name_kk": "Павлодар ауданы",
@@ -1829,6 +1970,7 @@
       "candidates": [
         "Успенский район"
       ],
+      "oblast_source": "both",
       "kato": "556400000",
       "name_ru": "Успенский район",
       "name_kk": "Успен ауданы",
@@ -1846,6 +1988,7 @@
       "candidates": [
         "Щербактинский район"
       ],
+      "oblast_source": "both",
       "kato": "556800000",
       "name_ru": "Щербактинский район",
       "name_kk": "Шарбақты ауданы",
@@ -1864,7 +2007,8 @@
       "name_ru": "г.Алматы",
       "candidates": [
         "г.Алматы"
-      ]
+      ],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25SA00529M",
@@ -1878,6 +2022,7 @@
       "candidates": [
         "Петропавловск Г.А."
       ],
+      "oblast_source": "both",
       "kato": "591000000",
       "name_ru": "Петропавловск Г.А.",
       "name_kk": "Петропавл Қ.Ә.",
@@ -1895,6 +2040,7 @@
       "candidates": [
         "Аккайынский район"
       ],
+      "oblast_source": "both",
       "kato": "595800000",
       "name_ru": "Аккайынский район",
       "name_kk": "Аққайың ауданы",
@@ -1912,6 +2058,7 @@
       "candidates": [
         "Айыртауский район"
       ],
+      "oblast_source": "both",
       "kato": "593200000",
       "name_ru": "Айыртауский район",
       "name_kk": "Айыртау ауданы",
@@ -1929,6 +2076,7 @@
       "candidates": [
         "Акжарский район"
       ],
+      "oblast_source": "both",
       "kato": "593400000",
       "name_ru": "Акжарский район",
       "name_kk": "Ақжар ауданы",
@@ -1946,6 +2094,7 @@
       "candidates": [
         "Район им.Габита Мусрепова"
       ],
+      "oblast_source": "both",
       "kato": "596600000",
       "name_ru": "Район им.Габита Мусрепова",
       "name_kk": "Ғабит Мүсірепов атын.ауданы",
@@ -1963,6 +2112,7 @@
       "candidates": [
         "Есильский район"
       ],
+      "oblast_source": "both",
       "kato": "594200000",
       "name_ru": "Есильский район",
       "name_kk": "Есіл ауданы",
@@ -1980,6 +2130,7 @@
       "candidates": [
         "Жамбылский район"
       ],
+      "oblast_source": "both",
       "kato": "594600000",
       "name_ru": "Жамбылский район",
       "name_kk": "Жамбыл ауданы",
@@ -1997,6 +2148,7 @@
       "candidates": [
         "Кызылжарский район"
       ],
+      "oblast_source": "both",
       "kato": "595000000",
       "name_ru": "Кызылжарский район",
       "name_kk": "Қызылжар ауданы",
@@ -2014,6 +2166,7 @@
       "candidates": [
         "Район Магжана Жумабаева"
       ],
+      "oblast_source": "both",
       "kato": "593600000",
       "name_ru": "Район Магжана Жумабаева",
       "name_kk": "Мағжан Жұмабаев ауданы",
@@ -2031,6 +2184,7 @@
       "candidates": [
         "Мамлютский район"
       ],
+      "oblast_source": "both",
       "kato": "595200000",
       "name_ru": "Мамлютский район",
       "name_kk": "Мамлют ауданы",
@@ -2048,6 +2202,7 @@
       "candidates": [
         "Тайыншинский район"
       ],
+      "oblast_source": "both",
       "kato": "596000000",
       "name_ru": "Тайыншинский район",
       "name_kk": "Тайынша ауданы",
@@ -2065,6 +2220,7 @@
       "candidates": [
         "Тимирязевский район"
       ],
+      "oblast_source": "both",
       "kato": "596200000",
       "name_ru": "Тимирязевский район",
       "name_kk": "Тимирязев ауданы",
@@ -2082,6 +2238,7 @@
       "candidates": [
         "Уалихановский район"
       ],
+      "oblast_source": "both",
       "kato": "596400000",
       "name_ru": "Уалихановский район",
       "name_kk": "Уәлиханов ауданы",
@@ -2099,6 +2256,7 @@
       "candidates": [
         "Атырау Г.А."
       ],
+      "oblast_source": "both",
       "kato": "231000000",
       "name_ru": "Атырау Г.А.",
       "name_kk": "Атырау Қ.Ә.",
@@ -2116,6 +2274,7 @@
       "candidates": [
         "Жылыойский район"
       ],
+      "oblast_source": "both",
       "kato": "233600000",
       "name_ru": "Жылыойский район",
       "name_kk": "Жылыой ауданы",
@@ -2133,6 +2292,7 @@
       "candidates": [
         "Махамбетский район"
       ],
+      "oblast_source": "both",
       "kato": "235600000",
       "name_ru": "Махамбетский район",
       "name_kk": "Махамбет ауданы",
@@ -2147,7 +2307,8 @@
       "outcome": "unmapped-no-district-matched",
       "oblast_kato": "230000000",
       "oblast_name": "Атырауская область",
-      "candidates": []
+      "candidates": [],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25TF00186M",
@@ -2161,6 +2322,7 @@
       "candidates": [
         "Индерский район"
       ],
+      "oblast_source": "both",
       "kato": "234000000",
       "name_ru": "Индерский район",
       "name_kk": "Индер ауданы",
@@ -2178,6 +2340,7 @@
       "candidates": [
         "Макатский район"
       ],
+      "oblast_source": "both",
       "kato": "235200000",
       "name_ru": "Макатский район",
       "name_kk": "Мақат ауданы",
@@ -2195,6 +2358,7 @@
       "candidates": [
         "Курмангазинский район"
       ],
+      "oblast_source": "both",
       "kato": "234600000",
       "name_ru": "Курмангазинский район",
       "name_kk": "Құрманғазы ауданы",
@@ -2209,7 +2373,8 @@
       "outcome": "unmapped-no-district-matched",
       "oblast_kato": "610000000",
       "oblast_name": "Туркестанская область",
-      "candidates": []
+      "candidates": [],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25UC00221M",
@@ -2223,6 +2388,7 @@
       "candidates": [
         "Кентау Г.А."
       ],
+      "oblast_source": "both",
       "kato": "612000000",
       "name_ru": "Кентау Г.А.",
       "name_kk": "Кентау Қ.Ә.",
@@ -2240,6 +2406,7 @@
       "candidates": [
         "район Байдибека"
       ],
+      "oblast_source": "both",
       "kato": "613600000",
       "name_ru": "район Байдибека",
       "name_kk": "Бәйдібек ауданы",
@@ -2257,6 +2424,7 @@
       "candidates": [
         "Казыгуртский район"
       ],
+      "oblast_source": "both",
       "kato": "614000000",
       "name_ru": "Казыгуртский район",
       "name_kk": "Қазығұрт ауданы",
@@ -2274,6 +2442,7 @@
       "candidates": [
         "Мактааральский район"
       ],
+      "oblast_source": "both",
       "kato": "614400000",
       "name_ru": "Мактааральский район",
       "name_kk": "Мақтаарал ауданы",
@@ -2291,6 +2460,7 @@
       "candidates": [
         "Ордабасынский район"
       ],
+      "oblast_source": "both",
       "kato": "614600000",
       "name_ru": "Ордабасынский район",
       "name_kk": "Ордабасы ауданы",
@@ -2308,6 +2478,7 @@
       "candidates": [
         "Отрарский район"
       ],
+      "oblast_source": "both",
       "kato": "614800000",
       "name_ru": "Отрарский район",
       "name_kk": "Отырар ауданы",
@@ -2325,6 +2496,7 @@
       "candidates": [
         "Сайрамский район"
       ],
+      "oblast_source": "both",
       "kato": "615200000",
       "name_ru": "Сайрамский район",
       "name_kk": "Сайрам ауданы",
@@ -2342,6 +2514,7 @@
       "candidates": [
         "Сарыагашский район"
       ],
+      "oblast_source": "both",
       "kato": "615400000",
       "name_ru": "Сарыагашский район",
       "name_kk": "Сарыағаш ауданы",
@@ -2356,7 +2529,8 @@
       "outcome": "unmapped-no-district-matched",
       "oblast_kato": "610000000",
       "oblast_name": "Туркестанская область",
-      "candidates": []
+      "candidates": [],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25UM30178M",
@@ -2370,6 +2544,7 @@
       "candidates": [
         "Толебийский район"
       ],
+      "oblast_source": "both",
       "kato": "615800000",
       "name_ru": "Толебийский район",
       "name_kk": "Төле би ауданы",
@@ -2387,6 +2562,7 @@
       "candidates": [
         "Тюлькубасский район"
       ],
+      "oblast_source": "both",
       "kato": "616000000",
       "name_ru": "Тюлькубасский район",
       "name_kk": "Түлкібас ауданы",
@@ -2404,6 +2580,7 @@
       "candidates": [
         "Шардаринский район"
       ],
+      "oblast_source": "both",
       "kato": "616400000",
       "name_ru": "Шардаринский район",
       "name_kk": "Шардара ауданы",
@@ -2421,6 +2598,7 @@
       "candidates": [
         "Жетысайский район"
       ],
+      "oblast_source": "both",
       "kato": "613800000",
       "name_ru": "Жетысайский район",
       "name_kk": "Жетісай ауданы",
@@ -2438,6 +2616,7 @@
       "candidates": [
         "Келесский район"
       ],
+      "oblast_source": "both",
       "kato": "613900000",
       "name_ru": "Келесский район",
       "name_kk": "Келес ауданы",
@@ -2455,6 +2634,7 @@
       "candidates": [
         "район Сауран"
       ],
+      "oblast_source": "both",
       "kato": "615500000",
       "name_ru": "район Сауран",
       "name_kk": "Сауран ауданы",
@@ -2472,6 +2652,7 @@
       "candidates": [
         "Усть-Каменогорск Г.А."
       ],
+      "oblast_source": "both",
       "kato": "631000000",
       "name_ru": "Усть-Каменогорск Г.А.",
       "name_kk": "Өскемен Қ.Ә.",
@@ -2489,6 +2670,7 @@
       "candidates": [
         "Риддер Г.А."
       ],
+      "oblast_source": "both",
       "kato": "632400000",
       "name_ru": "Риддер Г.А.",
       "name_kk": "Риддер Қ.Ә.",
@@ -2506,6 +2688,7 @@
       "candidates": [
         "Глубоковский район"
       ],
+      "oblast_source": "both",
       "kato": "634000000",
       "name_ru": "Глубоковский район",
       "name_kk": "Глубокое ауданы",
@@ -2523,6 +2706,7 @@
       "candidates": [
         "Зайсанский район"
       ],
+      "oblast_source": "both",
       "kato": "634600000",
       "name_ru": "Зайсанский район",
       "name_kk": "Зайсан ауданы",
@@ -2540,6 +2724,7 @@
       "candidates": [
         "район Алтай"
       ],
+      "oblast_source": "both",
       "kato": "634800000",
       "name_ru": "район Алтай",
       "name_kk": "Алтай ауданы",
@@ -2557,6 +2742,7 @@
       "candidates": [
         "Катон-Карагайский район"
       ],
+      "oblast_source": "both",
       "kato": "635400000",
       "name_ru": "Катон-Карагайский район",
       "name_kk": "Катонқарағай ауданы",
@@ -2574,6 +2760,7 @@
       "candidates": [
         "Курчумский район"
       ],
+      "oblast_source": "both",
       "kato": "635200000",
       "name_ru": "Курчумский район",
       "name_kk": "Күршім ауданы",
@@ -2591,6 +2778,7 @@
       "candidates": [
         "Тарбагатайский район"
       ],
+      "oblast_source": "both",
       "kato": "635800000",
       "name_ru": "Тарбагатайский район",
       "name_kk": "Тарбағатай ауданы",
@@ -2608,6 +2796,7 @@
       "candidates": [
         "Уланский район"
       ],
+      "oblast_source": "both",
       "kato": "636200000",
       "name_ru": "Уланский район",
       "name_kk": "Ұлан ауданы",
@@ -2625,6 +2814,7 @@
       "candidates": [
         "Шемонаихинский район"
       ],
+      "oblast_source": "both",
       "kato": "636800000",
       "name_ru": "Шемонаихинский район",
       "name_kk": "Шемонаиха ауданы",
@@ -2642,6 +2832,7 @@
       "candidates": [
         "район Самар"
       ],
+      "oblast_source": "both",
       "kato": "635600000",
       "name_ru": "район Самар",
       "name_kk": "Самар ауданы",
@@ -2659,6 +2850,7 @@
       "candidates": [
         "район Үлкен Нарын"
       ],
+      "oblast_source": "both",
       "kato": "636300000",
       "name_ru": "район Үлкен Нарын",
       "name_kk": "Үлкен Нарын ауданы",
@@ -2676,6 +2868,7 @@
       "candidates": [
         "район Марқакөл"
       ],
+      "oblast_source": "both",
       "kato": "635500000",
       "name_ru": "район Марқакөл",
       "name_kk": "Марқакөл ауданы",
@@ -2693,6 +2886,7 @@
       "candidates": [
         "Уральск Г.А."
       ],
+      "oblast_source": "both",
       "kato": "271000000",
       "name_ru": "Уральск Г.А.",
       "name_kk": "Орал Қ.Ә.",

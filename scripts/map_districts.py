@@ -330,40 +330,54 @@ def map_row(
         return {**result, "outcome": NO_BODY}
     from_body = oblast_from_body(body, oblasts)
     from_text = oblast_from_text(text, oblasts)
+
+    # The oblast normally needs two agreeing sources. An oblast capital does
+    # not repeat its own oblast's name, so its text names none — and the text
+    # is the source that fails there, not the facet. When the text is silent,
+    # the registry facet alone is accepted; when the text DOES speak, both
+    # sources must still agree, exactly as before. See
+    # .claude/decisions/kato/the-title-is-a-second-district-source.md.
     if from_text is None:
-        return {**result, "outcome": NO_OBLAST_IN_TEXT, "body": body}
-    if from_body is None:
-        return {
-            **result,
-            "outcome": NO_OBLAST_FROM_BODY,
-            "body": body,
-            "oblast_from_text": from_text,
-        }
-    if from_body != from_text:
-        return {
-            **result,
-            "outcome": OBLAST_DISAGREEMENT,
-            "body": body,
-            "oblast_from_body": from_body,
-            "oblast_from_text": from_text,
-        }
+        if from_body is None:
+            return {**result, "outcome": NO_OBLAST_IN_TEXT, "body": body}
+        oblast_kato = from_body
+        oblast_source = "body-only"
+    else:
+        if from_body is None:
+            return {
+                **result,
+                "outcome": NO_OBLAST_FROM_BODY,
+                "body": body,
+                "oblast_from_text": from_text,
+            }
+        if from_body != from_text:
+            return {
+                **result,
+                "outcome": OBLAST_DISAGREEMENT,
+                "body": body,
+                "oblast_from_body": from_body,
+                "oblast_from_text": from_text,
+            }
+        oblast_kato = from_text
+        oblast_source = "both"
 
     # A city of republican significance has no district-level codes under it,
     # and its maslikhat legislates for the city itself — so the oblast-level
     # code IS the district here. Not an exception to the rule: the same rule,
     # applied where the hierarchy has one level fewer.
-    if not grouped.get(from_text[:2]):
+    if not grouped.get(oblast_kato[:2]):
         return {
             **result,
             "outcome": MAPPED_ONE,
-            "oblast_kato": from_text,
-            "oblast_name": oblasts[from_text],
-            "kato": from_text,
-            "name_ru": oblasts[from_text],
-            "candidates": [oblasts[from_text]],
+            "oblast_kato": oblast_kato,
+            "oblast_name": oblasts[oblast_kato],
+            "kato": oblast_kato,
+            "name_ru": oblasts[oblast_kato],
+            "candidates": [oblasts[oblast_kato]],
+            "oblast_source": oblast_source,
         }
 
-    outcome, candidates = district_in_oblast(text, from_text, grouped, oblasts[from_text])
+    outcome, candidates = district_in_oblast(text, oblast_kato, grouped, oblasts[oblast_kato])
     district_source = "citation" if outcome == MAPPED_ONE else None
 
     # The title as a SECOND district source: a fallback when the citation
@@ -375,7 +389,7 @@ def map_row(
     title_text = (titles or {}).get(row["document_id"])
     if title_text:
         title_outcome, title_candidates = district_in_oblast(
-            title_text, from_text, grouped, oblasts[from_text]
+            title_text, oblast_kato, grouped, oblasts[oblast_kato]
         )
         if outcome == MAPPED_ONE and title_outcome == MAPPED_ONE:
             if title_candidates[0]["kato"] != candidates[0]["kato"]:
@@ -391,9 +405,10 @@ def map_row(
     mapped = {
         **result,
         "outcome": outcome,
-        "oblast_kato": from_text,
-        "oblast_name": oblasts[from_text],
+        "oblast_kato": oblast_kato,
+        "oblast_name": oblasts[oblast_kato],
         "candidates": [candidate["name_ru"] for candidate in candidates],
+        "oblast_source": oblast_source,
     }
     if outcome == MAPPED_ONE:
         mapped["kato"] = candidates[0]["kato"]

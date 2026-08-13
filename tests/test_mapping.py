@@ -15,6 +15,7 @@ from map_districts import (
     JURISDICTION_UNKNOWN,
     MAPPED_ONE,
     NO_DISTRICT,
+    OBLAST_DISAGREEMENT,
     TITLE_CONTRADICTS_CITATION,
     district_in_oblast,
     districts_by_oblast,
@@ -298,3 +299,54 @@ def test_a_row_that_was_previously_mapped_now_refuses_on_a_corrupted_title() -> 
     corrupted_titles = {"TEST-WAS-MAPPED": "О понижении ставки по Бурлинскому району"}
     corrupted_result = map_row(row, bodies, OBLASTS, GROUPED, corrupted_titles)
     assert corrupted_result["outcome"] == TITLE_CONTRADICTS_CITATION
+
+
+# «Решение Карагандинского городского маслихата от 28 ноября 2025 года № 318» —
+# an oblast capital's own citation never repeats its oblast's name, so
+# oblast_from_text has nothing to read here. This is the real text of
+# G25KA00318M, the row the plan names by name.
+KARAGANDA_NO_OBLAST_IN_TEXT = (
+    "Решение Карагандинского городского маслихата от 28 ноября 2025 года № 318"
+)
+
+
+def test_a_row_whose_text_names_no_oblast_maps_from_the_facet_alone() -> None:
+    """oblast_from_text refuses on this citation; the registry facet alone
+    must still resolve the oblast, mapping Караганда Г.А."""
+    row = {
+        "document_id": "TEST-KARAGANDA",
+        "rate": 0.02,
+        "year": 2026,
+        "decision_ref": KARAGANDA_NO_OBLAST_IN_TEXT,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-KARAGANDA": "Карагандинская область"}
+
+    assert oblast_from_text(KARAGANDA_NO_OBLAST_IN_TEXT, OBLASTS) is None
+
+    result = map_row(row, bodies, OBLASTS, GROUPED)
+    assert result["outcome"] == MAPPED_ONE
+    assert result["kato"] == "351000000"
+    assert result["name_ru"] == "Караганда Г.А."
+    assert result["oblast_source"] == "body-only"
+
+
+def test_both_sources_speaking_and_disagreeing_still_refuses() -> None:
+    """The new body-only path must never swallow a genuine disagreement: when
+    the text DOES name an oblast, both sources are still required to agree,
+    exactly as before this slice. Regression guard for the case that matters
+    most — a wrong oblast is worse than a missing one."""
+    row = {
+        "document_id": "TEST-DISAGREE",
+        "rate": 0.03,
+        "year": 2026,
+        "decision_ref": URALSK,  # names Западно-Казахстанская область in the text
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    assert oblast_from_text(URALSK, OBLASTS) is not None
+
+    result = map_row(row, {"TEST-DISAGREE": "Акмолинская область"}, OBLASTS, GROUPED)
+    assert result["outcome"] == OBLAST_DISAGREEMENT
+    assert "kato" not in result
