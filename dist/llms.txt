@@ -53,13 +53,17 @@ base_rate: a maslikhat may lower the rate by up to half, so the gap is unknown, 
 ## Provenance
 
 Every row carries source_url, a link to the maslikhat decision the rate was read from,
-and verified_by, naming who read it. No rate is invented, inferred or filled in.
+a decision_ref naming that decision, and an extraction_method saying how the number was
+obtained. verified_by names a person only once one has actually checked the row against
+source_url; until then it stays empty, and it is empty on every row today. No rate is
+invented, inferred or filled in.
 
 Rows: 148. Read by a person: 0. Extracted from the decision by rule: 148.
 
 A machine-extracted row was parsed out of the published decision text by
-scripts/extract_rates.py, not produced by a language model. It is still unverified by
-a human being: open source_url before relying on the number.
+scripts/extract_rates.py, not produced by a language model, and extraction_method says
+so. That is not the same claim as verification: open source_url and check the row
+yourself before relying on it, whatever verified_by holds.
 
 Base rate and the ±50% a maslikhat may apply: Налоговый кодекс Республики Казахстан от 18 июля 2025 года № 214-VIII ЗРК, статья 726
 https://adilet.zan.kz/rus/docs/K2500000214

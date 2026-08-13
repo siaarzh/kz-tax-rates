@@ -19,7 +19,7 @@ The base rate is 4% under НК РК art. 726. A local maslikhat can move it by u
 
 ## What's in it, and what isn't
 
-127 districts for 2026. There are roughly 200 that could publish a decision, so this is partial and says so: `dist/rates.json` carries its own coverage count on every build.
+**148 districts** for 2026. There are roughly 200 that could publish a decision, so this is partial and says so: `dist/rates.json` carries its own coverage count on every build.
 
 **A missing district is not a district paying the base rate.** It means we found no decision for it. Those two look identical in an empty row, and telling them apart is the hard part of this problem, not the easy part.
 
@@ -29,7 +29,7 @@ Read out of the decision document itself, by code, never recalled by a model and
 
 Each act is published in Russian and in Kazakh as separate files. Independent readers work over both, and a rate is recorded only when readings from two different files agree. Disagreement is thrown away rather than resolved, because picking the more plausible number is how a wrong rate gets in wearing a real citation. Every row keeps the exact sentence it came from, so you can check it without trusting the parser.
 
-**No person has read these decisions.** The `verified_by` column says `machine-extracted, NOT human-verified` and it means it. That column exists to hold a human's name and it doesn't have one yet.
+**No person has read these decisions.** Every row's `extraction_method` says `deterministic-readers`, meaning a script read it by rule. The `verified_by` column exists to hold a human's name once one has actually checked the row, and on every row today it is empty.
 
 Two things that bite everyone: rates are fractions, so `0.03` and never `3` or `"3%"`. КАТО codes are strings. Parse one as an integer and you lose a leading zero, which quietly hands you a different district's rate.
 
