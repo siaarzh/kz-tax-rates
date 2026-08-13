@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T12:58:17Z",
+  "generated_at": "2026-08-13T21:41:39Z",
   "kato_version": "NK RK 11-2025",
   "licence": "MIT",
   "not_tax_advice": "Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date, so read the linked decision before relying on it.",
   "not_tax_advice_ru": "Не является налоговой консультацией. Это машиночитаемая копия сведений из опубликованных нормативных правовых актов; в каждой строке стоит ссылка на первоисточник. Здесь нет ни толкования норм, ни расчёта налога. Ставка достоверна только по состоянию на дату verified_at, поэтому прежде чем полагаться на неё, откройте само решение.",
   "verification": {
-    "rows": 150,
+    "rows": 148,
     "human_verified": 0,
-    "machine_extracted": 150
+    "machine_extracted": 148
   },
   "years": {
     "2026": {
@@ -273,6 +273,16 @@
           "rate": 0.02,
           "decision_ref": "Решение Целиноградского районного маслихата Акмолинской области от 28 ноября 2025 года № 410/54-8",
           "source_url": "https://adilet.zan.kz/rus/docs/G25BQ41054M"
+        },
+        {
+          "kato": "116800000",
+          "name_ru": "Шортандинский район",
+          "name_kk": "Шортанды ауданы",
+          "oblast_ru": "Акмолинская область",
+          "oblast_kk": "Ақмола облысы",
+          "rate": 0.02,
+          "decision_ref": "Решение Шортандинского района Акмолинской области от 21 ноября 2025 года № 8С- 44/3",
+          "source_url": "https://adilet.zan.kz/rus/docs/G25BR08443M"
         },
         {
           "kato": "117000000",
@@ -545,14 +555,14 @@
           "source_url": "https://adilet.zan.kz/rus/docs/G25ZA00249M"
         },
         {
-          "kato": "314200000",
-          "name_ru": "Жуалынский район",
-          "name_kk": "Жуалы ауданы",
+          "kato": "315000000",
+          "name_ru": "район Турара Рыскулова",
+          "name_kk": "Тұрар Рысқұлов ауданы",
           "oblast_ru": "Жамбылская область",
           "oblast_kk": "Жамбыл облысы",
           "rate": 0.02,
-          "decision_ref": "Решение Жуалынского районного маслихата Жамбылской области от 26 ноября 2025 года № 55-2",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25GD00552M"
+          "decision_ref": "Решение маслихата района Т. Рыскулова Жамбылской области от 26 ноября 2025 года № 41-5",
+          "source_url": "https://adilet.zan.kz/rus/docs/G25GH00415M"
         },
         {
           "kato": "315600000",
@@ -675,6 +685,16 @@
           "source_url": "https://adilet.zan.kz/rus/docs/G25IJ49191M"
         },
         {
+          "kato": "351000000",
+          "name_ru": "Караганда Г.А.",
+          "name_kk": "Қарағанды Қ.Ә.",
+          "oblast_ru": "Карагандинская область",
+          "oblast_kk": "Қарағанды облысы",
+          "rate": 0.02,
+          "decision_ref": "Решение Карагандинского городского маслихата от 28 ноября 2025 года № 318",
+          "source_url": "https://adilet.zan.kz/rus/docs/G25KA00318M"
+        },
+        {
           "kato": "351600000",
           "name_ru": "Балхаш Г.А.",
           "name_kk": "Балқаш Қ.Ә.",
@@ -795,6 +815,16 @@
           "source_url": "https://adilet.zan.kz/rus/docs/G25ND00200M"
         },
         {
+          "kato": "392400000",
+          "name_ru": "Рудный Г.А.",
+          "name_kk": "Рудный Қ.Ә.",
+          "oblast_ru": "Костанайская область",
+          "oblast_kk": "Қостанай облысы",
+          "rate": 0.03,
+          "decision_ref": "Решение маслихата города Рудного Костанайской области от 27 ноября 2025 года № 249",
+          "source_url": "https://adilet.zan.kz/rus/docs/G25NB00249M"
+        },
+        {
           "kato": "393600000",
           "name_ru": "Аулиекольский район",
           "name_kk": "Әулиекөл ауданы",
@@ -823,6 +853,16 @@
           "rate": 0.03,
           "decision_ref": "Решение маслихата Сарыкольского района Костанайской области от 19 ноября 2025 года № 359",
           "source_url": "https://adilet.zan.kz/rus/docs/G25NQ00359M"
+        },
+        {
+          "kato": "431000000",
+          "name_ru": "Кызылорда Г.А.",
+          "name_kk": "Қызылорда Қ.Ә.",
+          "oblast_ru": "Кызылординская область",
+          "oblast_kk": "Қызылорда облысы",
+          "rate": 0.02,
+          "decision_ref": "Решение Кызылординского городского маслихата от 27 ноября 2025 года № 309-44/3",
+          "source_url": "https://adilet.zan.kz/rus/docs/G25LA30944M"
         },
         {
           "kato": "434000000",
@@ -945,6 +985,16 @@
           "source_url": "https://adilet.zan.kz/rus/docs/G25PA27332M"
         },
         {
+          "kato": "551600000",
+          "name_ru": "Аксу Г.А.",
+          "name_kk": "Ақсу Қ.Ә.",
+          "oblast_ru": "Павлодарская область",
+          "oblast_kk": "Павлодар облысы",
+          "rate": 0.03,
+          "decision_ref": "Решение Аксуского городского маслихата Павлодарской области от 28 ноября 2025 года № 241/42",
+          "source_url": "https://adilet.zan.kz/rus/docs/G25PB24142M"
+        },
+        {
           "kato": "552200000",
           "name_ru": "Экибастуз Г.А.",
           "name_kk": "Екібастұз Қ.Ә.",
@@ -953,16 +1003,6 @@
           "rate": 0.03,
           "decision_ref": "Решение Экибастузского городского маслихата Павлодарской области от 28 ноября 2025 года № 289/37",
           "source_url": "https://adilet.zan.kz/rus/docs/G25PC28937M"
-        },
-        {
-          "kato": "553200000",
-          "name_ru": "Актогайский район",
-          "name_kk": "Ақтоғай ауданы",
-          "oblast_ru": "Павлодарская область",
-          "oblast_kk": "Павлодар облысы",
-          "rate": 0.03,
-          "decision_ref": "Решение Актогайского районного маслихата Павлодарской области от 25 ноября 2025 года № 230/40",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25PD23040M"
         },
         {
           "kato": "553600000",
@@ -1195,36 +1235,6 @@
           "source_url": "https://adilet.zan.kz/rus/docs/G25UE34201M"
         },
         {
-          "kato": "613800000",
-          "name_ru": "Жетысайский район",
-          "name_kk": "Жетісай ауданы",
-          "oblast_ru": "Туркестанская область",
-          "oblast_kk": "Түркістан облысы",
-          "rate": 0.02,
-          "decision_ref": "Решение Жетысайского районного маслихата Туркестанской области от 25 ноября 2025 года № 32-197-VIII",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25UP32197M"
-        },
-        {
-          "kato": "613900000",
-          "name_ru": "Келесский район",
-          "name_kk": "Келес ауданы",
-          "oblast_ru": "Туркестанская область",
-          "oblast_kk": "Түркістан облысы",
-          "rate": 0.02,
-          "decision_ref": "Решение Келесского районного маслихата Туркестанской области от 28 ноября 2025 года № 29-212-VIII",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25UQ02921M"
-        },
-        {
-          "kato": "614000000",
-          "name_ru": "Казыгуртский район",
-          "name_kk": "Қазығұрт ауданы",
-          "oblast_ru": "Туркестанская область",
-          "oblast_kk": "Түркістан облысы",
-          "rate": 0.02,
-          "decision_ref": "Решение Казыгуртского районного маслихата Туркестанской области от 25 ноября 2025 года № 33/195-VIII",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25UF33195M"
-        },
-        {
           "kato": "614400000",
           "name_ru": "Мактааральский район",
           "name_kk": "Мақтаарал ауданы",
@@ -1233,26 +1243,6 @@
           "rate": 0.02,
           "decision_ref": "Решение Мактааральского районного маслихата Туркестанской области от 28 ноября 2025 года № 32-204-VIІI",
           "source_url": "https://adilet.zan.kz/rus/docs/G25UG32204M"
-        },
-        {
-          "kato": "614600000",
-          "name_ru": "Ордабасынский район",
-          "name_kk": "Ордабасы ауданы",
-          "oblast_ru": "Туркестанская область",
-          "oblast_kk": "Түркістан облысы",
-          "rate": 0.02,
-          "decision_ref": "Решение Ордабасинского районного маслихата Туркестанской области от 24 ноября 2025 года № 37/3",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25UH00373M"
-        },
-        {
-          "kato": "614800000",
-          "name_ru": "Отрарский район",
-          "name_kk": "Отырар ауданы",
-          "oblast_ru": "Туркестанская область",
-          "oblast_kk": "Түркістан облысы",
-          "rate": 0.02,
-          "decision_ref": "Решение Отрарского районного маслихата Туркестанской области от 21 ноября 2025 года № 28/166-VIII",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25UI28166M"
         },
         {
           "kato": "615200000",
@@ -1343,16 +1333,6 @@
           "rate": 0.03,
           "decision_ref": "Решение Сатпаевского городского маслихата области Ұлытау от 25 ноября 2025 года № 228",
           "source_url": "https://adilet.zan.kz/rus/docs/G25HB00228M"
-        },
-        {
-          "kato": "623800000",
-          "name_ru": "Улытауский район",
-          "name_kk": "Ұлытау ауданы",
-          "oblast_ru": "область Ұлытау",
-          "oblast_kk": "Ұлытау облысы",
-          "rate": 0.03,
-          "decision_ref": "Решение Улытауского районного маслихата области Ұлытау от 27 ноября 2025 года № 236",
-          "source_url": "https://adilet.zan.kz/rus/docs/G25HE00236M"
         },
         {
           "kato": "631000000",
@@ -1516,7 +1496,7 @@
         }
       ],
       "coverage": {
-        "districts": 150,
+        "districts": 148,
         "estimated_total": 200,
         "complete": false
       }
