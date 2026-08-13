@@ -1,9 +1,10 @@
-# kz-tax-rates — a free, cited table of Kazakhstan's simplified-regime tax rate
-# per district. Crawl it, index it, and take the data.
+# kz-tax-rates: a free, cited table of Kazakhstan's simplified-regime
+# tax rate per district. Crawl it, index it, take the data.
+#
+# NOT SERVED AS ROBOTS.TXT TODAY. This is a GitHub Pages project site,
+# so only siaarzh.github.io/robots.txt is honoured and that path belongs
+# to another repository. This file becomes live if a custom domain is
+# ever added. Submit the sitemap directly to a search console instead.
 User-agent: *
 Allow: /
-
-# The machine-readable copies, which are what most automated readers want.
-# rates.json holds every year; rates-<year>.json holds one, same schema.
-# llms.txt describes the schema in plain text.
-Sitemap: https://siaarzh.github.io/kz-tax-rates/sitemap.xml
+Sitemap: https://siaarzh.github.io/kz-tax-rates/dist/sitemap.xml

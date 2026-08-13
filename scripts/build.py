@@ -6,7 +6,9 @@ and JSON is generated from it in CI, so the two cannot drift (SPEC.md §4).
 
 from __future__ import annotations
 
+import base64
 import csv
+import html
 import json
 import os
 import re
@@ -39,6 +41,72 @@ ESTIMATED_DISTRICTS = 200
 # The licence covers this compilation and the scripts. It does not and cannot
 # cover the underlying decisions: a legal act is not copyrightable.
 LICENCE = "MIT"
+
+# Where this is actually served from. Every URL built out of these was fetched
+# on 2026-08-13 and answered 200, including data/rates.csv and datapackage.json
+# at the repository root: Pages publishes the whole tree, not dist/ alone.
+#
+# They live here rather than in the template for the same reason the disclaimer
+# does. A location is a claim, and a URL nobody fetched is the same class of
+# failure as a rate nobody read.
+SITE = "https://siaarzh.github.io/kz-tax-rates/"
+PAGE_URL = SITE + "dist/"
+REPO_URL = "https://github.com/siaarzh/kz-tax-rates"
+
+AUTHOR = "Serzhan Akhmetov"
+AUTHOR_URL = "https://github.com/siaarzh"
+
+# The SPDX page for the identifier, which is what a schema.org consumer
+# dereferences. datapackage.json cites opensource.org because the frictionless
+# packages read first cite it there; the two name the same licence.
+LICENCE_URL = "https://spdx.org/licenses/MIT.html"
+
+# The act the base rate comes from, cited so a reader can check the 4% for
+# themselves. The identifier was confirmed by fetching it rather than guessed:
+# the document at K2500000214 is «НАЛОГОВЫЙ КОДЕКС РЕСПУБЛИКИ КАЗАХСТАН», and
+# scripts/extract_rates.py quotes article 726 of it for the same base rate.
+#
+# adilet.zan.kz serves a chain the default trust store does not carry, so a
+# plain curl reports a connection failure rather than a 404. That is a local
+# trust problem, not a dead link; scripts/adilet-chain.pem is what the pipeline
+# already passes for it.
+TAX_CODE_NAME = (
+    "Налоговый кодекс Республики Казахстан от 18 июля 2025 года № 214-VIII ЗРК, статья 726"
+)
+TAX_CODE_URL = "https://adilet.zan.kz/rus/docs/K2500000214"
+
+# What scripts/extract_rates.py writes into verified_by for a row it read by
+# rule rather than a person reading it. The footer and llms.txt say which of the
+# two a reader is looking at, and they count rather than assert it, so the
+# sentence changes by itself the day a person verifies a row.
+MACHINE_MARKER = "machine-extracted"
+
+# Searchable in both languages, because the reader typing «упрощенка ставка
+# район» and the crawler indexing "Kazakhstan tax rate dataset" are looking for
+# the same file.
+KEYWORDS = [
+    "упрощённая декларация",
+    "упрощёнка",
+    "ставка налога",
+    "СНР",
+    "КАТО",
+    "маслихат",
+    "районы Казахстана",
+    "налоги Казахстан",
+    "открытые данные",
+    "Kazakhstan",
+    "simplified declaration regime",
+    "income tax rate",
+    "KATO classifier",
+    "district tax rate",
+    "open data",
+]
+
+# Must match --bg in the template's light and dark palettes. Two copies of one
+# fact, so a test compares them and fails rather than letting the browser chrome
+# drift away from the page it frames.
+THEME_LIGHT = "#ffffff"
+THEME_DARK = "#14161a"
 
 # Carried in the JSON as a field, not only in the README, so a consumer reading
 # the JSON alone still gets it. The line it keeps visible: tax consulting is a
@@ -151,6 +219,15 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
             "complete": False,
         }
 
+    # Counted, never asserted. A consumer reading rates.json alone cannot see
+    # verified_by (it is a CSV column and not part of a rate entry), so without
+    # this they would have no way to tell a row a person read from a row a
+    # parser produced — and that difference is the whole subject of the project.
+    #
+    # Additive and top level, so schema_version stays 1.0: a consumer reading
+    # the keys it already knows is unaffected.
+    human = sum(1 for row in rows if MACHINE_MARKER not in row.get("verified_by", ""))
+
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at(),
@@ -158,6 +235,11 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
         "licence": LICENCE,
         "not_tax_advice": NOT_TAX_ADVICE,
         "not_tax_advice_ru": NOT_TAX_ADVICE_RU,
+        "verification": {
+            "rows": len(rows),
+            "human_verified": human,
+            "machine_extracted": len(rows) - human,
+        },
         "years": years,
     }
 
@@ -188,7 +270,285 @@ def page_view(payload: dict[str, Any]) -> dict[str, Any]:
         # no column to qualify, and with no future year there is nothing partly
         # decided to warn about.
         "future_note_ru": FUTURE_YEAR_NOTE_RU if len(years) > 1 and future else "",
+        # Who made this and where it lives, so a reader never has to infer it
+        # from the URL bar. Passed through the view for the same reason the
+        # licence is passed through the payload: the template states nothing it
+        # was not given.
+        "author": AUTHOR,
+        "repo_url": REPO_URL,
+        "provenance_ru": provenance_ru(payload),
+        # [label, relative href, hover title] for the machine-readable files,
+        # shown near the top of the page and not only in the metadata.
+        "files": [[file["name"], file["href"], file["title"]] for file in artefacts(payload)],
     }
+
+
+def provenance_ru(payload: dict[str, Any]) -> str:
+    """How the rates in this build got here, counted from verified_by.
+
+    Counted rather than declared, so the sentence corrects itself the first time
+    a person verifies a row instead of standing as a stale confession.
+    """
+    counts = payload["verification"]
+    if not counts["rows"]:
+        return ""
+    if not counts["machine_extracted"]:
+        return "Каждую ставку прочитал из решения человек."
+    if not counts["human_verified"]:
+        return (
+            "Ставки извлечены из решений маслихатов программой, по одному и тому же правилу. "
+            "Ни одну строку не проверял человек, поэтому перед тем, как полагаться на ставку, "
+            "откройте решение по ссылке рядом с ней."
+        )
+    return (
+        "Часть ставок прочитал из решения человек, остальные извлечены программой. "
+        "Кто проверил конкретную строку, записано в столбце verified_by файла data/rates.csv."
+    )
+
+
+def districts(payload: dict[str, Any]) -> int:
+    """Distinct КАТО codes across every year, not the sum of the year counts.
+
+    Summing would double count a district we hold two years for and publish a
+    coverage figure larger than the country.
+    """
+    return len({rate["kato"] for bucket in payload["years"].values() for rate in bucket["rates"]})
+
+
+def page_title(payload: dict[str, Any]) -> str:
+    """The title, built from the years present rather than typed with one in it.
+
+    It used to carry a hardcoded 2026, which a second year of data would have
+    left standing and wrong.
+    """
+    years = sorted(payload["years"])
+    span = ", " + " · ".join(years) if years else ""
+    return f"Ставка налога по упрощённой декларации (упрощёнка) по районам Казахстана{span} · КАТО"
+
+
+def description_ru(payload: dict[str, Any]) -> str:
+    """What a person searching for their own district's rate needs to read.
+
+    It states a count and a scope and no rate at all: a description is a place
+    a number would be copied from without its citation.
+    """
+    if not payload["years"]:
+        return (
+            "Бесплатный машиночитаемый справочник ставок налога по упрощённой декларации "
+            "для районов и городов Казахстана. В каждой строке стоит ссылка на решение "
+            "маслихата, из которого взята ставка."
+        )
+    years = sorted(payload["years"])
+    span = years[0] if len(years) == 1 else f"{years[0]}, {years[-1]}"
+    return (
+        f"Ставка налога по упрощённой декларации («упрощёнка») по районам и городам "
+        f"Казахстана за {span} год: {districts(payload)} районов и городов, поиск по названию "
+        f"или коду КАТО. В каждой строке стоит ссылка на решение маслихата, из которого взята "
+        f"ставка. Бесплатно, в JSON и CSV."
+    )
+
+
+def artefacts(payload: dict[str, Any]) -> list[dict[str, str]]:
+    """Every file this build publishes, with the URL that actually serves it.
+
+    One list, read by three consumers: the schema.org distribution array, the
+    links the page shows near the top, and llms.txt. Three hand-kept copies of
+    this list would disagree within a release, and the one that disagreed would
+    be the one an agent fetched.
+
+    `href` is relative because the page must carry no absolute link to itself:
+    a copy opened from file:// has to keep working, and a page that hardcodes
+    its own origin stops working the moment it is mirrored.
+    """
+    files = [
+        {
+            "name": "rates.json",
+            "url": PAGE_URL + "rates.json",
+            "href": "rates.json",
+            "format": "application/json",
+            "title": "Все годы в одном файле",
+        }
+    ]
+    for year in sorted(payload["years"]):
+        files.append(
+            {
+                "name": f"rates-{year}.json",
+                "url": f"{PAGE_URL}rates-{year}.json",
+                "href": f"rates-{year}.json",
+                "format": "application/json",
+                "title": f"Только {year} год, та же схема",
+            }
+        )
+    files.append(
+        {
+            "name": "data/rates.csv",
+            "url": SITE + "data/rates.csv",
+            "href": "../data/rates.csv",
+            "format": "text/csv",
+            "title": "Источник истины, одна строка на район и период",
+        }
+    )
+    files.append(
+        {
+            "name": "datapackage.json",
+            "url": SITE + "datapackage.json",
+            "href": "../datapackage.json",
+            "format": "application/json",
+            "title": "Frictionless: типы столбцов обеих таблиц",
+        }
+    )
+    files.append(
+        {
+            "name": "llms.txt",
+            "url": PAGE_URL + "llms.txt",
+            "href": "llms.txt",
+            "format": "text/plain",
+            "title": "Описание схемы для машинного читателя",
+        }
+    )
+    return files
+
+
+def dataset_jsonld(payload: dict[str, Any]) -> dict[str, Any]:
+    """schema.org Dataset, populated from the payload and never by hand.
+
+    This is what Google Dataset Search indexes, and it is the one piece of
+    metadata on this page with a channel of its own rather than a checkbox.
+
+    Every field is derived: the years decide temporalCoverage, the build clock
+    decides dateModified, and the artefact list decides the distributions. A
+    field typed here would be a second copy of a fact the payload already holds,
+    and the copy is the one that goes stale.
+    """
+    years = sorted(payload["years"])
+    block: dict[str, Any] = {
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "Ставки налога по упрощённой декларации по районам Казахстана",
+        "alternateName": "kz-tax-rates",
+        "description": description_ru(payload) + " " + payload["not_tax_advice"],
+        "url": PAGE_URL,
+        "sameAs": REPO_URL,
+        "identifier": REPO_URL,
+        "license": LICENCE_URL,
+        "isAccessibleForFree": True,
+        "creator": {"@type": "Person", "name": AUTHOR, "url": AUTHOR_URL},
+        "publisher": {"@type": "Person", "name": AUTHOR, "url": AUTHOR_URL},
+        "dateModified": payload["generated_at"],
+        "version": payload["schema_version"],
+        "inLanguage": ["ru", "kk"],
+        "spatialCoverage": {
+            "@type": "Place",
+            "name": "Казахстан",
+            "address": {"@type": "PostalAddress", "addressCountry": "KZ"},
+        },
+        "keywords": KEYWORDS,
+        "citation": {"@type": "Legislation", "name": TAX_CODE_NAME, "url": TAX_CODE_URL},
+        # The page never claims completeness and neither does its metadata.
+        "creativeWorkStatus": "Incomplete",
+        "distribution": [
+            {
+                "@type": "DataDownload",
+                "name": file["name"],
+                "description": file["title"],
+                "encodingFormat": file["format"],
+                "contentUrl": file["url"],
+            }
+            for file in artefacts(payload)
+        ],
+    }
+    if years:
+        # Closed on both sides, because the rows carry valid_to and a year of
+        # this dataset is a year, not a period still running.
+        block["temporalCoverage"] = f"{years[0]}-01-01/{years[-1]}-12-31"
+    return block
+
+
+def website_jsonld(payload: dict[str, Any]) -> dict[str, Any]:
+    """WebSite with a SearchAction, declared only because ?q= actually works.
+
+    The page reads ?q= into the search box on load, so the URL template below
+    resolves to a real filtered page. Declaring one the page did not honour
+    would send a reader to an unfiltered table and call it a search.
+    """
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": PAGE_URL,
+        "name": page_title(payload),
+        "inLanguage": "ru",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": PAGE_URL + "?q={search_term_string}",
+            },
+            "query-input": "required name=search_term_string",
+        },
+    }
+
+
+def favicon_data_uri() -> str:
+    """dist/favicon.svg as a data: URI, or empty where it is not there.
+
+    Measured rather than assumed: `<link rel="icon" href="favicon.svg">` is a
+    second HTTP request, which the page's zero-request rule forbids however
+    same-origin it is. A data: URI is not a request at all, and 453 bytes of
+    hand-drawn SVG costs about 620 characters inlined.
+
+    Base64 rather than percent-encoded, because the file carries both `#` and
+    double quotes and one of them ends the attribute early.
+
+    Missing file yields no tag at all. A favicon pointing at nothing is the same
+    failure as an og:image pointing at nothing.
+    """
+    icon = DIST / "favicon.svg"
+    if not icon.exists():
+        return ""
+    return "data:image/svg+xml;base64," + base64.b64encode(icon.read_bytes()).decode("ascii")
+
+
+def _script_safe(block: dict[str, Any]) -> str:
+    """JSON for a <script> element: `</` cannot be allowed to close the tag."""
+    return json.dumps(block, ensure_ascii=False, indent=2).replace("</", "<\\/")
+
+
+def render_head(payload: dict[str, Any]) -> str:
+    """Everything in <head> that a crawler, an agent or a share card reads.
+
+    Built here rather than written into the template, because all of it is
+    derived from the payload: the title carries the years, the description
+    carries the count, and the structured data carries both plus the artefact
+    list. A template can hold none of that without holding a stale copy of it.
+    """
+    title = page_title(payload)
+    description = description_ru(payload)
+    icon = favicon_data_uri()
+
+    tags = [
+        f"<title>{html.escape(title)}</title>",
+        f'<meta name="description" content="{html.escape(description, quote=True)}">',
+        f'<link rel="canonical" href="{PAGE_URL}">',
+        f'<meta name="author" content="{html.escape(AUTHOR)}">',
+        f'<meta name="theme-color" content="{THEME_LIGHT}" media="(prefers-color-scheme: light)">',
+        f'<meta name="theme-color" content="{THEME_DARK}" media="(prefers-color-scheme: dark)">',
+        f'<meta property="og:title" content="{html.escape(title, quote=True)}">',
+        f'<meta property="og:description" content="{html.escape(description, quote=True)}">',
+        f'<meta property="og:url" content="{PAGE_URL}">',
+        '<meta property="og:type" content="website">',
+        '<meta property="og:site_name" content="kz-tax-rates">',
+        '<meta property="og:locale" content="ru_RU">',
+        '<meta property="og:locale:alternate" content="kk_KZ">',
+        '<meta name="twitter:card" content="summary">',
+        # No og:image and no twitter:image. A social preview image has not been
+        # drawn, and a tag pointing at a file that does not exist is worse than
+        # no tag: the card renders broken instead of rendering plain.
+    ]
+    if icon:
+        tags.append(f'<link rel="icon" type="image/svg+xml" href="{icon}">')
+    for block in (dataset_jsonld(payload), website_jsonld(payload)):
+        tags.append('<script type="application/ld+json">\n' + _script_safe(block) + "\n</script>")
+    return "\n".join(tags)
 
 
 def read_aliases() -> list[list[str]]:
@@ -236,9 +596,14 @@ def render_index(payload: dict[str, Any]) -> str:
             "</", "<\\/"
         ),
         "/*MINISEARCH*/": search,
+        # The head is HTML rather than a script body, so it needs an HTML
+        # comment as its placeholder. Same single pass as the rest.
+        "<!--HEAD-->": render_head(payload),
     }
     return re.sub(
-        r"/\*(?:DATA|ALIASES|VIEW|MINISEARCH)\*/", lambda match: parts[match.group(0)], template
+        r"/\*(?:DATA|ALIASES|VIEW|MINISEARCH)\*/|<!--HEAD-->",
+        lambda match: parts[match.group(0)],
+        template,
     )
 
 
@@ -294,7 +659,7 @@ def datapackage() -> dict[str, Any]:
             {
                 "name": "MIT",
                 "path": "https://opensource.org/licenses/MIT",
-                "title": "MIT License — covers this compilation and the scripts, "
+                "title": "MIT License · covers this compilation and the scripts, "
                 "not the underlying legal acts, which are not copyrightable",
             }
         ],
@@ -317,7 +682,7 @@ def datapackage() -> dict[str, Any]:
                 "profile": "tabular-data-resource",
                 "format": "csv",
                 "encoding": "utf-8",
-                "title": "КАТО classifier, from stat.gov.kz — see data/kato.source.json",
+                "title": "КАТО classifier, from stat.gov.kz · see data/kato.source.json",
                 "schema": {"fields": KATO_FIELDS, "primaryKey": ["kato", "kato_version"]},
             },
         ],
@@ -327,15 +692,23 @@ def datapackage() -> dict[str, Any]:
 def render_llms_txt(payload: dict[str, Any]) -> str:
     """Plain-text description of the dataset for a machine reader (SPEC.md §3).
 
-    The remote exists and is **private**, so the URLs below fetch nothing. They
-    are stated as what will serve the data once it is public, and labelled as
-    not fetchable today — a URL that 404s reads as a fact, which is the failure
-    this text existed to avoid when the account name was still unknown.
+    Written for an agent that will fetch one URL and act on what it gets, so it
+    leads with the URLs and states the two traps before the schema. Short enough
+    to be read in full, because a file an agent skims is a file whose warnings
+    are the part that gets skimmed.
+
+    The repository is public and every URL below answered 200 on 2026-08-13.
+    The earlier NOT FETCHABLE warning was true of a private remote and is now
+    false, which is its own kind of wrong fact.
 
     Note `@master`. SPEC.md §8.2 writes `@main`; this repository's default
     branch is `master`, and jsDelivr resolves the branch literally.
     """
     years = sorted(payload["years"])
+    counts = payload["verification"]
+    files = artefacts(payload)
+    width = max((len(file["url"]) for file in files), default=0)
+
     lines = [
         "# kz-tax-rates",
         "",
@@ -344,59 +717,122 @@ def render_llms_txt(payload: dict[str, Any]) -> str:
         "",
         f"{payload['not_tax_advice']}",
         "",
-        f"Licence: {payload['licence']}, covering this compilation and the scripts. The "
-        "underlying maslikhat decisions are legal acts and are not copyrightable.",
+        f"Licence: {payload['licence']} ({LICENCE_URL}), covering this compilation and the "
+        "scripts. The underlying maslikhat decisions are legal acts and are not copyrightable, "
+        "so no permission is needed to redistribute them.",
         "",
-        "## Files",
+        "## Fetch",
         "",
-        "- dist/rates.json — every year in one file.",
-        "- dist/rates-<year>.json — one year, same schema.",
-        "- dist/index.html — the lookup page, with the data inlined.",
-        "- data/rates.csv — the source of truth, hand-verified, one row per district per period.",
-        "- data/kato.csv — the КАТО spine from stat.gov.kz; data/kato.source.json records where.",
+        "Public, free, no key, no rate limit worth naming. Take the JSON.",
+        "",
+    ]
+    lines += [f"{file['url'].ljust(width)}  {file['title']}" for file in files]
+    lines += [
+        "",
+        "Mirror on jsDelivr, for volume. raw.githubusercontent.com is rate limited and is not",
+        "a CDN. The branch is master, not main, and jsDelivr resolves it literally:",
+        "",
+        "https://cdn.jsdelivr.net/gh/siaarzh/kz-tax-rates@master/dist/rates.json",
+        "",
+        f"Source and issue tracker: {REPO_URL}",
         "",
         "## Schema of dist/rates.json",
         "",
         "schema_version, generated_at (UTC, ISO 8601), kato_version, licence,",
-        "not_tax_advice, not_tax_advice_ru, and years — an object keyed by year.",
+        "not_tax_advice, not_tax_advice_ru, verification, and years (an object keyed by year).",
         "",
+        "verification holds rows, human_verified and machine_extracted.",
         "Each year holds base_rate, rates[], and coverage {districts, estimated_total, complete}.",
-        "Each entry of rates[] holds kato, name_ru, name_kk, rate, decision_ref, source_url.",
+        "Each entry of rates[] holds kato, name_ru, name_kk, oblast_ru, oblast_kk, rate,",
+        "decision_ref, source_url.",
         "",
-        "## Reading the numbers",
+        "dist/rates-<year>.json is the same object with years narrowed to one key.",
+        "",
+        "## Two ways to read this wrong",
         "",
         "- rate and base_rate are FRACTIONS: 0.03 means 3%. Never a percentage, never a string.",
-        "- kato is a STRING of nine digits. Parsing it as an integer drops a leading zero and",
-        "  silently returns a different district.",
-        "- coverage.complete is always false while districts < estimated_total. A district that",
-        "  is absent has not had its decision read yet; it does not mean the district has no rate.",
+        "  Multiply by 100 to display. Storing 3 where 0.03 belongs is the error this dataset",
+        "  is validated against, because it has already happened to someone.",
+        "- kato is a STRING of nine digits. Parsing it as an integer drops a leading zero,",
+        "  shortens the code, and silently returns a different district. No error is raised.",
+        "",
+        "## What an absent district means",
+        "",
+        "It means nobody has read that district's decision yet. It does NOT mean the district",
+        "charges the base rate, and it does NOT mean the district has no rate. coverage.complete",
+        "is false and stays false while districts < estimated_total. Do not fill a gap with",
+        "base_rate: a maslikhat may lower the rate by up to half, so the gap is unknown, not 4%.",
         "",
         "## Provenance",
         "",
-        "Every row carries source_url, a link to the decision it was read from, and verified_by,",
-        "the person who read it. No rate is generated, inferred or filled in by a model.",
+        "Every row carries source_url, a link to the maslikhat decision the rate was read from,",
+        "and verified_by, naming who read it. No rate is invented, inferred or filled in.",
         "",
-        f"Years present: {', '.join(years) if years else 'none yet — the dataset is empty'}.",
+        f"Rows: {counts['rows']}. Read by a person: {counts['human_verified']}. "
+        f"Extracted from the decision by rule: {counts['machine_extracted']}.",
+        "",
+        "A machine-extracted row was parsed out of the published decision text by",
+        "scripts/extract_rates.py, not produced by a language model. It is still unverified by",
+        "a human being: open source_url before relying on the number.",
+        "",
+        f"Base rate and the ±50% a maslikhat may apply: {TAX_CODE_NAME}",
+        f"{TAX_CODE_URL}",
+        "",
+        f"Years present: {', '.join(years) if years else 'none yet, the dataset is empty'}.",
         f"Built: {payload['generated_at']}.",
-        "",
-        "## Published copies",
-        "",
-        "NOT FETCHABLE TODAY. github.com/siaarzh/kz-tax-rates is a PRIVATE repository, so",
-        "GitHub Pages serves nothing and the jsDelivr URL below 404s. Nothing here is public.",
-        "",
-        "Once the repository is made public, Pages serves dist/ and jsDelivr fronts the raw",
-        "files — raw.githubusercontent.com is rate-limited and is not a CDN:",
-        "",
-        "https://cdn.jsdelivr.net/gh/siaarzh/kz-tax-rates@master/dist/rates.json",
         "",
     ]
     return "\n".join(lines)
+
+
+def render_sitemap(payload: dict[str, Any]) -> str:
+    """A sitemap listing every published artefact, generated from `artefacts()`.
+
+    Written rather than hand-maintained because a hand-written one had the
+    namespace wrong (`w3.org/1999/sitemap/0.9` instead of
+    `sitemaps.org/schemas/sitemap/0.9`) and listed three of six files. A crawler
+    does not report either fault; it simply parses nothing and moves on.
+    """
+    urls = [SITE + "dist/"] + [SITE + item["url"].removeprefix(SITE) for item in artefacts(payload)]
+    seen: list[str] = []
+    for url in urls:
+        if url not in seen:
+            seen.append(url)
+    body = "\n".join(
+        f"  <url><loc>{url}</loc><lastmod>{payload['generated_at'][:10]}</lastmod></url>"
+        for url in seen
+    )
+    return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
+
+
+def render_robots() -> str:
+    """robots.txt, generated so its one honest caveat stays attached to it.
+
+    **A project site cannot serve robots.txt.** GitHub Pages honours only
+    `siaarzh.github.io/robots.txt`, which belongs to a different repository, so
+    this file is documentation until a custom domain exists. Saying so here
+    stops the next reader assuming crawl rules are in force that are not.
+    """
+    return (
+        "# kz-tax-rates: a free, cited table of Kazakhstan's simplified-regime\n"
+        "# tax rate per district. Crawl it, index it, take the data.\n"
+        "#\n"
+        "# NOT SERVED AS ROBOTS.TXT TODAY. This is a GitHub Pages project site,\n"
+        "# so only siaarzh.github.io/robots.txt is honoured and that path belongs\n"
+        "# to another repository. This file becomes live if a custom domain is\n"
+        "# ever added. Submit the sitemap directly to a search console instead.\n"
+        "User-agent: *\n"
+        "Allow: /\n"
+        f"Sitemap: {SITE}dist/sitemap.xml\n"
+    )
 
 
 def write(payload: dict[str, Any]) -> list[Path]:
     DIST.mkdir(exist_ok=True)
     (DIST / "index.html").write_text(render_index(payload), encoding="utf-8")
     (DIST / "llms.txt").write_text(render_llms_txt(payload), encoding="utf-8")
+    (DIST / "sitemap.xml").write_text(render_sitemap(payload), encoding="utf-8")
+    (DIST / "robots.txt").write_text(render_robots(), encoding="utf-8")
     # At the repository root, not in dist/: it describes data/, and the
     # frictionless convention puts it beside the data it documents.
     (REPO_ROOT / "datapackage.json").write_text(
@@ -406,6 +842,8 @@ def write(payload: dict[str, Any]) -> list[Path]:
         REPO_ROOT / "datapackage.json",
         DIST / "index.html",
         DIST / "llms.txt",
+        DIST / "sitemap.xml",
+        DIST / "robots.txt",
         DIST / "rates.json",
     ]
     (DIST / "rates.json").write_text(

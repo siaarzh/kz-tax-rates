@@ -4,46 +4,65 @@ Income tax rate under Kazakhstan's simplified regime (СНР на основе �
 
 Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date, so read the linked decision before relying on it.
 
-Licence: MIT, covering this compilation and the scripts. The underlying maslikhat decisions are legal acts and are not copyrightable.
+Licence: MIT (https://spdx.org/licenses/MIT.html), covering this compilation and the scripts. The underlying maslikhat decisions are legal acts and are not copyrightable, so no permission is needed to redistribute them.
 
-## Files
+## Fetch
 
-- dist/rates.json — every year in one file.
-- dist/rates-<year>.json — one year, same schema.
-- dist/index.html — the lookup page, with the data inlined.
-- data/rates.csv — the source of truth, hand-verified, one row per district per period.
-- data/kato.csv — the КАТО spine from stat.gov.kz; data/kato.source.json records where.
+Public, free, no key, no rate limit worth naming. Take the JSON.
+
+https://siaarzh.github.io/kz-tax-rates/dist/rates.json       Все годы в одном файле
+https://siaarzh.github.io/kz-tax-rates/dist/rates-2026.json  Только 2026 год, та же схема
+https://siaarzh.github.io/kz-tax-rates/data/rates.csv        Источник истины, одна строка на район и период
+https://siaarzh.github.io/kz-tax-rates/datapackage.json      Frictionless: типы столбцов обеих таблиц
+https://siaarzh.github.io/kz-tax-rates/dist/llms.txt         Описание схемы для машинного читателя
+
+Mirror on jsDelivr, for volume. raw.githubusercontent.com is rate limited and is not
+a CDN. The branch is master, not main, and jsDelivr resolves it literally:
+
+https://cdn.jsdelivr.net/gh/siaarzh/kz-tax-rates@master/dist/rates.json
+
+Source and issue tracker: https://github.com/siaarzh/kz-tax-rates
 
 ## Schema of dist/rates.json
 
 schema_version, generated_at (UTC, ISO 8601), kato_version, licence,
-not_tax_advice, not_tax_advice_ru, and years — an object keyed by year.
+not_tax_advice, not_tax_advice_ru, verification, and years (an object keyed by year).
 
+verification holds rows, human_verified and machine_extracted.
 Each year holds base_rate, rates[], and coverage {districts, estimated_total, complete}.
-Each entry of rates[] holds kato, name_ru, name_kk, rate, decision_ref, source_url.
+Each entry of rates[] holds kato, name_ru, name_kk, oblast_ru, oblast_kk, rate,
+decision_ref, source_url.
 
-## Reading the numbers
+dist/rates-<year>.json is the same object with years narrowed to one key.
+
+## Two ways to read this wrong
 
 - rate and base_rate are FRACTIONS: 0.03 means 3%. Never a percentage, never a string.
-- kato is a STRING of nine digits. Parsing it as an integer drops a leading zero and
-  silently returns a different district.
-- coverage.complete is always false while districts < estimated_total. A district that
-  is absent has not had its decision read yet; it does not mean the district has no rate.
+  Multiply by 100 to display. Storing 3 where 0.03 belongs is the error this dataset
+  is validated against, because it has already happened to someone.
+- kato is a STRING of nine digits. Parsing it as an integer drops a leading zero,
+  shortens the code, and silently returns a different district. No error is raised.
+
+## What an absent district means
+
+It means nobody has read that district's decision yet. It does NOT mean the district
+charges the base rate, and it does NOT mean the district has no rate. coverage.complete
+is false and stays false while districts < estimated_total. Do not fill a gap with
+base_rate: a maslikhat may lower the rate by up to half, so the gap is unknown, not 4%.
 
 ## Provenance
 
-Every row carries source_url, a link to the decision it was read from, and verified_by,
-the person who read it. No rate is generated, inferred or filled in by a model.
+Every row carries source_url, a link to the maslikhat decision the rate was read from,
+and verified_by, naming who read it. No rate is invented, inferred or filled in.
+
+Rows: 150. Read by a person: 0. Extracted from the decision by rule: 150.
+
+A machine-extracted row was parsed out of the published decision text by
+scripts/extract_rates.py, not produced by a language model. It is still unverified by
+a human being: open source_url before relying on the number.
+
+Base rate and the ±50% a maslikhat may apply: Налоговый кодекс Республики Казахстан от 18 июля 2025 года № 214-VIII ЗРК, статья 726
+https://adilet.zan.kz/rus/docs/K2500000214
 
 Years present: 2026.
 Built: 2026-08-13T12:58:17Z.
-
-## Published copies
-
-NOT FETCHABLE TODAY. github.com/siaarzh/kz-tax-rates is a PRIVATE repository, so
-GitHub Pages serves nothing and the jsDelivr URL below 404s. Nothing here is public.
-
-Once the repository is made public, Pages serves dist/ and jsDelivr fronts the raw
-files — raw.githubusercontent.com is rate-limited and is not a CDN:
-
-https://cdn.jsdelivr.net/gh/siaarzh/kz-tax-rates@master/dist/rates.json

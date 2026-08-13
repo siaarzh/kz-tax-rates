@@ -8,6 +8,7 @@ never reach the dataset (SPEC.md §12).
 from __future__ import annotations
 
 import ast
+import base64
 import csv
 import io
 import json
@@ -18,9 +19,22 @@ import sys
 import zipfile
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
+import build as build_module
 import pytest
-from build import build, datapackage, read_aliases, render_index, render_llms_txt
+from build import (
+    PAGE_URL,
+    REPO_URL,
+    SITE,
+    TAX_CODE_URL,
+    artefacts,
+    build,
+    datapackage,
+    read_aliases,
+    render_index,
+    render_llms_txt,
+)
 from fetch_kato import FIELDS as KATO_CSV_FIELDS
 from fetch_kato import TYPE_CODE_LEGEND, find_workbook_url, level_of, read_sheet, to_rows
 from validate import (
@@ -178,16 +192,48 @@ def test_a_reversed_range_is_reported_rather_than_silently_never_overlapping() -
     assert any("after valid_to" in error for error in check_no_overlap(rows))
 
 
+def _markup_only(page: str) -> str:
+    """The page with every script BODY emptied, opening tags kept.
+
+    Scanning the raw page for attributes reads the inlined JavaScript as markup:
+    `i<all.length; ...` matches an opening tag and swallows everything up to the
+    next `>`. Emptying the bodies leaves the one thing that matters here, which
+    is `<script src=`, still visible in the opening tag.
+    """
+    return re.sub(r"(<script\b[^>]*>).*?(</script>)", r"\1\2", page, flags=re.S)
+
+
+# Attributes a browser dereferences on its own. `rel` is not one of them, and
+# neither is a `content` on a meta: og:url naming this page is a declaration,
+# not a fetch.
+FETCHING_ATTRS = r"\b(src|srcset|href|poster|data|action|formaction)\s*=\s*\"([^\"]*)\""
+
+
 def test_the_page_inlines_the_data_and_requests_nothing() -> None:
     """SPEC.md §8.1: one self-contained file, no framework.
 
-    A page that fetched rates.json would show an empty table under file:// —
+    A page that fetched rates.json would show an empty table under file://,
     indistinguishable from a complete table of nothing.
+
+    Every attribute the browser would dereference must be a fragment, a data:
+    URI, or the canonical link. Canonical is the one absolute URL allowed here
+    and it is allowed on a measured ground rather than a stylistic one: no
+    browser fetches it. The favicon is inlined as base64 for the same reason a
+    relative one was rejected, that a same-origin request is still a request.
     """
     page = render_index(build([VALID]))
     assert VALID["kato"] in page
-    assert not re.findall(r'(?:src|href)="(?!#)[^"]+"', page)
     assert "<script src" not in page
+
+    for tag in re.finditer(r"<([a-z]+)\b([^>]*)>", _markup_only(page)):
+        name, attrs = tag.group(1), tag.group(2)
+        rel = re.search(r'\brel="([^"]*)"', attrs)
+        for attribute, value in re.findall(FETCHING_ATTRS, attrs):
+            if value.startswith("#") or value.startswith("data:"):
+                continue
+            assert name == "link" and rel and rel.group(1) == "canonical", (
+                f"<{name} {attribute}={value!r}> makes the page fetch something"
+            )
 
 
 def test_a_closing_script_tag_in_the_data_cannot_end_the_tag_early() -> None:
@@ -215,18 +261,25 @@ def test_the_page_carries_the_citation_of_every_row() -> None:
     assert "link.href = rate.source_url" in page
 
 
-# Anything that would make the browser open a connection: a stylesheet or
-# preload link, a script with a src, a CSS import, a font declaration, or any
-# absolute URL sitting in an attribute or a CSS url(). A source_url inside the
-# JSON payload is none of these — it is data the page prints as a link, and it
-# is the whole point of the project.
+# Anything that would make the browser open a connection: a link with a rel
+# that fetches, a script with a src, a CSS import, a font declaration, an
+# embedded media element, or an absolute URL inside a CSS url(). A source_url
+# inside the JSON payload is none of these: it is data the page prints as a
+# link, and it is the whole point of the project.
+#
+# `<link\b` used to stand here as a blanket ban, which was a proxy for the rule
+# rather than the rule. rel=canonical and a data: rel=icon fetch nothing, and
+# the page needs both to be findable. The rels below are the ones that do fetch;
+# the companion test above is what actually holds the line, by walking every
+# dereferenced attribute rather than pattern-matching the tags.
 EXTERNAL = (
-    r"<link\b",
+    r"<link[^>]*\brel=\"(?:stylesheet|preload|prefetch|preconnect|dns-prefetch"
+    r"|modulepreload|manifest|prerender)\"",
     r"<script[^>]*\bsrc\s*=",
     r"@import",
     r"@font-face",
     r"url\(\s*['\"]?https?:",
-    r"(?:src|href)\s*=\s*['\"]\s*(?:https?:)?//",
+    r"<(?:img|iframe|object|embed|video|audio|source|track)\b",
 )
 
 
@@ -238,8 +291,9 @@ def test_the_built_page_references_no_external_script_style_or_font() -> None:
     for the reader who has none, and offline is the case this page is built for.
     """
     page = render_index(build([VALID]))
+    markup = _markup_only(page)
     for pattern in EXTERNAL:
-        assert not re.search(pattern, page, re.IGNORECASE), pattern
+        assert not re.search(pattern, markup, re.IGNORECASE), pattern
     for host in ("cdn.jsdelivr.net/npm", "unpkg.com", "fonts.googleapis.com", "cdnjs"):
         assert host not in page
 
@@ -350,11 +404,11 @@ def _for_year(year: int, kato: str = "750000000", rate: str = "0.03") -> dict[st
     }
 
 
-def _view_of(page: str) -> dict[str, object]:
+def _view_of(page: str) -> dict[str, Any]:
     """The view blob the built page was handed, read back out of the page."""
     blob = re.search(r'id="view">(.*?)</script>', page, re.S)
     assert blob, "the page carries no view blob"
-    loaded: dict[str, object] = json.loads(blob.group(1))
+    loaded: dict[str, Any] = json.loads(blob.group(1))
     return loaded
 
 
@@ -451,12 +505,265 @@ def test_a_year_the_district_has_no_decision_for_is_absent_not_filled_in(
     assert "percent(" not in body
 
 
-def test_the_page_carries_no_em_or_en_dash_in_any_language() -> None:
-    """A typographic dash is not in the house style, in Russian or in English."""
+DASHES = ("—", "–", "―", "‒")
+
+
+def test_no_published_artefact_carries_an_em_or_en_dash_in_any_language() -> None:
+    """A typographic dash is not in the house style, in Russian or in English.
+
+    The head is checked as well as the body now, because a description and an
+    og:title are read by a person in a search result and a share card, which is
+    exactly where the house style is visible.
+
+    The template's own HTML comments are excluded and nothing else is: they are
+    stripped by no build step, but they are also not text anyone is served.
+    """
+    payload = build([_for_year(2026)])
+    page = render_index(payload)
+    served = re.sub(r"<!--.*?-->", "", page, flags=re.S)
+    for dash in DASHES:
+        assert dash not in served, f"the rendered page carries {dash!r}"
+        assert dash not in render_llms_txt(payload), f"llms.txt carries {dash!r}"
+        assert dash not in json.dumps(datapackage(), ensure_ascii=False), (
+            f"datapackage.json carries {dash!r}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Findability: the structured data, the ordinary metadata, and the attribution.
+#
+# All of it is emitted by render_head() and page_view() rather than written into
+# the template, so all of it is checked against the payload it came from. The
+# failure these guard against is metadata that was true of an earlier build:
+# a title naming one year while the data holds two, a distribution list missing
+# the file the build actually wrote, a canonical pointing at a moved page.
+# ---------------------------------------------------------------------------
+
+
+def _jsonld(page: str) -> list[dict[str, Any]]:
+    """Every ld+json block in the page, parsed. Unparseable is a failure here."""
+    blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', page, re.S)
+    assert blocks, "the page carries no JSON-LD at all"
+    return [json.loads(block.replace("<\\/", "</")) for block in blocks]
+
+
+def _typed(page: str, wanted: str) -> dict[str, Any]:
+    found = [block for block in _jsonld(page) if block.get("@type") == wanted]
+    assert len(found) == 1, f"expected exactly one {wanted} block, found {len(found)}"
+    return found[0]
+
+
+def test_the_dataset_block_parses_and_is_populated_from_the_payload() -> None:
+    payload = build([_for_year(2026)])
+    dataset = _typed(render_index(payload), "Dataset")
+
+    assert dataset["@context"] == "https://schema.org"
+    assert dataset["license"] == "https://spdx.org/licenses/MIT.html"
+    assert dataset["isAccessibleForFree"] is True
+    assert dataset["url"] == PAGE_URL
+    assert dataset["dateModified"] == payload["generated_at"]
+    assert dataset["creator"] == {
+        "@type": "Person",
+        "name": "Serzhan Akhmetov",
+        "url": "https://github.com/siaarzh",
+    }
+    assert dataset["spatialCoverage"]["address"]["addressCountry"] == "KZ"
+    assert dataset["temporalCoverage"] == "2026-01-01/2026-12-31"
+    assert dataset["citation"]["url"] == TAX_CODE_URL
+    assert "726" in str(dataset["citation"]["name"])
+    # Both languages, because the reader and the crawler search in different ones.
+    keywords = dataset["keywords"]
+    assert any(re.search("[а-яё]", word, re.I) for word in keywords)
+    assert any(re.fullmatch("[ -~]+", word) for word in keywords)
+
+
+def test_the_temporal_coverage_spans_every_year_present() -> None:
+    """Derived, so a second year of data cannot leave the first year's span behind."""
+    payload = build([_for_year(2026), _for_year(2027, kato="751000000")])
+    assert _typed(render_index(payload), "Dataset")["temporalCoverage"] == "2026-01-01/2027-12-31"
+
+
+def test_every_published_artefact_has_a_distribution() -> None:
+    """The distribution list is what a dataset crawler follows, so a file the
+    build wrote and the metadata did not mention is a file nobody finds.
+
+    Checked against artefacts(), which is the same list write(), the page's own
+    link row and llms.txt are built from.
+    """
+    payload = build([_for_year(2026), _for_year(2027, kato="751000000")])
+    dataset = _typed(render_index(payload), "Dataset")
+    declared = {entry["contentUrl"]: entry for entry in dataset["distribution"]}
+
+    for artefact in artefacts(payload):
+        assert artefact["url"] in declared, artefact["url"]
+        entry = declared[artefact["url"]]
+        assert entry["@type"] == "DataDownload"
+        assert entry["encodingFormat"] == artefact["format"]
+
+    # Both year files, the CSV and the frictionless descriptor, named explicitly
+    # rather than only via the loop, so a change to artefacts() that dropped one
+    # would not silently take the assertion with it.
+    for url in (
+        PAGE_URL + "rates.json",
+        PAGE_URL + "rates-2026.json",
+        PAGE_URL + "rates-2027.json",
+        SITE + "data/rates.csv",
+        SITE + "datapackage.json",
+    ):
+        assert url in declared, url
+    assert declared[SITE + "data/rates.csv"]["encodingFormat"] == "text/csv"
+
+
+def test_the_page_declares_a_description_and_a_canonical() -> None:
     page = render_index(build([_for_year(2026)]))
+    description = re.search(r'<meta name="description" content="([^"]+)">', page)
+    assert description, "the page has no meta description"
+    # Written for a person searching in Russian for their own district's rate.
+    assert re.search("[а-яё]", description.group(1), re.I)
+    assert len(description.group(1)) > 80
+    assert f'<link rel="canonical" href="{PAGE_URL}">' in page
+    assert f'<meta property="og:url" content="{PAGE_URL}">' in page
+    assert '<meta property="og:locale" content="ru_RU">' in page
+    assert '<meta property="og:locale:alternate" content="kk_KZ">' in page
+    assert '<meta name="twitter:card" content="summary">' in page
+
+
+def test_the_page_states_no_image_it_does_not_have() -> None:
+    """An og:image pointing at a file nobody drew renders as a broken card.
+
+    Same rule that refused an invented jsDelivr URL: a tag is a claim.
+    """
+    page = render_index(build([_for_year(2026)]))
+    assert "og:image" not in page
+    assert "twitter:image" not in page
+
+
+def test_the_title_carries_the_years_the_payload_actually_holds() -> None:
+    one = render_index(build([_for_year(2026)]))
+    assert re.search(r"<title>[^<]*2026[^<]*</title>", one)
+    assert "2027" not in one[: one.index("</head>")]
+
+    two = render_index(build([_for_year(2026), _for_year(2027, kato="751000000")]))
+    title = re.search(r"<title>([^<]*)</title>", two)
+    assert title and "2026 · 2027" in title.group(1)
+
+
+def test_the_favicon_is_inlined_rather_than_fetched() -> None:
+    """A relative href to favicon.svg is still an HTTP request, so it is base64.
+
+    Measured, not assumed: the rule is zero requests, not zero third parties.
+    """
+    page = render_index(build([_for_year(2026)]))
+    icon = re.search(r'<link rel="icon" type="image/svg\+xml" href="([^"]+)">', page)
+    assert icon, "the page references no favicon"
+    assert icon.group(1).startswith("data:image/svg+xml;base64,")
+    decoded = base64.b64decode(icon.group(1).split(",", 1)[1])
+    assert decoded == (REPO_ROOT / "dist" / "favicon.svg").read_bytes()
+
+
+def test_no_favicon_tag_is_emitted_when_the_file_is_missing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A favicon pointing at nothing is the same failure as an absent og:image."""
+    monkeypatch.setattr(build_module, "DIST", REPO_ROOT / "nowhere")
+    assert 'rel="icon"' not in render_index(build([_for_year(2026)]))
+
+
+def test_the_theme_colour_matches_the_page_it_frames() -> None:
+    """Two copies of one fact, so they are compared rather than trusted."""
+    page = render_index(build([_for_year(2026)]))
+    css = page[page.index("<style>") : page.index("</style>")]
+    light = re.search(r'content="(#[0-9a-f]{6})" media="\(prefers-color-scheme: light\)"', page)
+    dark = re.search(r'content="(#[0-9a-f]{6})" media="\(prefers-color-scheme: dark\)"', page)
+    assert light and dark
+
+    def expand(value: str) -> str:
+        short = re.search(r"--bg:\s*(#[0-9a-f]{3,6});", value)
+        assert short
+        hex_ = short.group(1)[1:]
+        return "#" + ("".join(c * 2 for c in hex_) if len(hex_) == 3 else hex_)
+
+    assert expand(css[: css.index("@media")]) == light.group(1)
+    assert expand(css[css.index("prefers-color-scheme: dark") :]) == dark.group(1)
+
+
+def test_the_search_action_is_declared_because_the_page_honours_a_query_string() -> None:
+    """Declared only because ?q= works. Both halves are checked, in one test,
+    because either alone is the failure: a SearchAction the page ignores sends
+    a reader from a search engine to an unfiltered table and calls it a result.
+    """
+    page = render_index(build([_for_year(2026)]))
+    site = _typed(page, "WebSite")
+    action = site["potentialAction"]
+    assert action["@type"] == "SearchAction"
+    assert action["target"]["urlTemplate"] == PAGE_URL + "?q={search_term_string}"
+    assert action["query-input"] == "required name=search_term_string"
+
+    # The renderer's own source, because CI has no browser to run it in.
     body = page[page.index("<body>") :]
-    for dash in ("—", "–"):
-        assert dash not in body, f"the rendered page carries {dash!r}"
+    assert 'queryParam("q")' in body
+    assert "location.search" in body
+    # The hash still wins: a permalink to one row is more specific than a query.
+    assert "hash || queryParam" in body
+
+
+def test_the_footer_names_the_author_and_links_the_repository() -> None:
+    """Asked for directly: nobody should have to infer this from the URL bar."""
+    page = render_index(build([_for_year(2026)]))
+    view = _view_of(page)
+    assert view["author"] == "Serzhan Akhmetov"
+    assert view["repo_url"] == REPO_URL
+
+    body = page[page.index("<body>") :]
+    assert "view.author" in body
+    assert "view.repo_url" in body
+    assert "view.provenance_ru" in body
+    # The licence still comes from the payload, never from the template.
+    assert 'attribution.appendChild(document.createTextNode(". Лицензия " + payload.licence' in body
+
+
+def test_the_footer_says_no_person_verified_the_rates_while_none_has() -> None:
+    """Counted from verified_by, so it corrects itself rather than standing stale."""
+    machine = {**_for_year(2026), "verified_by": "machine-extracted, NOT human-verified"}
+    view = _view_of(render_index(build([machine])))
+    assert "Ни одну строку не проверял человек" in str(view["provenance_ru"])
+
+    human = _view_of(render_index(build([_for_year(2026)])))
+    assert human["provenance_ru"] == "Каждую ставку прочитал из решения человек."
+
+    mixed = _view_of(render_index(build([machine, _for_year(2026, kato="751000000")])))
+    assert "Часть ставок" in str(mixed["provenance_ru"])
+
+    assert _view_of(render_index(build([])))["provenance_ru"] == ""
+
+
+def test_the_page_lists_its_machine_readable_files_near_the_top() -> None:
+    """Visible on the page, not only in the metadata, and above the search box.
+
+    The links are relative, so a copy opened from file:// still resolves them.
+    """
+    page = render_index(build([_for_year(2026)]))
+    view = _view_of(page)
+    assert [entry[0] for entry in view["files"]] == [
+        "rates.json",
+        "rates-2026.json",
+        "data/rates.csv",
+        "datapackage.json",
+        "llms.txt",
+    ]
+    for entry in view["files"]:
+        assert not entry[1].startswith("http"), entry
+
+    body = page[page.index("<body>") :]
+    assert body.index('id="files"') < body.index('class="search"')
+
+
+def test_the_verification_count_reaches_the_published_json() -> None:
+    """A consumer of rates.json alone cannot see verified_by, so it is counted here."""
+    machine = {**VALID, "verified_by": "machine-extracted, NOT human-verified"}
+    payload = build([VALID, machine])
+    assert payload["verification"] == {"rows": 2, "human_verified": 1, "machine_extracted": 1}
+    assert build([])["verification"] == {"rows": 0, "human_verified": 0, "machine_extracted": 0}
 
 
 def test_the_datapackage_types_every_column_of_both_csvs() -> None:
@@ -486,16 +793,38 @@ def test_llms_txt_states_the_fraction_and_string_traps() -> None:
     assert "Not tax advice." in text
 
 
-def test_llms_txt_says_the_urls_do_not_fetch_while_the_repository_is_private() -> None:
-    """A URL that 404s reads as a fact, whether it is invented or merely private.
+def test_llms_txt_gives_a_fetch_url_for_every_published_artefact() -> None:
+    """An agent reads this file to find out what to fetch, so it must list it all.
 
-    The placeholder went away when the remote was created; the warning must not
-    have gone with it. A private repository serves no Pages and no jsDelivr.
+    The repository is public and every one of these URLs answered 200 on
+    2026-08-13. The file used to warn NOT FETCHABLE TODAY, which was true of a
+    private remote and became a wrong fact the moment the remote went public.
+    A stale warning is not the safe side of this; it is the same failure as a
+    stale rate.
     """
-    text = render_llms_txt(build([]))
-    assert "NOT FETCHABLE TODAY" in text
-    assert "PRIVATE repository" in text
+    payload = build([VALID])
+    text = render_llms_txt(payload)
+    for artefact in artefacts(payload):
+        assert artefact["url"] in text, artefact["url"]
+    assert "NOT FETCHABLE" not in text
+    assert "PRIVATE repository" not in text
     assert "<user>" not in text
+    assert REPO_URL in text
+
+
+def test_llms_txt_states_what_an_absent_district_means_and_who_verified_the_rows() -> None:
+    """The two things an agent gets wrong when it has only the numbers.
+
+    A gap is not the base rate, and a machine-extracted row is not a verified
+    one. Both are counted from the data rather than asserted, so the sentences
+    correct themselves the day a person verifies a row.
+    """
+    text = render_llms_txt(build([VALID, {**VALID, "kato": "751000000"}]))
+    assert "does NOT mean the district charges the base rate" in text.replace("\n", " ")
+    assert "Rows: 2. Read by a person: 2. Extracted from the decision by rule: 0." in text
+
+    machine = {**VALID, "verified_by": "machine-extracted, NOT human-verified"}
+    assert "Read by a person: 0." in render_llms_txt(build([machine]))
 
 
 def test_the_jsdelivr_url_names_the_branch_this_repository_actually_uses() -> None:

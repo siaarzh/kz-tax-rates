@@ -7,7 +7,7 @@
     {
       "name": "MIT",
       "path": "https://opensource.org/licenses/MIT",
-      "title": "MIT License — covers this compilation and the scripts, not the underlying legal acts, which are not copyrightable"
+      "title": "MIT License · covers this compilation and the scripts, not the underlying legal acts, which are not copyrightable"
     }
   ],
   "resources": [
@@ -96,7 +96,7 @@
       "profile": "tabular-data-resource",
       "format": "csv",
       "encoding": "utf-8",
-      "title": "КАТО classifier, from stat.gov.kz — see data/kato.source.json",
+      "title": "КАТО classifier, from stat.gov.kz · see data/kato.source.json",
       "schema": {
         "fields": [
           {
