@@ -48,8 +48,8 @@ kz-tax-rates/
 ├── LICENSE                  # MIT
 ├── datapackage.json         # frictionless metadata
 ├── data/
-│   ├── rates.csv            # canonical, hand-curated, source of truth
-│   ├── kato.csv             # generated from data.egov.kz
+│   ├── rates.csv            # canonical, machine-read from the decisions
+│   ├── kato.csv             # generated from stat.gov.kz
 │   └── aliases.csv          # human name → КАТО, for fuzzy lookup
 ├── dist/                    # generated; committed so Pages/jsDelivr can serve it
 │   ├── rates.json

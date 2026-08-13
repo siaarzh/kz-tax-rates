@@ -1,28 +1,52 @@
 # kz-tax-rates
 
-The income tax rate under Kazakhstan's simplified regime (СНР на основе упрощённой декларации), for every administrative-territorial unit, by year, keyed on КАТО, with a citation to the maslikhat decision that set it.
+The income tax rate under Kazakhstan's simplified regime (СНР на основе упрощённой декларации), per district, with a link to the maslikhat decision that set it.
 
-The base rate is 4% under НК РК art. 726. A local maslikhat may move it by ±50%, so the real rate in a district is between 2% and 6%. Roughly 200 maslikhats publish a separate decision each November. This repository consolidates them.
+The base rate is 4% under НК РК art. 726. A local maslikhat can move it by up to half, so a district's real rate sits between 2% and 6%. Around 200 of them publish their own decision each November, scattered across the national legal database. This pulls them into one file.
 
-**Not tax advice.** This is a machine-readable copy of published legal facts, each row carrying a link to its primary source. It does not interpret anything, it does not tell you what to pay, and a rate here is only as current as its `verified_at` date. Check the linked decision before you rely on a number.
+**Not tax advice.** It's a machine-readable copy of published legal facts, each row linking to its source. It doesn't interpret anything and it won't tell you what to pay. Open the linked decision before you rely on a number.
 
-## Status
+## Live
 
-**Partial, and it says so.** `data/rates.csv` holds 127 rows against an estimated ~200 maslikhats that issue a decision. `dist/rates.json` reports its coverage on every build and never claims to be complete — a table that looks finished while most districts are missing is the same failure as one that goes stale while looking maintained.
+| | |
+|---|---|
+| Lookup page | https://siaarzh.github.io/kz-tax-rates/ |
+| JSON, all years | `https://cdn.jsdelivr.net/gh/siaarzh/kz-tax-rates@master/dist/rates.json` |
+| JSON, one year | `.../dist/rates-2026.json` |
+| CSV | [`data/rates.csv`](data/rates.csv) |
+
+`@master`, not `@main`. That's this repository's default branch and jsDelivr takes the branch name literally. Don't fetch from `raw.githubusercontent.com` directly, it's rate-limited and isn't a CDN.
+
+## What's in it, and what isn't
+
+127 districts for 2026. There are roughly 200 that could publish a decision, so this is partial and says so: `dist/rates.json` carries its own coverage count on every build.
+
+**A missing district is not a district paying the base rate.** It means we found no decision for it. Those two look identical in an empty row, and telling them apart is the hard part of this problem, not the easy part.
+
+## How a rate gets in
+
+Read out of the decision document itself, by code, never recalled by a model and never typed from memory.
+
+Each act is published in Russian and in Kazakh as separate files. Independent readers work over both, and a rate is recorded only when readings from two different files agree. Disagreement is thrown away rather than resolved, because picking the more plausible number is how a wrong rate gets in wearing a real citation. Every row keeps the exact sentence it came from, so you can check it without trusting the parser.
+
+**No person has read these decisions.** The `verified_by` column says `machine-extracted, NOT human-verified` and it means it. That column exists to hold a human's name and it doesn't have one yet.
+
+Two things that bite everyone: rates are fractions, so `0.03` and never `3` or `"3%"`. КАТО codes are strings. Parse one as an integer and you lose a leading zero, which quietly hands you a different district's rate.
 
 ## Layout
 
 | Path | What it is |
 |---|---|
-| `data/rates.csv` | The source of truth. Hand-curated, human-verified, edited only by a person. |
-| `data/kato.csv` | The КАТО spine, generated from stat.gov.kz. `data/kato.source.json` records exactly where from. |
-| `dist/` | Generated from `data/`: `rates.json`, `rates-<year>.json`, `index.html`, `llms.txt`. Committed on purpose — GitHub Pages and jsDelivr serve it from the repository. |
-| `datapackage.json` | Generated. Frictionless metadata describing both CSVs. |
-| `scripts/validate.py` | Deterministic checks. Blocking. Names the checks it does not yet make. |
+| `data/rates.csv` | The dataset. |
+| `data/kato.csv` | The КАТО spine from stat.gov.kz. `data/kato.source.json` records where it came from and when. |
+| `dist/` | Built from `data/`. Committed on purpose, because Pages and jsDelivr serve it straight from the repository. |
+| `scripts/extract_rates.py` | Fetches a decision and reads a rate out of it, or refuses and says why. |
+| `scripts/map_districts.py` | Attaches a decision to one КАТО code, or leaves it unattached and counts it. |
+| `scripts/validate.py` | Blocking checks. Also names the checks it doesn't make. |
 | `scripts/build.py` | CSV to JSON. Validates first; a failure writes nothing. |
-| `docs/SPEC.md` | The specification: data model, КАТО handling, ingestion, correctness rules, distribution. |
+| `docs/SPEC.md` | Data model, КАТО handling, ingestion, correctness rules, distribution. |
 
-## Build it
+## Running it
 
 ```sh
 python scripts/validate.py     # check data/rates.csv
@@ -31,26 +55,8 @@ python scripts/build.py        # regenerate dist/
 
 Gates: `pytest`, `ruff check scripts tests`, `ruff format --check scripts tests`, `mypy`.
 
-## The rule that matters
-
-**Every rate is read out of the decision by a person.** `verified_by` is never an agent, no row exists without a `source_url`, and no script writes to `data/rates.csv`. A model cannot tell "I read this in the decision" from "this is what decisions usually say", and that failure is the exact one this dataset exists to correct.
-
-Rates are stored as fractions — `0.03`, never `3`, never `"3%"`. КАТО codes are strings; parsing one as an integer drops a leading zero and silently returns another district's rate.
-
-## Using the data
-
-`dist/rates.json` holds every year; `dist/rates-<year>.json` holds one, with the same schema. Both state `licence` and the "not tax advice" notice as fields, so a consumer reading only the JSON still gets the terms. `dist/llms.txt` describes the schema in plain text, and `datapackage.json` is [frictionless](https://specs.frictionlessdata.io/) metadata for both CSVs.
-
-**Nothing is fetchable yet, and the remote existing does not change that.** `github.com/siaarzh/kz-tax-rates` is **private**: GitHub Pages serves nothing from it and the jsDelivr URL below returns 404, exactly as an invented URL would. It becomes real when the repository is made public, which is a decision, not a step.
-
-```
-https://cdn.jsdelivr.net/gh/siaarzh/kz-tax-rates@master/dist/rates.json
-```
-
-`@master`, not `@main` — that is this repository's default branch, and jsDelivr resolves the branch name literally. `raw.githubusercontent.com` is rate-limited and is not a CDN, which is why jsDelivr fronts it.
-
-A custom domain, if one is ever used, must not be `.kz`: a `.kz` domain may be suspended when its resources are hosted outside Kazakhstan, and GitHub Pages is not hosted there.
+Fetching hits `adilet.zan.kz` at a fixed rate with an honest User-Agent, and caches every document locally so a re-run costs nothing.
 
 ## Licence
 
-MIT — see [`LICENSE`](LICENSE). **It covers this compilation and the scripts, and nothing else.** The maslikhat decisions the data is read from are legal acts and are not copyrightable, so the licence neither claims nor could claim anything over them.
+MIT, see [`LICENSE`](LICENSE). It covers this compilation and the scripts. The decisions themselves are legal acts, not copyrightable, so the licence neither claims nor could claim anything over them.
