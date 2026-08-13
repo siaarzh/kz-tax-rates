@@ -20,7 +20,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/224/g25bs08399m.24-12-2025.kaz.pdf",
@@ -42,7 +43,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/736/g25bs83910m.24-12-2025.kaz.pdf",
@@ -64,7 +66,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/g25cc00327m.28-11-2025.kaz.pdf",
@@ -86,7 +89,8 @@
       ],
       "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога,за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки в Алгинском районе с 4 (четырех) процентов на 3 (три) процента.",
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/928/g25cc00348m.28-11-2025.kaz.pdf",
@@ -108,7 +112,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/424/g25ce00267m.04-11-2025.kaz.pdf",
@@ -130,7 +135,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/648/g25ds84521m.08-08-2025.kaz.pdf",
@@ -152,7 +158,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/936/g25fe30523m.26-11-2025.kaz.pdf",
@@ -174,7 +181,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/640/g25fi29572m.25-11-2025.kaz.pdf",
@@ -196,7 +204,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/704/g25fk28198m.28-11-2025.kaz.pdf",
@@ -244,7 +253,8 @@
       "decision_ref": "Решение маслихата района Мақаншы области Абай от 28 ноября 2025 года № 28-198/",
       "in_force_from": null,
       "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run"
+      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/840/g25ga00334m.31-10-2025.kaz.pdf",
@@ -292,7 +302,8 @@
       "decision_ref": "Решение Таразского городского маслихата Жамбылской области от 31 октября 2025 года № 33-4",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]"
+      "reason": "readers disagree: [2, 4]",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/g25gb00533m.27-11-2025.kaz.pdf",
@@ -340,7 +351,8 @@
       "decision_ref": "Решение Байзакского районного маслихата Жамбылской области от 27 ноября 2025 года № 53-3",
       "in_force_from": null,
       "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run"
+      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/448/g25gc00462m.28-11-2025.kaz.pdf",
@@ -388,7 +400,8 @@
       "decision_ref": "Решение Жамбылского районного маслихата Жамбылской области от 28 ноября 2025 года № 46-2",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]"
+      "reason": "readers disagree: [2, 4]",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25gd00552m.26-11-2025.kaz.pdf",
@@ -436,7 +449,8 @@
       "decision_ref": "Решение Жуалынского районного маслихата Жамбылской области от 26 ноября 2025 года № 55-2",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Жуалынском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'"
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Жуалынском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/776/g25ge00514m.12-11-2025.kaz.pdf",
@@ -484,7 +498,8 @@
       "decision_ref": "Решение Кордайского районного маслихата Жамбылской области от 12 ноября 2025 года № 51-4",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]"
+      "reason": "readers disagree: [2, 4]",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/g25gf00492m.27-11-2025.kaz.pdf",
@@ -532,7 +547,8 @@
       "decision_ref": "Решение Меркенского районного маслихата Жамбылской области от 27 ноября 2025 года № 49-2",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]"
+      "reason": "readers disagree: [2, 4]",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/616/g25gj00472m.24-11-2025.kaz.pdf",
@@ -580,7 +596,8 @@
       "decision_ref": "Решение Таласского районного маслихата Жамбылской области от 24 ноября 2025 года № 47-2",
       "in_force_from": null,
       "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run"
+      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/104/g25gk00462m.28-11-2025.kaz.pdf",
@@ -628,7 +645,8 @@
       "decision_ref": "Решение Шуского районного маслихата Жамбылской области от 28 ноября 2025 года № 46-2",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]"
+      "reason": "readers disagree: [2, 4]",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/032/g25ha37799m.26-12-2025.kaz.pdf",
@@ -650,7 +668,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/608/g25hd34199m.28-11-2025.kaz.pdf",
@@ -672,7 +691,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/680/g25he00236m.27-11-2025.kaz.pdf",
@@ -720,7 +740,8 @@
       "decision_ref": "Решение Улытауского районного маслихата области Ұлытау от 27 ноября 2025 года № 236",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога с 4% на 3% по доходам, полученным (подлежащим получению) за налоговый период.'"
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога с 4% на 3% по доходам, полученным (подлежащим получению) за налоговый период.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25id00563m.02-12-2025.kaz.pdf",
@@ -742,7 +763,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/640/g25ie49142m.24-07-2025.kaz.pdf",
@@ -764,7 +786,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/800/g25kd25204m.28-11-2025.kaz.pdf",
@@ -786,7 +809,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25km42326m.28-11-2025.kaz.pdf",
@@ -808,7 +832,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/352/g25kn00189m.21-11-2025.kaz.pdf",
@@ -830,7 +855,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/960/g25kq27239m.21-11-2025.kaz.pdf",
@@ -878,7 +904,8 @@
       "decision_ref": "Решение Шетского районного маслихата Карагандинской области от 21 ноября 2025 года № 27/239",
       "in_force_from": null,
       "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run"
+      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/576/g25la31144m.27-11-2025.kaz.pdf",
@@ -900,7 +927,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -948,7 +976,8 @@
       "decision_ref": "Решение Аральского районного маслихата Кызылординской области от 24 ноября 2025 года № 433",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )"
+      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -996,7 +1025,8 @@
       "decision_ref": "Решение Жалагашского районного маслихата Кызылординской области от 21 ноября 2025 года № 35-3",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )"
+      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -1044,7 +1074,8 @@
       "decision_ref": "Решение Шиелийского районного маслихата Кызылординской области от 24 ноября 2025 года № 36/6",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )"
+      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/544/g25ng00357m.12-11-2025.kaz.pdf",
@@ -1066,7 +1097,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/136/g25nj00329m.18-02-2026.kaz.pdf",
@@ -1088,7 +1120,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/672/g25nj00330m.18-02-2026.kaz.pdf",
@@ -1110,7 +1143,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/232/g25nj00334m.28-10-2025.kaz.pdf",
@@ -1132,7 +1166,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/384/g25pa27432m.28-11-2025.kaz.pdf",
@@ -1154,7 +1189,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/096/g25pc29137m.28-11-2025.kaz.pdf",
@@ -1176,7 +1212,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/328/g25pc29237m.28-11-2025.kaz.pdf",
@@ -1198,7 +1235,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/552/g25pd23040m.25-11-2025.kaz.pdf",
@@ -1246,7 +1284,8 @@
       "decision_ref": "Решение Актогайского районного маслихата Павлодарской области от 25 ноября 2025 года № 230/40",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence names BOTH the retail tax regime (розничного налога) and the simplified declaration (упрощенной декларации) — cannot tell which governs: 'Понизить размер ставки исчисления корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период в Актогайском районе с 4 (четырех) процентов на 3 (три) процента за налоговый период.'"
+      "reason": "regime objected: sentence names BOTH the retail tax regime (розничного налога) and the simplified declaration (упрощенной декларации) — cannot tell which governs: 'Понизить размер ставки исчисления корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период в Актогайском районе с 4 (четырех) процентов на 3 (три) процента за налоговый период.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/256/g25pe37642m.19-12-2025.kaz.pdf",
@@ -1268,7 +1307,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/136/g25pf02058m.28-11-2025.kaz.pdf",
@@ -1316,7 +1356,8 @@
       "decision_ref": "Решение Железинского районного маслихата Павлодарской области от 28 ноября 2025 года № 205/8",
       "in_force_from": null,
       "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run"
+      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/864/g25r000275m.30-12-2025.kaz.pdf",
@@ -1338,7 +1379,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/448/g25sa00629m.28-11-2025.kaz.pdf",
@@ -1360,7 +1402,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/904/g25sb00291m.28-11-2025.kaz.pdf",
@@ -1382,7 +1425,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/744/g25se00331m.25-11-2025.kaz.pdf",
@@ -1404,7 +1448,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/576/g25sf35527m.28-11-2025.kaz.pdf",
@@ -1426,7 +1471,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25sh00275m.26-11-2025.kaz.pdf",
@@ -1448,7 +1494,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25sj00483m.28-11-2025.kaz.pdf",
@@ -1470,7 +1517,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/608/g25sl03119m.22-12-2025.kaz.pdf",
@@ -1492,7 +1540,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/384/g25sn00353m.27-11-2025.kaz.pdf",
@@ -1514,7 +1563,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/896/g25td00203m.26-11-2025.kaz.pdf",
@@ -1562,7 +1612,8 @@
       "decision_ref": "Решение Исатайского районного маслихата Атырауской области от 26 ноября 2025 года № 203-VIII",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]"
+      "reason": "readers disagree: [2, 4]",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/136/g25ud35164m.28-11-2025.kaz.pdf",
@@ -1584,7 +1635,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/360/g25uf33195m.25-11-2025.kaz.pdf",
@@ -1632,7 +1684,8 @@
       "decision_ref": "Решение Казыгуртского районного маслихата Туркестанской области от 25 ноября 2025 года № 33/195-VIII",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'Установить, что на территории Казыгуртского района, за исключением налогов, удерживаемых у источника выплаты, ставка налога при применении специального налогового режима на основе упрощҰнной декларации для исчисления корпоративного подоходного налога или индивидуального подоходного налога снижается с 4% до 2%.'"
+      "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'Установить, что на территории Казыгуртского района, за исключением налогов, удерживаемых у источника выплаты, ставка налога при применении специального налогового режима на основе упрощҰнной декларации для исчисления корпоративного подоходного налога или индивидуального подоходного налога снижается с 4% до 2%.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/g25uh00373m.24-11-2025.kaz.pdf",
@@ -1680,7 +1733,8 @@
       "decision_ref": "Решение Ордабасинского районного маслихата Туркестанской области от 24 ноября 2025 года № 37/3",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'В Ордабасинском районе установить снижение ставки корпоративного или индивидуального подоходного налога (за исключением налогов, удерживаемых у источника выплаты) с 4% до 2% при применении специального налогового режима на основе упрощҰнной декларации.'"
+      "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'В Ордабасинском районе установить снижение ставки корпоративного или индивидуального подоходного налога (за исключением налогов, удерживаемых у источника выплаты) с 4% до 2% при применении специального налогового режима на основе упрощҰнной декларации.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/768/g25ui28166m.21-11-2025.kaz.pdf",
@@ -1728,7 +1782,8 @@
       "decision_ref": "Решение Отрарского районного маслихата Туркестанской области от 21 ноября 2025 года № 28/166-VIII",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Отырарском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'"
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Отырарском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/1000/g25up32197m.25-11-2025.kaz.pdf",
@@ -1776,7 +1831,8 @@
       "decision_ref": "Решение Жетысайского районного маслихата Туркестанской области от 25 ноября 2025 года № 32-197-VIII",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в районе Жетысай с 4 (четырех) процентов на 2 (два) процента по доходам, полученным (подлежащим получению) за налоговый период.'"
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в районе Жетысай с 4 (четырех) процентов на 2 (два) процента по доходам, полученным (подлежащим получению) за налоговый период.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/192/g25up32198m.25-11-2025.kaz.pdf",
@@ -1798,7 +1854,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/392/g25uq02921m.28-11-2025.kaz.pdf",
@@ -1846,7 +1903,8 @@
       "decision_ref": "Решение Келесского районного маслихата Туркестанской области от 28 ноября 2025 года № 29-212-VIII",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Келесском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'"
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Келесском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'",
+      "terminal": true
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/712/g25vd00336m.19-12-2025.kaz.pdf",
@@ -1868,7 +1926,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/320/g25vd00337m.19-12-2025.kaz.pdf",
@@ -1890,7 +1949,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/616/g25vd00338m.19-12-2025.kaz.pdf",
@@ -1912,7 +1972,8 @@
       ],
       "sentence": null,
       "year": 2027,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/744/g25vl00343m.25-11-2025.kaz.pdf",
@@ -1934,7 +1995,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/160/g25vl00344m.25-11-2025.kaz.pdf",
@@ -1956,7 +2018,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/352/g25vn03915m.28-11-2025.kaz.pdf",
@@ -1978,7 +2041,8 @@
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в районе Курчум с 4 (четырех) процентов на 2 (два) процента по доходам, полученным (подлежащим получению) за налоговый период.",
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/712/g26aaz4065m.24-04-2026.kaz.pdf",
@@ -2000,7 +2064,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -2048,7 +2113,8 @@
       "decision_ref": "Решение Жаксынского районного маслихата Акмолинской области от 10 июля 2026 года № 8С-57-2",
       "in_force_from": "2027-01-01",
       "outcome": "conflict",
-      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )"
+      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/616/g26dg44198m.06-01-2026.kaz.pdf",
@@ -2070,7 +2136,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/768/g26ie59180m.20-04-2026.kaz.pdf",
@@ -2092,7 +2159,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/776/g26ka00349m.25-02-2026.kaz.pdf",
@@ -2114,7 +2182,8 @@
       ],
       "sentence": null,
       "year": 2023,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/g26kc00404m.13-02-2026.kaz.pdf",
@@ -2136,7 +2205,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/640/g26ki46430m.20-02-2026.kaz.pdf",
@@ -2158,7 +2228,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/896/g26kr40299m.29-04-2026.kaz.pdf",
@@ -2180,7 +2251,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/096/g26nj00373m.18-02-2026.kaz.pdf",
@@ -2202,7 +2274,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/552/g26nj00374m.18-02-2026.kaz.pdf",
@@ -2224,7 +2297,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/904/g26pa32242m.03-06-2026.kaz.pdf",
@@ -2246,7 +2320,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/616/g26ph00343m.10-04-2026.kaz.pdf",
@@ -2268,7 +2343,8 @@
       ],
       "sentence": null,
       "year": 2027,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/736/g26pk38707m.12-05-2026.kaz.pdf",
@@ -2290,7 +2366,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/064/g26sc08375m.06-01-2026.kaz.pdf",
@@ -2312,7 +2389,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/808/g26sg00386m.18-02-2026.kaz.pdf",
@@ -2334,7 +2412,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/608/g26si00352m.05-01-2026.kaz.pdf",
@@ -2356,7 +2435,8 @@
       ],
       "sentence": null,
       "year": 2027,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/1000/k1700000120.01-01-2026.kaz.pdf",
@@ -2378,7 +2458,8 @@
       ],
       "sentence": null,
       "year": 2025,
-      "year_source": "tax-period"
+      "year_source": "tax-period",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/712/v25ca037637.18-12-2025.kaz.pdf",
@@ -2400,7 +2481,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/928/v25cb037517.28-11-2025.kaz.pdf",
@@ -2422,7 +2504,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/616/v25cc037659.23-12-2025.kaz.pdf",
@@ -2444,7 +2527,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/256/v25cd037622.18-12-2025.kaz.pdf",
@@ -2466,7 +2550,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/v25ce037615.18-12-2025.kaz.pdf",
@@ -2488,7 +2573,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/936/v25cf037643.19-12-2025.kaz.pdf",
@@ -2510,7 +2596,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/960/v25ci037568.08-12-2025.kaz.pdf",
@@ -2532,7 +2619,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/552/v25cj037724.29-12-2025.kaz.pdf",
@@ -2554,7 +2642,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/320/v25cl037696.24-12-2025.kaz.pdf",
@@ -2576,7 +2665,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/160/v25cm037596.15-12-2025.kaz.pdf",
@@ -2598,7 +2688,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/968/v25db037740.25-12-2025.kaz.pdf",
@@ -2620,7 +2711,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/v25dr037758.30-12-2025.kaz.pdf",
@@ -2642,7 +2734,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/296/v25e0037791.26-12-2025.kaz.pdf",
@@ -2664,7 +2757,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/200/v25fa037835.30-12-2025.kaz.pdf",
@@ -2686,7 +2780,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/424/v25gd037730.22-12-2025.kaz.pdf",
@@ -2708,7 +2803,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/328/v25ge037129.13-10-2025.kaz.pdf",
@@ -2730,7 +2826,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/872/v25ge037531.28-11-2025.kaz.pdf",
@@ -2752,7 +2849,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/032/v25gh526808.31-03-2025.kaz.pdf",
@@ -2774,7 +2872,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/000/v25gi037725.26-12-2025.kaz.pdf",
@@ -2796,7 +2895,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -2818,7 +2918,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/008/v25hb037709.24-12-2025.kaz.pdf",
@@ -2840,7 +2941,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/320/v25hc037720.25-12-2025.kaz.pdf",
@@ -2862,7 +2964,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/v25hc037808.31-12-2025.kaz.pdf",
@@ -2884,7 +2987,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/256/v25ia037707.26-12-2025.kaz.pdf",
@@ -2906,7 +3010,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/544/v25ib037757.30-12-2025.kaz.pdf",
@@ -2928,7 +3033,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/768/v25ig037647.22-12-2025.kaz.pdf",
@@ -2950,7 +3056,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/256/v25ii037668.23-12-2025.kaz.pdf",
@@ -2972,7 +3079,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/072/v25ka037655.19-12-2025.kaz.pdf",
@@ -2994,7 +3102,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/424/v25kc037631.19-12-2025.kaz.pdf",
@@ -3016,7 +3125,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/680/v25kg037696.18-12-2025.kaz.pdf",
@@ -3038,7 +3148,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/512/v25ki037610.18-12-2025.kaz.pdf",
@@ -3060,7 +3171,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/392/v25kj037689.23-12-2025.kaz.pdf",
@@ -3082,7 +3194,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/744/v25kk037753.29-12-2025.kaz.pdf",
@@ -3104,7 +3217,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/224/v25ko037718.24-12-2025.kaz.pdf",
@@ -3126,7 +3240,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/608/v25kr037781.29-12-2025.kaz.pdf",
@@ -3148,7 +3263,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/776/v25la037515.27-11-2025.kaz.pdf",
@@ -3170,7 +3286,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/584/v25la037665.24-12-2025.kaz.pdf",
@@ -3192,7 +3309,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/864/v25lc037688.23-12-2025.kaz.pdf",
@@ -3214,7 +3332,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/232/v25lg037640.19-12-2025.kaz.pdf",
@@ -3236,7 +3355,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/224/v25lh037666.23-12-2025.kaz.pdf",
@@ -3258,7 +3378,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/832/v25li037523.02-12-2025.kaz.pdf",
@@ -3280,7 +3401,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/552/v25mb037609.17-12-2025.kaz.pdf",
@@ -3302,7 +3424,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/808/v25mc037746.30-12-2025.kaz.pdf",
@@ -3324,7 +3447,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/072/v25nj037802.29-12-2025.kaz.pdf",
@@ -3346,7 +3470,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/416/v25pb037636.19-12-2025.kaz.pdf",
@@ -3368,7 +3493,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/040/v25pg037630.19-12-2025.kaz.pdf",
@@ -3390,7 +3516,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/072/v25ph764314.12-05-2026.kaz.pdf",
@@ -3412,7 +3539,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/008/v25r0037745.30-12-2025.kaz.pdf",
@@ -3434,7 +3562,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/320/v25ub037729.11-12-2025.kaz.pdf",
@@ -3456,7 +3585,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/192/v25ud037644.19-12-2025.kaz.pdf",
@@ -3478,7 +3608,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/672/v25ug037787.30-12-2025.kaz.pdf",
@@ -3500,7 +3631,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/v25uj037719.24-12-2025.kaz.pdf",
@@ -3522,7 +3654,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/040/v25uk037750.24-12-2025.kaz.pdf",
@@ -3544,7 +3677,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/032/v25va037487.25-11-2025.kaz.pdf",
@@ -3566,7 +3700,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/168/v25vk037614.19-12-2025.kaz.pdf",
@@ -3588,7 +3723,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/224/v25vs037486.26-11-2025.kaz.pdf",
@@ -3610,7 +3746,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/072/v25za037786.30-12-2025.kaz.pdf",
@@ -3632,7 +3769,8 @@
       ],
       "sentence": null,
       "year": 2025,
-      "year_source": "tax-period"
+      "year_source": "tax-period",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/320/v25zk750207.20-03-2025.kaz.pdf",
@@ -3654,7 +3792,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -3676,7 +3815,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/904/v26ch037863.19-01-2026.kaz.pdf",
@@ -3698,7 +3838,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/648/v26fd038095.03-03-2026.kaz.pdf",
@@ -3720,7 +3861,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/736/v26fe038010.13-02-2026.kaz.pdf",
@@ -3742,7 +3884,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/840/v26ff038451.15-04-2026.kaz.pdf",
@@ -3764,7 +3907,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/032/v26fj038571.27-04-2026.kaz.pdf",
@@ -3786,7 +3930,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/008/v26gh037920.29-01-2026.kaz.pdf",
@@ -3808,7 +3953,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/488/v26hd038702.22-04-2026.kaz.pdf",
@@ -3830,7 +3976,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/360/v26he037894.27-01-2026.kaz.pdf",
@@ -3852,7 +3999,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/576/v26ia037948.04-02-2026.kaz.pdf",
@@ -3874,7 +4022,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/392/v26ic038136.27-02-2026.kaz.pdf",
@@ -3896,7 +4045,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/704/v26ie039344.09-07-2026.kaz.pdf",
@@ -3918,7 +4068,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/v26if037868.21-01-2026.kaz.pdf",
@@ -3940,7 +4091,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/584/v26ij037810.06-01-2026.kaz.pdf",
@@ -3962,7 +4114,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/v26kc037885.23-01-2026.kaz.pdf",
@@ -3984,7 +4137,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/168/v26kh039357.20-07-2026.kaz.pdf",
@@ -4006,7 +4160,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/v26ki038032.20-02-2026.kaz.pdf",
@@ -4028,7 +4183,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/736/v26kn038003.16-02-2026.kaz.pdf",
@@ -4050,7 +4206,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/136/v26ko038109.05-03-2026.kaz.pdf",
@@ -4072,7 +4229,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/320/v26kq038604.28-04-2026.kaz.pdf",
@@ -4094,7 +4252,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/392/v26kr038618.29-04-2026.kaz.pdf",
@@ -4116,7 +4275,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -4138,7 +4298,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": null,
@@ -4160,7 +4321,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/1000/v26ma038950.05-06-2026.kaz.pdf",
@@ -4182,7 +4344,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/424/v26mf037842.13-01-2026.kaz.pdf",
@@ -4204,7 +4367,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/864/v26ph038009.16-02-2026.kaz.pdf",
@@ -4226,7 +4390,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/392/v26sa038496.20-04-2026.kaz.pdf",
@@ -4248,7 +4413,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/032/v26ta038668.30-04-2026.kaz.pdf",
@@ -4270,7 +4436,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/544/v26tc038534.20-04-2026.kaz.pdf",
@@ -4292,7 +4459,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/960/v26td038721.12-05-2026.kaz.pdf",
@@ -4314,7 +4482,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/872/v26tf038497.20-04-2026.kaz.pdf",
@@ -4336,7 +4505,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/704/v26tg039091.23-06-2026.kaz.pdf",
@@ -4358,7 +4528,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/712/v26th037935.26-01-2026.kaz.pdf",
@@ -4380,7 +4551,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/232/v26uc038008.13-02-2026.kaz.pdf",
@@ -4402,7 +4574,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/136/v26ui038062.19-02-2026.kaz.pdf",
@@ -4424,7 +4597,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/424/v26um038033.11-02-2026.kaz.pdf",
@@ -4446,7 +4620,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/352/v26un038716.13-05-2026.kaz.pdf",
@@ -4468,7 +4643,8 @@
       ],
       "sentence": null,
       "year": null,
-      "year_source": null
+      "year_source": null,
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/360/v26ur038443.15-04-2026.kaz.pdf",
@@ -4490,7 +4666,8 @@
       ],
       "sentence": null,
       "year": 2026,
-      "year_source": "in-force-date"
+      "year_source": "in-force-date",
+      "terminal": false
     }
   ]
 }

@@ -359,10 +359,10 @@
     },
     {
       "document_id": "G25GD00552M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.02,
-      "parser_rate": 0.02,
-      "reason": "model agrees with the parser: 0.02"
+      "parser_rate": null,
+      "reason": "G25GD00552M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25GG00442M",
@@ -408,10 +408,10 @@
     },
     {
       "document_id": "G25HE00236M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.03,
-      "parser_rate": 0.03,
-      "reason": "model agrees with the parser: 0.03"
+      "parser_rate": null,
+      "reason": "G25HE00236M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.03) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25IA46254M",
@@ -723,10 +723,10 @@
     },
     {
       "document_id": "G25PD23040M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.03,
-      "parser_rate": 0.03,
-      "reason": "model agrees with the parser: 0.03"
+      "parser_rate": null,
+      "reason": "G25PD23040M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.03) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25PE36839M",
@@ -954,10 +954,10 @@
     },
     {
       "document_id": "G25UF33195M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.02,
-      "parser_rate": 0.02,
-      "reason": "model agrees with the parser: 0.02"
+      "parser_rate": null,
+      "reason": "G25UF33195M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25UG32204M",
@@ -968,17 +968,17 @@
     },
     {
       "document_id": "G25UH00373M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.02,
-      "parser_rate": 0.02,
-      "reason": "model agrees with the parser: 0.02"
+      "parser_rate": null,
+      "reason": "G25UH00373M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25UI28166M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.02,
-      "parser_rate": 0.02,
-      "reason": "model agrees with the parser: 0.02"
+      "parser_rate": null,
+      "reason": "G25UI28166M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25UJ33228M",
@@ -1024,17 +1024,17 @@
     },
     {
       "document_id": "G25UP32197M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.02,
-      "parser_rate": 0.02,
-      "reason": "model agrees with the parser: 0.02"
+      "parser_rate": null,
+      "reason": "G25UP32197M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25UQ02921M",
-      "outcome": "agree",
+      "outcome": "published_support_withdrawn",
       "model_rate": 0.02,
-      "parser_rate": 0.02,
-      "reason": "model agrees with the parser: 0.02"
+      "parser_rate": null,
+      "reason": "G25UQ02921M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
     },
     {
       "document_id": "G25UR00281M",
@@ -1141,5 +1141,6 @@
       "parser_rate": 0.03,
       "reason": "model agrees with the parser: 0.03"
     }
-  ]
+  ],
+  "parser_rates_fingerprint": "9f7e3cc23b057bd74a6d0cf356b63506b4fdd89a00cdea00ef3fb3d525efd984"
 }

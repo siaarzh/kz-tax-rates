@@ -27,6 +27,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+import pytest
 from extract_rates import EXTRACTED
 from validate_readings import TASK_FIELDS, task_fields
 
@@ -48,7 +49,17 @@ def _real_extracted_row(document_id: str) -> dict[str, Any]:
     return dict(row)
 
 
-ROW = _real_extracted_row(DOCUMENT_ID)
+@pytest.fixture
+def real_row() -> dict[str, Any]:
+    """The committed row for DOCUMENT_ID, looked up per-test rather than at import.
+
+    A module-level `ROW = _real_extracted_row(DOCUMENT_ID)` runs at collection
+    time: if DOCUMENT_ID ever left the confirmed set -- exactly what just
+    happened to eight other documents when the regime reader was added --
+    collecting this file would raise and every test in it would error, not
+    just the one that needed the row. A fixture defers the lookup.
+    """
+    return _real_extracted_row(DOCUMENT_ID)
 
 
 def _naive_emit(document_id: str, text: str, row: dict[str, Any]) -> dict[str, Any]:
@@ -67,15 +78,15 @@ def _leaked_keys(task: dict[str, Any]) -> list[str]:
     return sorted(set(task) - TASK_FIELDS)
 
 
-def test_naive_emitter_leaks_the_parser_rate() -> None:
+def test_naive_emitter_leaks_the_parser_rate(real_row: dict[str, Any]) -> None:
     """Proves the leak check itself works, before trusting it against anything real."""
-    naive_task = _naive_emit(DOCUMENT_ID, REAL_TEXT, ROW)
+    naive_task = _naive_emit(DOCUMENT_ID, REAL_TEXT, real_row)
     leaked = _leaked_keys(naive_task)
 
     assert "rate" in leaked, "the naive emitter's leak went undetected -- the check is broken"
     assert "readings" in leaked
     assert "sentence" in leaked
-    assert naive_task["rate"] == ROW["rate"]
+    assert naive_task["rate"] == real_row["rate"]
 
 
 def test_real_emitter_does_not_leak() -> None:
@@ -103,17 +114,30 @@ def test_real_emitter_does_not_leak() -> None:
     assert "decision_ref" not in real_task
 
 
-def test_task_fields_has_no_parameter_for_a_parser_answer() -> None:
+def test_task_fields_has_no_parameter_for_a_parser_answer(real_row: dict[str, Any]) -> None:
     """The blinding is structural: there is no argument to pass a rate through.
 
     `_leaked_keys` above only proves the function's *output* is clean on one
     call. This proves the function *cannot* be called with a parser's row at
     all -- a caller who tried would get a TypeError, not a silently accepted
-    leak. A deliberately wrong stand-in for a parser's rate is included to
-    make the point concrete: this value cannot reach `task_fields` no matter
-    what it is.
+    leak. A deliberately wrong stand-in for a parser's rate is passed as an
+    actual keyword argument to make the point concrete: whatever this value
+    is, `task_fields` has no parameter to receive it through.
+
+    The previous version of this test compared a float against
+    `inspect.Parameter` objects (`0.99 not in signature.parameters.values()`)
+    -- a comparison that is true for every possible float, so it could never
+    fail regardless of what `task_fields` looked like. Calling the function
+    and asserting the `TypeError` is the real claim.
     """
-    deliberately_wrong_parser_rate = 0.99  # ROW's real rate is 0.03; this is not it
+    deliberately_wrong_parser_rate = real_row["rate"] * 33  # nowhere near a real rate either
     signature = inspect.signature(task_fields)
     assert set(signature.parameters) == {"document_id", "source_url", "text", "kazakh_text"}
-    assert deliberately_wrong_parser_rate not in signature.parameters.values()
+    with pytest.raises(TypeError):
+        task_fields(  # type: ignore[call-arg]
+            document_id=DOCUMENT_ID,
+            source_url="https://adilet.zan.kz/rus/docs/" + DOCUMENT_ID,
+            text=REAL_TEXT,
+            kazakh_text=None,
+            rate=deliberately_wrong_parser_rate,
+        )

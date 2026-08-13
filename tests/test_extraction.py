@@ -31,6 +31,7 @@ from pathlib import Path
 
 import discover_decisions
 import enumerate_decisions
+import validate_readings
 from extract_rates import (
     CONFIRMED,
     CONFLICT,
@@ -176,6 +177,33 @@ def test_a_sentence_naming_both_regimes_is_refused_as_ambiguous_not_guessed() ->
     assert "rate" not in result
     assert "regime objected" in result["reason"]
     assert "BOTH" in result["reason"]
+
+
+def test_a_non_genitive_retail_form_naming_both_regimes_is_ambiguous_not_confirmed() -> None:
+    """The genitive-only bug: `розничному налогу` (dative) used to slip past retail entirely.
+
+    `REGIME_RETAIL` used to match only the genitive `розничного налог\\w*`.
+    `розничный налог`, `розничному налогу` and `розничном налоге` all missed
+    it, and — because the "simplified alone" branch returned before the
+    generic marker fallback was ever reached — a sentence naming BOTH the
+    dative retail form and the simplified declaration confirmed silently as
+    simplified. Widening the pattern to `розничн\\w*\\s+налог\\w*` and
+    reordering the marker check ahead of the "simplified alone" return both
+    close this; either alone was verified insufficient while diagnosing it.
+    """
+    dative_and_simplified = (
+        "Решение маслихата Тестового района от 20 ноября 2025 года № 4. "
+        "Понизить размер ставки при применении специального налогового режима "
+        "розничному налогу на основе упрощенной декларации "
+        "с 4 (четырех) процентов на 3 (три) процента за налоговый период в 2026 году."
+    )
+    reading = read_regime(dative_and_simplified)
+    assert reading.kind == "substantive"
+    assert "BOTH" in reading.detail
+
+    result = classify(dative_and_simplified, kazakh_text=NO_KAZAKH_RATE)
+    assert result["outcome"] == CONFLICT
+    assert "rate" not in result
 
 
 def test_article_726_part_one_still_confirms_with_no_regime_named() -> None:
@@ -636,6 +664,13 @@ def test_the_limiter_is_one_shared_place_rather_than_one_per_script() -> None:
     assert enumerate_decisions.PAUSE_SECONDS == extract_rates.MIN_REQUEST_INTERVAL
     for module in (discover_decisions, enumerate_decisions):
         assert module.fetch is extract_rates.fetch
+
+    # validate_readings.py fetches too (`emit_tasks` -> `cached_document`), but
+    # through extract_rates's own `cached_document` rather than reimplementing
+    # a fetch path of its own -- this was the enrolment missing here: nothing
+    # asserted that the LLM validation gate's emitter goes through the same
+    # limiter as everything else that talks to adilet.zan.kz.
+    assert validate_readings.cached_document is extract_rates.cached_document
 
 
 def test_the_limiter_actually_waits(monkeypatch) -> None:  # type: ignore[no-untyped-def]

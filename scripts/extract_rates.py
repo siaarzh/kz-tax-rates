@@ -13,16 +13,21 @@ at row 150; a language model is not a reader at all and none is used here.
 ## Why several readers rather than one pattern
 
 One pattern that matches the wrong number returns a confident, well-formed,
-wrong rate, and nothing downstream can tell. So the document is read three ways
-and **disagreement is the output**, not an average:
+wrong rate, and nothing downstream can tell. So the document is read five ways
+— four that can produce a rate (digit, word, transition, kazakh) and a fifth,
+`read_regime`, that never produces one and only objects — and **disagreement
+is the output**, not an average:
 
-  - `confirmed` — **all three readers produced a rate and produced the same
-    one**, and the sanity rules hold. Only these become rows. A reader that
-    refuses blocks confirmation: its refusal is evidence, not silence.
-  - `conflict`  — readers disagree. The dangerous case, and the reason this
-    module exists in this shape.
-  - `unparsed`  — nothing matched. Safe, but it is silent coverage loss, so it
-    is counted rather than shrugged at.
+  - `confirmed` — **at least two of the four rate-bearing readers agree, from
+    two different sources**, no reader raises a substantive objection, and the
+    sanity rules hold. Only these become rows. A reader that refuses blocks
+    confirmation: its refusal is evidence, not silence. `read_regime` never
+    supplies the agreement itself — it can only veto one.
+  - `conflict`  — readers disagree, or one objects while the rest read cleanly
+    (a rate rise, a wrong starting point, a document naming the wrong regime).
+    The dangerous case, and the reason this module exists in this shape.
+  - `unparsed`  — nothing matched, or only one independent source did. Safe,
+    but it is silent coverage loss, so it is counted rather than shrugged at.
 
 **The readers must stay independent, and independence decays quietly.** If two
 of them ever start deriving from the same substring the same way, they agree
@@ -220,16 +225,28 @@ SUPERSEDED_MARKERS = (
 # same verb ("Понизить"/"Установить снижение"), same "с X на|до Y" shape, same
 # article. Nothing above tells the two apart: a retail-tax decision reads
 # cleanly, every reader agrees, and the row confirms — wrong regime entirely.
-# Measured: seven published districts were exactly that
-# (`.claude/decisions/…` names them), read correctly and published as if they
-# were simplified-declaration rates.
+# Measured 2026-08-14: seven published districts were exactly that — Жуалынский,
+# Жетысайский, Казыгуртский, Келесский, Ордабасынский, Отрарский and Улытауский —
+# read correctly and published as if they were simplified-declaration rates. An
+# eighth, Актогайский, names both regimes in one clause and is refused as
+# ambiguous rather than decided.
 #
 # So the regime is checked on THE SAME SENTENCE the rate comes from, never the
 # document as a whole — a title can name one regime while the operative
 # clause governs the other. Measured on G25GD00552M and two siblings: the
 # title says «упрощенной декларации», the "Понизить…" clause that actually
 # carries the rate says «розничного налога».
-REGIME_RETAIL = re.compile(r"розничного\s+налог\w*")
+# Genitive-only (`розничного`) missed the nominative, dative and prepositional
+# forms — `розничный налог`, `розничному налогу`, `розничном налоге` — which
+# all occur in real decisions and were confirmed to fall through to `simplified`
+# unchallenged. Widened to the stem plus any Cyrillic suffix rather than an
+# enumerated list of inflections: a stopword list keyed to specific endings is
+# exactly the shape that stopped matching silently once before (94 rows
+# collapsed to 1 when a stem length moved by one character). Measured: widening
+# changes the verdict on zero of the currently cached documents — the corpus
+# so far only ever wrote the genitive — so this is a forward guard, not a
+# correction to any confirmed row.
+REGIME_RETAIL = re.compile(r"розничн\w*\s+налог\w*")
 REGIME_SIMPLIFIED = re.compile(r"упрощ(?:е|ё)нн\w*\s+деклараци\w*")
 
 # The generic phrase that introduces EITHER regime name. Present in the rate
@@ -276,6 +293,12 @@ READER_SOURCE = {
     "transition": "russian-numeral",
     "word": "russian-word",
     "kazakh": "kazakh-file",
+    # `read_regime` never returns a rate, so this entry is never actually
+    # looked up by the `rate_percent is not None` filter below — but a
+    # dict indexed by every reader's name and missing one is a KeyError
+    # waiting for the day that filter's guard changes, not a fact worth
+    # relying on staying true forever.
+    "regime": "regime-check",
 }
 
 
@@ -532,16 +555,25 @@ def read_regime(sentence: str) -> Reading:
     - «упрощенной декларации» alone → fine, this is the regime published here.
     - neither name, but the generic "специального налогового режима" marker
       is present → the regime cannot be identified (see REGIME_MARKER above)
-      → refuse rather than assume it is the one this dataset publishes.
+      → refuse rather than assume it is the one this dataset publishes. This
+      is checked BEFORE the "simplified alone" case below, not after: a
+      pattern that misses a real retail phrasing (the genitive-only bug fixed
+      alongside this one) must not let an unrelated `simplified` match in the
+      same sentence short-circuit past the marker on its way out. Widening a
+      name pattern can always miss a future inflection; a marker check that
+      an early return can skip is a hole no widening closes for good.
     - neither name and no marker at all → says nothing about the regime one
       way or the other; left to the other readers. This is the COMMON case:
       documents that cite «частью первой … статьи 726» directly never name a
       regime by word (`G25BE08332M` and its siblings), and some cite article
       726 without even «частью первой» (`G25BI84692M`) — both are genuine
       simplified-declaration rows this reader must not touch.
+    - «упрощенной декларации» alone, with no unexplained marker → fine, this
+      is the regime published here.
     """
     retail = REGIME_RETAIL.search(sentence)
     simplified = REGIME_SIMPLIFIED.search(sentence)
+    marker = REGIME_MARKER.search(sentence)
     if retail and simplified:
         return Reading(
             "regime",
@@ -560,9 +592,7 @@ def read_regime(sentence: str) -> Reading:
             f"{sentence!r}",
             SUBSTANTIVE,
         )
-    if simplified:
-        return Reading("regime", None, "governs the simplified declaration regime", NO_MATCH)
-    if REGIME_MARKER.search(sentence):
+    if marker and not simplified:
         return Reading(
             "regime",
             None,
@@ -570,6 +600,8 @@ def read_regime(sentence: str) -> Reading:
             f"'розничного налога' nor 'упрощенной декларации' matched: {sentence!r}",
             SUBSTANTIVE,
         )
+    if simplified:
+        return Reading("regime", None, "governs the simplified declaration regime", NO_MATCH)
     return Reading("regime", None, "no regime named in the sentence", NO_MATCH)
 
 
@@ -761,6 +793,7 @@ def classify(
             "sentence": sentence,
             "year": year,
             "year_source": year_source,
+            "terminal": False,
         }
     if sentence is None:
         return {
@@ -770,6 +803,7 @@ def classify(
             "sentence": None,
             "year": year,
             "year_source": year_source,
+            "terminal": False,
         }
 
     readings = [
@@ -808,6 +842,7 @@ def classify(
                 f"NOT a disagreement. Re-run before reading this as a defect. "
                 f"({unreachable[0].detail.removeprefix(UNAVAILABLE)})"
             ),
+            "terminal": False,
         }
     if objections:
         # **A refusal is evidence, not silence** — but only a refusal that read
@@ -815,15 +850,35 @@ def classify(
         # as silence and confirmed a rate RISE at 4%; treating every refusal as
         # an objection would be the opposite error, blocking a document merely
         # phrased in a way one reader does not know.
+        #
+        # **`terminal` marks the one objection shape nothing can "fix":** the
+        # regime reader read the document correctly and it genuinely governs
+        # the retail-tax regime, not the simplified declaration. Widening a
+        # reader to make that case pass would be widening it to publish a
+        # wrong regime — the exact defect this reader exists to catch. Every
+        # OTHER objection shape (a rise, a wrong starting point, an unknown
+        # numeral) is a real candidate for a parser fix, so only an
+        # objection set made up entirely of `regime` readings is terminal.
         return {
             **result,
             "outcome": CONFLICT,
             "reason": "; ".join(f"{r.reader} objected: {r.detail}" for r in objections),
+            "terminal": all(r.reader == "regime" for r in objections),
         }
     if not values:
-        return {**result, "outcome": UNPARSED, "reason": "no reader produced a rate"}
+        return {
+            **result,
+            "outcome": UNPARSED,
+            "reason": "no reader produced a rate",
+            "terminal": False,
+        }
     if len(values) > 1:
-        return {**result, "outcome": CONFLICT, "reason": f"readers disagree: {sorted(values)}"}
+        return {
+            **result,
+            "outcome": CONFLICT,
+            "reason": f"readers disagree: {sorted(values)}",
+            "terminal": False,
+        }
     if len(sources) < 2:
         # One reading is never a row, however confident it looks.
         return {
@@ -833,6 +888,7 @@ def classify(
                 f"only one independent reading ({', '.join(sorted(sources))}) — a rate needs "
                 f"two, from different sources"
             ),
+            "terminal": False,
         }
 
     percent = values.pop()
@@ -842,6 +898,7 @@ def classify(
             **result,
             "outcome": CONFLICT,
             "reason": f"rate {rate} is outside the statutory band {RATE_MIN}..{RATE_MAX}",
+            "terminal": False,
         }
     return {**result, "outcome": CONFIRMED, "rate": rate}
 
