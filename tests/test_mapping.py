@@ -8,12 +8,15 @@ carefully as the matches.
 
 from __future__ import annotations
 
+from difflib import SequenceMatcher
+
 from map_districts import (
     CITY,
     DISTRICT,
     JURISDICTION_DISAGREEMENT,
     JURISDICTION_UNKNOWN,
     MAPPED_ONE,
+    MARGIN_FLOOR,
     NO_DISTRICT,
     OBLAST_DISAGREEMENT,
     TITLE_CONTRADICTS_CITATION,
@@ -22,7 +25,9 @@ from map_districts import (
     jurisdiction_from_maslikhat,
     jurisdiction_from_title,
     map_row,
+    name_margin,
     name_matches,
+    normalize_for_margin,
     oblast_codes,
     oblast_from_body,
     oblast_from_text,
@@ -457,3 +462,49 @@ def test_an_invented_word_order_still_refuses() -> None:
     returns None. A word order neither the adjective nor the genitive form
     uses — «маслихата района Костанайского» — must not be guessed."""
     assert jurisdiction_from_maslikhat("Решение маслихата района Костанайского области") is None
+
+
+# --- name_margin(): the reusable primitive for the spelling-divergence
+# widening, calibrated but NOT wired into district_in_oblast() in this slice.
+# See .plans/state/orchestrator/plan-7/margin-calibration.md.
+
+
+def test_name_margin_picks_best_and_runner_up_by_the_derived_ratio() -> None:
+    """A constructed case, not one of the calibration rows: the declined
+    form of «Хобдинский район» should beat every unrelated district name in
+    the same oblast by a wide, computable margin."""
+    candidates = ["Хобдинский район", "Мартукский район", "Каргалинский район"]
+    target = "Кобдинскому"
+
+    best, runner_up, margin = name_margin(target, candidates)
+
+    expected_ratios = sorted(
+        SequenceMatcher(None, normalize_for_margin(target), normalize_for_margin(c)).ratio()
+        for c in candidates
+    )
+    assert best == expected_ratios[-1]
+    assert runner_up == expected_ratios[-2]
+    assert margin == best - runner_up
+    assert best > runner_up
+
+
+def test_name_margin_with_a_single_candidate_has_no_runner_up() -> None:
+    best, runner_up, margin = name_margin("Аксу", ["Аксу"])
+    assert best == 1.0
+    assert runner_up == 0.0
+    assert margin == 1.0
+
+
+def test_normalize_for_margin_strips_the_declared_suffixes() -> None:
+    assert normalize_for_margin("Хобдинский район") == normalize_for_margin("хобдинский")
+    assert normalize_for_margin("Рудный Г.А.") == normalize_for_margin("рудный")
+
+
+def test_margin_floor_is_a_derived_constant_not_a_guess() -> None:
+    """The floor is measured, not typed to agree with an answer: it must sit
+    at or below the 5th percentile of the correct-answer margin distribution
+    the calibration recorded (0.150), never above it — a floor above that
+    line would reject known-correct rows outright."""
+    CALIBRATED_CORRECT_P5 = 0.150
+    assert MARGIN_FLOOR <= CALIBRATED_CORRECT_P5
+    assert 0.0 < MARGIN_FLOOR < 1.0

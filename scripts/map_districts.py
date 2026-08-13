@@ -45,6 +45,7 @@ import argparse
 import csv
 import json
 import re
+from difflib import SequenceMatcher
 from typing import Any
 
 from extract_rates import EXTRACTED
@@ -281,6 +282,64 @@ def name_matches(name: str, text_stems: set[str], text_lower: str) -> bool:
         return bool(name_stems & text_stems)
     words = [word for word in re.findall(WORD, name.lower()) if len(word) >= 2]
     return any(re.search(rf"\b{re.escape(word)}\b", text_lower) for word in words)
+
+
+# Suffixes that vary with declension or jurisdiction label, and never carry
+# the distinguishing information a spelling-divergence match needs: «район»,
+# «Г.А.», «области»/«область», per .claude/decisions/kato/name-matching-
+# widens-three-ways-and-each-widening-carries-its-own-guard.md section 3.
+_MARGIN_STRIP = ("г.а.", "района", "район", "области", "область")
+
+
+def normalize_for_margin(name: str) -> str:
+    """Case-fold and drop the suffixes above, so «Хобдинский район» and the
+    declined «хобдинского» compare on the root they share rather than on a
+    suffix that is never what tells two districts apart."""
+    text = name.casefold()
+    for token in _MARGIN_STRIP:
+        text = text.replace(token, "")
+    return " ".join(text.split())
+
+
+def name_margin(name: str, oblast_district_names: list[str]) -> tuple[float, float, float]:
+    """(best, runner_up, margin) for `name` against every district name in
+    an already-fixed oblast, by difflib.SequenceMatcher on names normalised
+    with normalize_for_margin().
+
+    NOT wired into district_in_oblast() or map_row() — this is the measured,
+    reusable primitive a later slice widens matching with. See
+    .plans/state/orchestrator/plan-7/margin-calibration.md for the
+    calibration this floor and this function were derived from.
+    """
+    a = normalize_for_margin(name)
+    ratios = sorted(
+        (
+            SequenceMatcher(None, a, normalize_for_margin(candidate)).ratio()
+            for candidate in oblast_district_names
+        ),
+        reverse=True,
+    )
+    best = ratios[0] if ratios else 0.0
+    runner_up = ratios[1] if len(ratios) > 1 else 0.0
+    return best, runner_up, best - runner_up
+
+
+# Calibrated over the 154 already-correctly-mapped rows that have a district
+# match (data/mapped-rates.json, outcome == "mapped", district_source
+# present) — never over the 5 spelling-divergence rows this floor exists to
+# eventually accept, which is the exact "typed a constant to agree with the
+# answer" failure this repository has already made once. The correct-answer
+# margin distribution has p5 = 0.150. The wrong-answer distribution (each
+# row's runner-up treated as if it had been the top pick) reaches 0.407, so
+# the two distributions OVERLAP — no single margin cleanly separates a right
+# pick from a wrong one, driven by homonymous city/district pairs
+# (Павлодар/Павлодарский, Костанай/Костанайский, ...) whose names collide
+# once «район»/«Г.А.» is stripped. MARGIN_FLOOR is the boundary below which
+# even an already-correct match should escalate rather than auto-accept; it
+# is NOT, by itself, a safe auto-accept threshold above 0.15 either. Full
+# distributions and the reasoning: .plans/state/orchestrator/plan-7/
+# margin-calibration.md.
+MARGIN_FLOOR = 0.15
 
 
 def district_in_oblast(
