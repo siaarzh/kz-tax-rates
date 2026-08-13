@@ -62,6 +62,7 @@ NO_OBLAST_IN_TEXT = "unmapped-no-oblast-named-in-text"
 NO_OBLAST_FROM_BODY = "unmapped-body-names-no-oblast"
 JURISDICTION_UNKNOWN = "unmapped-jurisdiction-type-not-stated"
 JURISDICTION_DISAGREEMENT = "unmapped-jurisdiction-sources-disagree"
+TITLE_CONTRADICTS_CITATION = "unmapped-title-contradicts-citation"
 
 CITY, DISTRICT = "city", "district"
 
@@ -293,11 +294,26 @@ def bodies_by_document() -> dict[str, str]:
     return {entry["document_id"]: entry["body"] for entry in payload["documents"]}
 
 
+def titles_by_document() -> dict[str, str]:
+    """The enumeration title, a second reading of which district an act names.
+
+    «О понижении размера ставки налогов ... в городе Караганда» — titles read
+    like this: a fixed preamble followed by the place. It is used only as a
+    FALLBACK when the citation resolves nothing, and as a VETO when both
+    resolve and disagree. Never as a replacement for the citation path.
+    """
+    if not ENUMERATED.exists():
+        return {}
+    payload = json.loads(ENUMERATED.read_text(encoding="utf-8"))
+    return {entry["document_id"]: entry["title"] for entry in payload["documents"]}
+
+
 def map_row(
     row: dict[str, Any],
     bodies: dict[str, str],
     oblasts: dict[str, str],
     grouped: dict[str, list[dict[str, str]]],
+    titles: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """One confirmed rate -> a code, or a named refusal."""
     text = " ".join(str(part) for part in (row.get("decision_ref"), row.get("sentence")) if part)
@@ -348,6 +364,30 @@ def map_row(
         }
 
     outcome, candidates = district_in_oblast(text, from_text, grouped, oblasts[from_text])
+    district_source = "citation" if outcome == MAPPED_ONE else None
+
+    # The title as a SECOND district source: a fallback when the citation
+    # resolves nothing, a veto when both resolve and disagree. Measured over
+    # the 150 already-mapped rows: 133 agree, 0 disagree, 17 silent — the
+    # title never contradicts the citation, which is the only safe shape for
+    # a second source. See .claude/decisions/kato/the-title-is-a-second-
+    # district-source.md.
+    title_text = (titles or {}).get(row["document_id"])
+    if title_text:
+        title_outcome, title_candidates = district_in_oblast(
+            title_text, from_text, grouped, oblasts[from_text]
+        )
+        if outcome == MAPPED_ONE and title_outcome == MAPPED_ONE:
+            if title_candidates[0]["kato"] != candidates[0]["kato"]:
+                # Both sources speak and name different districts. Neither
+                # is trusted over the other — refuse rather than pick.
+                outcome = TITLE_CONTRADICTS_CITATION
+                candidates = candidates + title_candidates
+                district_source = None
+        elif outcome != MAPPED_ONE and title_outcome == MAPPED_ONE:
+            outcome, candidates = title_outcome, title_candidates
+            district_source = "title"
+
     mapped = {
         **result,
         "outcome": outcome,
@@ -359,6 +399,7 @@ def map_row(
         mapped["kato"] = candidates[0]["kato"]
         mapped["name_ru"] = candidates[0]["name_ru"]
         mapped["name_kk"] = candidates[0]["name_kk"]
+        mapped["district_source"] = district_source or "citation"
     return mapped
 
 
@@ -369,7 +410,8 @@ def main() -> int:
 
     rows = json.loads(EXTRACTED.read_text(encoding="utf-8"))["rows"]
     bodies, oblasts, grouped = bodies_by_document(), oblast_codes(), districts_by_oblast()
-    results = [map_row(row, bodies, oblasts, grouped) for row in rows]
+    titles = titles_by_document()
+    results = [map_row(row, bodies, oblasts, grouped, titles) for row in rows]
 
     counts: dict[str, int] = {}
     for result in results:

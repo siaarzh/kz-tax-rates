@@ -1,9 +1,9 @@
 {
   "rule": "oblast from two agreeing sources, then exactly one district inside it",
   "counts": {
-    "mapped": 150,
+    "mapped": 151,
     "unmapped-no-oblast-named-in-text": 4,
-    "unmapped-no-district-matched": 7,
+    "unmapped-no-district-matched": 6,
     "unmapped-jurisdiction-type-not-stated": 2
   },
   "rows": [
@@ -36,7 +36,8 @@
       ],
       "kato": "111000000",
       "name_ru": "Кокшетау Г.А.",
-      "name_kk": "Көкшетау Қ.Ә."
+      "name_kk": "Көкшетау Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BB08265M",
@@ -52,7 +53,8 @@
       ],
       "kato": "111800000",
       "name_ru": "Степногорск Г.А.",
-      "name_kk": "Степногор Қ.Ә."
+      "name_kk": "Степногор Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BC00491M",
@@ -68,7 +70,8 @@
       ],
       "kato": "113200000",
       "name_ru": "Аккольский район",
-      "name_kk": "Ақкөл ауданы"
+      "name_kk": "Ақкөл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BD00432M",
@@ -84,7 +87,8 @@
       ],
       "kato": "113400000",
       "name_ru": "Аршалынский район",
-      "name_kk": "Аршалы ауданы"
+      "name_kk": "Аршалы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BE08332M",
@@ -100,7 +104,8 @@
       ],
       "kato": "113800000",
       "name_ru": "Атбасарский район",
-      "name_kk": "Атбасар ауданы"
+      "name_kk": "Атбасар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BF08432M",
@@ -116,7 +121,8 @@
       ],
       "kato": "113600000",
       "name_ru": "Астраханский район",
-      "name_kk": "Астрахан ауданы"
+      "name_kk": "Астрахан ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BG83411M",
@@ -132,7 +138,8 @@
       ],
       "kato": "114000000",
       "name_ru": "Буландынский район",
-      "name_kk": "Бұланды ауданы"
+      "name_kk": "Бұланды ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BH08344M",
@@ -148,7 +155,8 @@
       ],
       "kato": "114400000",
       "name_ru": "Егиндыкольский район",
-      "name_kk": "Егіндікөл ауданы"
+      "name_kk": "Егіндікөл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BI84692M",
@@ -164,7 +172,8 @@
       ],
       "kato": "114600000",
       "name_ru": "Ерейментауский район",
-      "name_kk": "Ерейментау ауданы"
+      "name_kk": "Ерейментау ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BJ00273M",
@@ -180,7 +189,8 @@
       ],
       "kato": "114500000",
       "name_ru": "район Биржан сал",
-      "name_kk": "Біржан сал ауданы"
+      "name_kk": "Біржан сал ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BK08403M",
@@ -196,7 +206,8 @@
       ],
       "kato": "114800000",
       "name_ru": "Есильский район",
-      "name_kk": "Есіл ауданы"
+      "name_kk": "Есіл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BL08593M",
@@ -212,7 +223,8 @@
       ],
       "kato": "115400000",
       "name_ru": "Жаркаинский район",
-      "name_kk": "Жарқайың ауданы"
+      "name_kk": "Жарқайың ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BN36276M",
@@ -228,7 +240,8 @@
       ],
       "kato": "115600000",
       "name_ru": "Зерендинский район",
-      "name_kk": "Зеренді ауданы"
+      "name_kk": "Зеренді ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BO00138M",
@@ -244,7 +257,8 @@
       ],
       "kato": "116000000",
       "name_ru": "Коргалжынский район",
-      "name_kk": "Қорғалжын ауданы"
+      "name_kk": "Қорғалжын ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BP00253M",
@@ -260,7 +274,8 @@
       ],
       "kato": "116400000",
       "name_ru": "Сандыктауский район",
-      "name_kk": "Сандықтау ауданы"
+      "name_kk": "Сандықтау ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BQ41054M",
@@ -276,7 +291,8 @@
       ],
       "kato": "116600000",
       "name_ru": "Целиноградский район",
-      "name_kk": "Целиноград ауданы"
+      "name_kk": "Целиноград ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BR08443M",
@@ -301,7 +317,8 @@
       ],
       "kato": "117000000",
       "name_ru": "Бурабайский район",
-      "name_kk": "Бурабай ауданы"
+      "name_kk": "Бурабай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25BT20651M",
@@ -317,7 +334,8 @@
       ],
       "kato": "111600000",
       "name_ru": "Косшы Г.А.",
-      "name_kk": "Қосшы Қ.Ә."
+      "name_kk": "Қосшы Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CA00356M",
@@ -333,7 +351,8 @@
       ],
       "kato": "151000000",
       "name_ru": "Актобе Г.А.",
-      "name_kk": "Ақтөбе Қ.Ә."
+      "name_kk": "Ақтөбе Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CB00406M",
@@ -349,7 +368,8 @@
       ],
       "kato": "153400000",
       "name_ru": "Айтекебийский район",
-      "name_kk": "Әйтеке би ауданы"
+      "name_kk": "Әйтеке би ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CC00349M",
@@ -365,7 +385,8 @@
       ],
       "kato": "153200000",
       "name_ru": "Алгинский район",
-      "name_kk": "Алға ауданы"
+      "name_kk": "Алға ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CD00324M",
@@ -381,7 +402,8 @@
       ],
       "kato": "153600000",
       "name_ru": "Байганинский район",
-      "name_kk": "Байғанин ауданы"
+      "name_kk": "Байғанин ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CF00378M",
@@ -397,7 +419,8 @@
       ],
       "kato": "154000000",
       "name_ru": "Каргалинский район",
-      "name_kk": "Қарғалы ауданы"
+      "name_kk": "Қарғалы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CG00395M",
@@ -424,7 +447,8 @@
       ],
       "kato": "154600000",
       "name_ru": "Мартукский район",
-      "name_kk": "Мәртөк ауданы"
+      "name_kk": "Мәртөк ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CI00452M",
@@ -440,7 +464,8 @@
       ],
       "kato": "154800000",
       "name_ru": "Мугалжарский район",
-      "name_kk": "Мұғалжар ауданы"
+      "name_kk": "Мұғалжар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CJ00382M",
@@ -456,7 +481,8 @@
       ],
       "kato": "155600000",
       "name_ru": "Темирский район",
-      "name_kk": "Темір ауданы"
+      "name_kk": "Темір ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CK00280M",
@@ -472,7 +498,8 @@
       ],
       "kato": "155200000",
       "name_ru": "Уилский район",
-      "name_kk": "Ойыл ауданы"
+      "name_kk": "Ойыл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CL00403M",
@@ -488,7 +515,8 @@
       ],
       "kato": "156000000",
       "name_ru": "Хромтауский район",
-      "name_kk": "Хромтау ауданы"
+      "name_kk": "Хромтау ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25CM00534M",
@@ -504,7 +532,8 @@
       ],
       "kato": "156400000",
       "name_ru": "Шалкарский район",
-      "name_kk": "Шалқар ауданы"
+      "name_kk": "Шалқар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DB54177M",
@@ -520,7 +549,8 @@
       ],
       "kato": "191000000",
       "name_ru": "Қонаев Г.А.",
-      "name_kk": "Қонаев Қ.Ә."
+      "name_kk": "Қонаев Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DG40184M",
@@ -536,7 +566,8 @@
       ],
       "kato": "194200000",
       "name_ru": "Жамбылский район",
-      "name_kk": "Жамбыл ауданы"
+      "name_kk": "Жамбыл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DH50225M",
@@ -552,7 +583,8 @@
       ],
       "kato": "194000000",
       "name_ru": "Енбекшиказахский район",
-      "name_kk": "Еңбекшіқазақ ауданы"
+      "name_kk": "Еңбекшіқазақ ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DJ52172M",
@@ -568,7 +600,8 @@
       ],
       "kato": "196800000",
       "name_ru": "Илийский район",
-      "name_kk": "Іле ауданы"
+      "name_kk": "Іле ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DK00453M",
@@ -584,7 +617,8 @@
       ],
       "kato": "195200000",
       "name_ru": "Карасайский район",
-      "name_kk": "Қарасай ауданы"
+      "name_kk": "Қарасай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DR50204M",
@@ -600,7 +634,8 @@
       ],
       "kato": "196200000",
       "name_ru": "Талгарский район",
-      "name_kk": "Талғар ауданы"
+      "name_kk": "Талғар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DS85123M",
@@ -616,7 +651,8 @@
       ],
       "kato": "196600000",
       "name_ru": "Уйгурский район",
-      "name_kk": "Ұйғыр ауданы"
+      "name_kk": "Ұйғыр ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25DU02465M",
@@ -632,7 +668,8 @@
       ],
       "kato": "191800000",
       "name_ru": "Алатау Г.А.",
-      "name_kk": "Алатау Қ.Ә."
+      "name_kk": "Алатау Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25E030271M",
@@ -663,7 +700,8 @@
       ],
       "kato": "101000000",
       "name_ru": "Семей Г.А.",
-      "name_kk": "Семей Қ.Ә."
+      "name_kk": "Семей Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FB33213M",
@@ -679,7 +717,8 @@
       ],
       "kato": "101800000",
       "name_ru": "Курчатов Г.А.",
-      "name_kk": "Курчатов Қ.Ә."
+      "name_kk": "Курчатов Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FC00352M",
@@ -706,7 +745,8 @@
       ],
       "kato": "103200000",
       "name_ru": "Абайский район",
-      "name_kk": "Абай ауданы"
+      "name_kk": "Абай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FE30522M",
@@ -722,7 +762,8 @@
       ],
       "kato": "103600000",
       "name_ru": "Аягозский район",
-      "name_kk": "Аягөз ауданы"
+      "name_kk": "Аягөз ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FF00345M",
@@ -738,7 +779,8 @@
       ],
       "kato": "103800000",
       "name_ru": "Бескарагайский район",
-      "name_kk": "Бесқарағай ауданы"
+      "name_kk": "Бесқарағай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FG00382M",
@@ -754,7 +796,8 @@
       ],
       "kato": "104000000",
       "name_ru": "Бородулихинский район",
-      "name_kk": "Бородулиха ауданы"
+      "name_kk": "Бородулиха ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FH31524M",
@@ -770,7 +813,8 @@
       ],
       "kato": "104200000",
       "name_ru": "Жарминский район",
-      "name_kk": "Жарма ауданы"
+      "name_kk": "Жарма ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FJ00342M",
@@ -786,7 +830,8 @@
       ],
       "kato": "104400000",
       "name_ru": "Кокпектинский район",
-      "name_kk": "Көкпекті ауданы"
+      "name_kk": "Көкпекті ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25FL22251M",
@@ -802,7 +847,8 @@
       ],
       "kato": "104100000",
       "name_ru": "район Жаңасемей",
-      "name_kk": "Жаңасемей ауданы"
+      "name_kk": "Жаңасемей ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25GD00552M",
@@ -818,7 +864,8 @@
       ],
       "kato": "314200000",
       "name_ru": "Жуалынский район",
-      "name_kk": "Жуалы ауданы"
+      "name_kk": "Жуалы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25GG00442M",
@@ -834,7 +881,8 @@
       ],
       "kato": "315600000",
       "name_ru": "Мойынкумский район",
-      "name_kk": "Мойынқұм ауданы"
+      "name_kk": "Мойынқұм ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25GH00415M",
@@ -859,7 +907,8 @@
       ],
       "kato": "316000000",
       "name_ru": "Сарысуский район",
-      "name_kk": "Сарысу ауданы"
+      "name_kk": "Сарысу ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25HA36207M",
@@ -875,7 +924,8 @@
       ],
       "kato": "621000000",
       "name_ru": "Жезказган Г.А.",
-      "name_kk": "Жезқазған Қ.Ә."
+      "name_kk": "Жезқазған Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25HB00228M",
@@ -891,7 +941,8 @@
       ],
       "kato": "622000000",
       "name_ru": "Сатпаев Г.А.",
-      "name_kk": "Сәтбаев Қ.Ә."
+      "name_kk": "Сәтбаев Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25HC00319M",
@@ -907,7 +958,8 @@
       ],
       "kato": "621800000",
       "name_ru": "Каражал Г.А.",
-      "name_kk": "Қаражал Қ.Ә."
+      "name_kk": "Қаражал Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25HE00236M",
@@ -923,7 +975,8 @@
       ],
       "kato": "623800000",
       "name_ru": "Улытауский район",
-      "name_kk": "Ұлытау ауданы"
+      "name_kk": "Ұлытау ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IA46254M",
@@ -939,7 +992,8 @@
       ],
       "kato": "331000000",
       "name_ru": "Талдыкорган Г.А.",
-      "name_kk": "Талдықорған Қ.Ә."
+      "name_kk": "Талдықорған Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IB37154M",
@@ -955,7 +1009,8 @@
       ],
       "kato": "331800000",
       "name_ru": "Текели Г.А.",
-      "name_kk": "Текелі Қ.Ә."
+      "name_kk": "Текелі Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IC61259M",
@@ -971,7 +1026,8 @@
       ],
       "kato": "333200000",
       "name_ru": "Аксуский район",
-      "name_kk": "Ақсу ауданы"
+      "name_kk": "Ақсу ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25ID00552M",
@@ -987,7 +1043,8 @@
       ],
       "kato": "333400000",
       "name_ru": "Алакольский район",
-      "name_kk": "Алакөл ауданы"
+      "name_kk": "Алакөл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IE54156M",
@@ -1003,7 +1060,8 @@
       ],
       "kato": "333600000",
       "name_ru": "Ескельдинский район",
-      "name_kk": "Ескелді ауданы"
+      "name_kk": "Ескелді ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IF49133M",
@@ -1019,7 +1077,8 @@
       ],
       "kato": "334400000",
       "name_ru": "Каратальский район",
-      "name_kk": "Қаратал ауданы"
+      "name_kk": "Қаратал ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IG30227M",
@@ -1035,7 +1094,8 @@
       ],
       "kato": "334000000",
       "name_ru": "Кербулакский район",
-      "name_kk": "Кербұлақ ауданы"
+      "name_kk": "Кербұлақ ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IH49201M",
@@ -1051,7 +1111,8 @@
       ],
       "kato": "334200000",
       "name_ru": "Коксуский район",
-      "name_kk": "Көксу ауданы"
+      "name_kk": "Көксу ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25II85022M",
@@ -1067,7 +1128,8 @@
       ],
       "kato": "334600000",
       "name_ru": "Панфиловский район",
-      "name_kk": "Панфилов ауданы"
+      "name_kk": "Панфилов ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25IJ49191M",
@@ -1083,7 +1145,8 @@
       ],
       "kato": "334800000",
       "name_ru": "Сарканский район",
-      "name_kk": "Сарқан ауданы"
+      "name_kk": "Сарқан ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KA00318M",
@@ -1108,7 +1171,8 @@
       ],
       "kato": "352400000",
       "name_ru": "Темиртау Г.А.",
-      "name_kk": "Теміртау Қ.Ә."
+      "name_kk": "Теміртау Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KD25205M",
@@ -1124,7 +1188,8 @@
       ],
       "kato": "351600000",
       "name_ru": "Балхаш Г.А.",
-      "name_kk": "Балқаш Қ.Ә."
+      "name_kk": "Балқаш Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KG00252M",
@@ -1140,7 +1205,8 @@
       ],
       "kato": "352200000",
       "name_ru": "Сарань Г.А.",
-      "name_kk": "Саран Қ.Ә."
+      "name_kk": "Саран Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KH45824M",
@@ -1156,7 +1222,8 @@
       ],
       "kato": "352800000",
       "name_ru": "Шахтинск Г.А.",
-      "name_kk": "Шахтинск Қ.Ә."
+      "name_kk": "Шахтинск Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KI41376M",
@@ -1172,7 +1239,8 @@
       ],
       "kato": "353200000",
       "name_ru": "Абайский район",
-      "name_kk": "Абай ауданы"
+      "name_kk": "Абай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KJ00335M",
@@ -1188,7 +1256,8 @@
       ],
       "kato": "353600000",
       "name_ru": "Актогайский район",
-      "name_kk": "Ақтоғай ауданы"
+      "name_kk": "Ақтоғай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KK03807M",
@@ -1204,7 +1273,8 @@
       ],
       "kato": "354000000",
       "name_ru": "Бухар-Жырауский район",
-      "name_kk": "Бұқар жырау ауданы"
+      "name_kk": "Бұқар жырау ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KM42327M",
@@ -1220,7 +1290,8 @@
       ],
       "kato": "354800000",
       "name_ru": "Каркаралинский район",
-      "name_kk": "Қарқаралы ауданы"
+      "name_kk": "Қарқаралы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KN00188M",
@@ -1236,7 +1307,8 @@
       ],
       "kato": "355200000",
       "name_ru": "Нуринский район",
-      "name_kk": "Нұра ауданы"
+      "name_kk": "Нұра ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KO40407M",
@@ -1252,7 +1324,8 @@
       ],
       "kato": "355600000",
       "name_ru": "Осакаровский район",
-      "name_kk": "Осакаров ауданы"
+      "name_kk": "Осакаров ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25KR34255M",
@@ -1268,7 +1341,8 @@
       ],
       "kato": "352100000",
       "name_ru": "Приозерск Г.А.",
-      "name_kk": "Приозерск Қ.Ә."
+      "name_kk": "Приозерск Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25LA30944M",
@@ -1293,7 +1367,8 @@
       ],
       "kato": "434400000",
       "name_ru": "Казалинский район",
-      "name_kk": "Қазалы ауданы"
+      "name_kk": "Қазалы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25LE00334M",
@@ -1309,7 +1384,8 @@
       ],
       "kato": "434600000",
       "name_ru": "Кармакшинский район",
-      "name_kk": "Қармақшы ауданы"
+      "name_kk": "Қармақшы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25LG00441M",
@@ -1325,7 +1401,8 @@
       ],
       "kato": "434000000",
       "name_ru": "Жанакорганский район",
-      "name_kk": "Жаңақорған ауданы"
+      "name_kk": "Жаңақорған ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25LH00216M",
@@ -1341,7 +1418,8 @@
       ],
       "kato": "434800000",
       "name_ru": "Сырдарьинский район",
-      "name_kk": "Сырдария ауданы"
+      "name_kk": "Сырдария ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25MA26167M",
@@ -1357,7 +1435,8 @@
       ],
       "kato": "471000000",
       "name_ru": "Актау Г.А.",
-      "name_kk": "Ақтау Г.А."
+      "name_kk": "Ақтау Г.А.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25MB32281M",
@@ -1373,7 +1452,8 @@
       ],
       "kato": "471800000",
       "name_ru": "Жанаозен Г.А.",
-      "name_kk": "Жаңаөзен Қ.Ә."
+      "name_kk": "Жаңаөзен Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25MC35268M",
@@ -1389,7 +1469,8 @@
       ],
       "kato": "473600000",
       "name_ru": "Бейнеуский район",
-      "name_kk": "Бейнеу ауданы"
+      "name_kk": "Бейнеу ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25MD31262M",
@@ -1405,7 +1486,8 @@
       ],
       "kato": "474200000",
       "name_ru": "Каракиянский район",
-      "name_kk": "Қарақия ауданы"
+      "name_kk": "Қарақия ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25ME24190M",
@@ -1421,7 +1503,8 @@
       ],
       "kato": "474600000",
       "name_ru": "Мангистауский район",
-      "name_kk": "Маңғыстау ауданы"
+      "name_kk": "Маңғыстау ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25MF35169M",
@@ -1437,7 +1520,8 @@
       ],
       "kato": "475200000",
       "name_ru": "Тупкараганский район",
-      "name_kk": "Түпқараған ауданы"
+      "name_kk": "Түпқараған ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25MG37210M",
@@ -1453,7 +1537,8 @@
       ],
       "kato": "475000000",
       "name_ru": "Мунайлинский район",
-      "name_kk": "Мұнайлы ауданы"
+      "name_kk": "Мұнайлы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25NA00200M",
@@ -1475,10 +1560,16 @@
       "year": 2026,
       "decision_ref": "Решение маслихата города Рудного Костанайской области от 27 ноября 2025 года № 249",
       "source_url": "https://adilet.zan.kz/rus/docs/G25NB00249M",
-      "outcome": "unmapped-no-district-matched",
+      "outcome": "mapped",
       "oblast_kato": "390000000",
       "oblast_name": "Костанайская область",
-      "candidates": []
+      "candidates": [
+        "Рудный Г.А."
+      ],
+      "kato": "392400000",
+      "name_ru": "Рудный Г.А.",
+      "name_kk": "Рудный Қ.Ә.",
+      "district_source": "title"
     },
     {
       "document_id": "G25ND00200M",
@@ -1494,7 +1585,8 @@
       ],
       "kato": "392000000",
       "name_ru": "Лисаковск Г.А.",
-      "name_kk": "Лисаков Қ.Ә."
+      "name_kk": "Лисаков Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25NG00389M",
@@ -1510,7 +1602,8 @@
       ],
       "kato": "393600000",
       "name_ru": "Аулиекольский район",
-      "name_kk": "Әулиекөл ауданы"
+      "name_kk": "Әулиекөл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25NJ00343M",
@@ -1526,7 +1619,8 @@
       ],
       "kato": "394400000",
       "name_ru": "Житикаринский район",
-      "name_kk": "Жітіқара ауданы"
+      "name_kk": "Жітіқара ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25NN00309M",
@@ -1556,7 +1650,8 @@
       ],
       "kato": "396200000",
       "name_ru": "Сарыкольский район",
-      "name_kk": "Сарыкөл ауданы"
+      "name_kk": "Сарыкөл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PA27332M",
@@ -1572,7 +1667,8 @@
       ],
       "kato": "551000000",
       "name_ru": "Павлодар Г.А.",
-      "name_kk": "Павлодар Қ.Ә."
+      "name_kk": "Павлодар Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PB24142M",
@@ -1599,7 +1695,8 @@
       ],
       "kato": "552200000",
       "name_ru": "Экибастуз Г.А.",
-      "name_kk": "Екібастұз Қ.Ә."
+      "name_kk": "Екібастұз Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PD23040M",
@@ -1615,7 +1712,8 @@
       ],
       "kato": "553200000",
       "name_ru": "Актогайский район",
-      "name_kk": "Ақтоғай ауданы"
+      "name_kk": "Ақтоғай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PE36839M",
@@ -1631,7 +1729,8 @@
       ],
       "kato": "553600000",
       "name_ru": "Баянаульский район",
-      "name_kk": "Баянауыл ауданы"
+      "name_kk": "Баянауыл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PG14342M",
@@ -1647,7 +1746,8 @@
       ],
       "kato": "554600000",
       "name_ru": "Иртышский район",
-      "name_kk": "Ертіс ауданы"
+      "name_kk": "Ертіс ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PH00236M",
@@ -1663,7 +1763,8 @@
       ],
       "kato": "554800000",
       "name_ru": "район Тереңкөл",
-      "name_kk": "Тереңкөл ауданы"
+      "name_kk": "Тереңкөл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PI16338M",
@@ -1679,7 +1780,8 @@
       ],
       "kato": "555200000",
       "name_ru": "район Аққулы",
-      "name_kk": "Аққулы ауданы"
+      "name_kk": "Аққулы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PJ00133M",
@@ -1695,7 +1797,8 @@
       ],
       "kato": "555600000",
       "name_ru": "Майский район",
-      "name_kk": "Май ауданы"
+      "name_kk": "Май ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PK38320M",
@@ -1711,7 +1814,8 @@
       ],
       "kato": "556000000",
       "name_ru": "Павлодарский район",
-      "name_kk": "Павлодар ауданы"
+      "name_kk": "Павлодар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PL20042M",
@@ -1727,7 +1831,8 @@
       ],
       "kato": "556400000",
       "name_ru": "Успенский район",
-      "name_kk": "Успен ауданы"
+      "name_kk": "Успен ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PM14750M",
@@ -1743,7 +1848,8 @@
       ],
       "kato": "556800000",
       "name_ru": "Щербактинский район",
-      "name_kk": "Шарбақты ауданы"
+      "name_kk": "Шарбақты ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25R000256M",
@@ -1774,7 +1880,8 @@
       ],
       "kato": "591000000",
       "name_ru": "Петропавловск Г.А.",
-      "name_kk": "Петропавл Қ.Ә."
+      "name_kk": "Петропавл Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SB02812M",
@@ -1790,7 +1897,8 @@
       ],
       "kato": "595800000",
       "name_ru": "Аккайынский район",
-      "name_kk": "Аққайың ауданы"
+      "name_kk": "Аққайың ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SC83411M",
@@ -1806,7 +1914,8 @@
       ],
       "kato": "593200000",
       "name_ru": "Айыртауский район",
-      "name_kk": "Айыртау ауданы"
+      "name_kk": "Айыртау ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SD00331M",
@@ -1822,7 +1931,8 @@
       ],
       "kato": "593400000",
       "name_ru": "Акжарский район",
-      "name_kk": "Ақжар ауданы"
+      "name_kk": "Ақжар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SE00332M",
@@ -1838,7 +1948,8 @@
       ],
       "kato": "596600000",
       "name_ru": "Район им.Габита Мусрепова",
-      "name_kk": "Ғабит Мүсірепов атын.ауданы"
+      "name_kk": "Ғабит Мүсірепов атын.ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SF35529M",
@@ -1854,7 +1965,8 @@
       ],
       "kato": "594200000",
       "name_ru": "Есильский район",
-      "name_kk": "Есіл ауданы"
+      "name_kk": "Есіл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SG00342M",
@@ -1870,7 +1982,8 @@
       ],
       "kato": "594600000",
       "name_ru": "Жамбылский район",
-      "name_kk": "Жамбыл ауданы"
+      "name_kk": "Жамбыл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SH00273M",
@@ -1886,7 +1999,8 @@
       ],
       "kato": "595000000",
       "name_ru": "Кызылжарский район",
-      "name_kk": "Қызылжар ауданы"
+      "name_kk": "Қызылжар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SI00331M",
@@ -1902,7 +2016,8 @@
       ],
       "kato": "593600000",
       "name_ru": "Район Магжана Жумабаева",
-      "name_kk": "Мағжан Жұмабаев ауданы"
+      "name_kk": "Мағжан Жұмабаев ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SJ00482M",
@@ -1918,7 +2033,8 @@
       ],
       "kato": "595200000",
       "name_ru": "Мамлютский район",
-      "name_kk": "Мамлют ауданы"
+      "name_kk": "Мамлют ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SK39427M",
@@ -1934,7 +2050,8 @@
       ],
       "kato": "596000000",
       "name_ru": "Тайыншинский район",
-      "name_kk": "Тайынша ауданы"
+      "name_kk": "Тайынша ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SL00302M",
@@ -1950,7 +2067,8 @@
       ],
       "kato": "596200000",
       "name_ru": "Тимирязевский район",
-      "name_kk": "Тимирязев ауданы"
+      "name_kk": "Тимирязев ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25SM00334M",
@@ -1966,7 +2084,8 @@
       ],
       "kato": "596400000",
       "name_ru": "Уалихановский район",
-      "name_kk": "Уәлиханов ауданы"
+      "name_kk": "Уәлиханов ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25TA00190M",
@@ -1982,7 +2101,8 @@
       ],
       "kato": "231000000",
       "name_ru": "Атырау Г.А.",
-      "name_kk": "Атырау Қ.Ә."
+      "name_kk": "Атырау Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25TB00381M",
@@ -1998,7 +2118,8 @@
       ],
       "kato": "233600000",
       "name_ru": "Жылыойский район",
-      "name_kk": "Жылыой ауданы"
+      "name_kk": "Жылыой ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25TC00237M",
@@ -2014,7 +2135,8 @@
       ],
       "kato": "235600000",
       "name_ru": "Махамбетский район",
-      "name_kk": "Махамбет ауданы"
+      "name_kk": "Махамбет ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25TE00352M",
@@ -2041,7 +2163,8 @@
       ],
       "kato": "234000000",
       "name_ru": "Индерский район",
-      "name_kk": "Индер ауданы"
+      "name_kk": "Индер ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25TG00189M",
@@ -2057,7 +2180,8 @@
       ],
       "kato": "235200000",
       "name_ru": "Макатский район",
-      "name_kk": "Мақат ауданы"
+      "name_kk": "Мақат ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25TH00242M",
@@ -2073,7 +2197,8 @@
       ],
       "kato": "234600000",
       "name_ru": "Курмангазинский район",
-      "name_kk": "Құрманғазы ауданы"
+      "name_kk": "Құрманғазы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UB38216M",
@@ -2100,7 +2225,8 @@
       ],
       "kato": "612000000",
       "name_ru": "Кентау Г.А.",
-      "name_kk": "Кентау Қ.Ә."
+      "name_kk": "Кентау Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UE34201M",
@@ -2116,7 +2242,8 @@
       ],
       "kato": "613600000",
       "name_ru": "район Байдибека",
-      "name_kk": "Бәйдібек ауданы"
+      "name_kk": "Бәйдібек ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UF33195M",
@@ -2132,7 +2259,8 @@
       ],
       "kato": "614000000",
       "name_ru": "Казыгуртский район",
-      "name_kk": "Қазығұрт ауданы"
+      "name_kk": "Қазығұрт ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UG32204M",
@@ -2148,7 +2276,8 @@
       ],
       "kato": "614400000",
       "name_ru": "Мактааральский район",
-      "name_kk": "Мақтаарал ауданы"
+      "name_kk": "Мақтаарал ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UH00373M",
@@ -2164,7 +2293,8 @@
       ],
       "kato": "614600000",
       "name_ru": "Ордабасынский район",
-      "name_kk": "Ордабасы ауданы"
+      "name_kk": "Ордабасы ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UI28166M",
@@ -2180,7 +2310,8 @@
       ],
       "kato": "614800000",
       "name_ru": "Отрарский район",
-      "name_kk": "Отырар ауданы"
+      "name_kk": "Отырар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UJ33228M",
@@ -2196,7 +2327,8 @@
       ],
       "kato": "615200000",
       "name_ru": "Сайрамский район",
-      "name_kk": "Сайрам ауданы"
+      "name_kk": "Сайрам ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UK35264M",
@@ -2212,7 +2344,8 @@
       ],
       "kato": "615400000",
       "name_ru": "Сарыагашский район",
-      "name_kk": "Сарыағаш ауданы"
+      "name_kk": "Сарыағаш ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UL00221M",
@@ -2239,7 +2372,8 @@
       ],
       "kato": "615800000",
       "name_ru": "Толебийский район",
-      "name_kk": "Төле би ауданы"
+      "name_kk": "Төле би ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UN38108M",
@@ -2255,7 +2389,8 @@
       ],
       "kato": "616000000",
       "name_ru": "Тюлькубасский район",
-      "name_kk": "Түлкібас ауданы"
+      "name_kk": "Түлкібас ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UO43236M",
@@ -2271,7 +2406,8 @@
       ],
       "kato": "616400000",
       "name_ru": "Шардаринский район",
-      "name_kk": "Шардара ауданы"
+      "name_kk": "Шардара ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UP32197M",
@@ -2287,7 +2423,8 @@
       ],
       "kato": "613800000",
       "name_ru": "Жетысайский район",
-      "name_kk": "Жетісай ауданы"
+      "name_kk": "Жетісай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UQ02921M",
@@ -2303,7 +2440,8 @@
       ],
       "kato": "613900000",
       "name_ru": "Келесский район",
-      "name_kk": "Келес ауданы"
+      "name_kk": "Келес ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25UR00281M",
@@ -2319,7 +2457,8 @@
       ],
       "kato": "615500000",
       "name_ru": "район Сауран",
-      "name_kk": "Сауран ауданы"
+      "name_kk": "Сауран ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VA00383M",
@@ -2335,7 +2474,8 @@
       ],
       "kato": "631000000",
       "name_ru": "Усть-Каменогорск Г.А.",
-      "name_kk": "Өскемен Қ.Ә."
+      "name_kk": "Өскемен Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VD00323M",
@@ -2351,7 +2491,8 @@
       ],
       "kato": "632400000",
       "name_ru": "Риддер Г.А.",
-      "name_kk": "Риддер Қ.Ә."
+      "name_kk": "Риддер Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VI00283M",
@@ -2367,7 +2508,8 @@
       ],
       "kato": "634000000",
       "name_ru": "Глубоковский район",
-      "name_kk": "Глубокое ауданы"
+      "name_kk": "Глубокое ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VK00432M",
@@ -2383,7 +2525,8 @@
       ],
       "kato": "634600000",
       "name_ru": "Зайсанский район",
-      "name_kk": "Зайсан ауданы"
+      "name_kk": "Зайсан ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VL00342M",
@@ -2399,7 +2542,8 @@
       ],
       "kato": "634800000",
       "name_ru": "район Алтай",
-      "name_kk": "Алтай ауданы"
+      "name_kk": "Алтай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VM31352M",
@@ -2415,7 +2559,8 @@
       ],
       "kato": "635400000",
       "name_ru": "Катон-Карагайский район",
-      "name_kk": "Катонқарағай ауданы"
+      "name_kk": "Катонқарағай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VN00453M",
@@ -2431,7 +2576,8 @@
       ],
       "kato": "635200000",
       "name_ru": "Курчумский район",
-      "name_kk": "Күршім ауданы"
+      "name_kk": "Күршім ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VP00333M",
@@ -2447,7 +2593,8 @@
       ],
       "kato": "635800000",
       "name_ru": "Тарбагатайский район",
-      "name_kk": "Тарбағатай ауданы"
+      "name_kk": "Тарбағатай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VQ00264M",
@@ -2463,7 +2610,8 @@
       ],
       "kato": "636200000",
       "name_ru": "Уланский район",
-      "name_kk": "Ұлан ауданы"
+      "name_kk": "Ұлан ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VS00413M",
@@ -2479,7 +2627,8 @@
       ],
       "kato": "636800000",
       "name_ru": "Шемонаихинский район",
-      "name_kk": "Шемонаиха ауданы"
+      "name_kk": "Шемонаиха ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VT00252M",
@@ -2495,7 +2644,8 @@
       ],
       "kato": "635600000",
       "name_ru": "район Самар",
-      "name_kk": "Самар ауданы"
+      "name_kk": "Самар ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VU17184M",
@@ -2511,7 +2661,8 @@
       ],
       "kato": "636300000",
       "name_ru": "район Үлкен Нарын",
-      "name_kk": "Үлкен Нарын ауданы"
+      "name_kk": "Үлкен Нарын ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25VV00322M",
@@ -2527,7 +2678,8 @@
       ],
       "kato": "635500000",
       "name_ru": "район Марқакөл",
-      "name_kk": "Марқакөл ауданы"
+      "name_kk": "Марқакөл ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25ZA00249M",
@@ -2543,7 +2695,8 @@
       ],
       "kato": "271000000",
       "name_ru": "Уральск Г.А.",
-      "name_kk": "Орал Қ.Ә."
+      "name_kk": "Орал Қ.Ә.",
+      "district_source": "citation"
     }
   ]
 }

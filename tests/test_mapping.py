@@ -15,6 +15,7 @@ from map_districts import (
     JURISDICTION_UNKNOWN,
     MAPPED_ONE,
     NO_DISTRICT,
+    TITLE_CONTRADICTS_CITATION,
     district_in_oblast,
     districts_by_oblast,
     jurisdiction_from_maslikhat,
@@ -210,3 +211,90 @@ def test_disagreeing_jurisdiction_sources_refuse_rather_than_pick() -> None:
     # And the independence that makes the disagreement meaningful: the title
     # pattern must not read the maslikhat's own adjective.
     assert jurisdiction_from_title("Костанайского районного маслихата") is None
+
+
+# --- The title as a second district source: fallback + veto -----------------
+#
+# .claude/decisions/kato/the-title-is-a-second-district-source.md — the title
+# is used only when the citation resolves nothing (fallback), or when both
+# resolve and disagree (veto). It never overrides an agreeing citation.
+
+CITATION_NAMES_NO_DISTRICT = (
+    "Решение маслихата Западно-Казахстанской области от 28 ноября 2025 года № 24-9"
+)
+
+
+def test_the_title_fills_in_when_the_citation_names_no_district() -> None:
+    """The citation names the oblast but no district; the title does."""
+    row = {
+        "document_id": "TEST-FALLBACK",
+        "rate": 0.03,
+        "year": 2026,
+        "decision_ref": CITATION_NAMES_NO_DISTRICT,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-FALLBACK": "Западно-Казахстанская область"}
+    titles = {"TEST-FALLBACK": "О понижении ставки по Бурлинскому району"}
+    result = map_row(row, bodies, OBLASTS, GROUPED, titles)
+    assert result["outcome"] == MAPPED_ONE
+    assert result["name_ru"] == "Бурлинский район"
+    assert result["district_source"] == "title"
+
+
+def test_a_title_that_agrees_with_the_citation_is_not_the_source_of_record() -> None:
+    """When the citation alone resolves the district, the source stays 'citation'."""
+    row = {
+        "document_id": "TEST-AGREE",
+        "rate": 0.03,
+        "year": 2026,
+        "decision_ref": URALSK,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-AGREE": "Западно-Казахстанская область"}
+    titles = {"TEST-AGREE": "О понижении ставки в городе Уральск"}
+    result = map_row(row, bodies, OBLASTS, GROUPED, titles)
+    assert result["outcome"] == MAPPED_ONE
+    assert result["district_source"] == "citation"
+
+
+def test_a_title_naming_a_different_district_vetoes_a_citation_match() -> None:
+    """Citation names Уральск; a (deliberately corrupted) title names Бурлинский
+    район, a different district in the same oblast. Neither is trusted over
+    the other, so the row refuses rather than picks."""
+    row = {
+        "document_id": "TEST-VETO",
+        "rate": 0.03,
+        "year": 2026,
+        "decision_ref": URALSK,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-VETO": "Западно-Казахстанская область"}
+    titles = {"TEST-VETO": "О понижении ставки по Бурлинскому району"}
+    result = map_row(row, bodies, OBLASTS, GROUPED, titles)
+    assert result["outcome"] == TITLE_CONTRADICTS_CITATION
+    assert "kato" not in result
+    assert "district_source" not in result
+
+
+def test_a_row_that_was_previously_mapped_now_refuses_on_a_corrupted_title() -> None:
+    """A previously-mapped row (citation resolves Уральск cleanly) must refuse,
+    not map wrongly, once a corrupted title contradicts it."""
+    row = {
+        "document_id": "TEST-WAS-MAPPED",
+        "rate": 0.03,
+        "year": 2026,
+        "decision_ref": URALSK,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-WAS-MAPPED": "Западно-Казахстанская область"}
+
+    clean_result = map_row(row, bodies, OBLASTS, GROUPED, {})
+    assert clean_result["outcome"] == MAPPED_ONE
+
+    corrupted_titles = {"TEST-WAS-MAPPED": "О понижении ставки по Бурлинскому району"}
+    corrupted_result = map_row(row, bodies, OBLASTS, GROUPED, corrupted_titles)
+    assert corrupted_result["outcome"] == TITLE_CONTRADICTS_CITATION
