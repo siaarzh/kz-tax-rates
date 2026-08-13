@@ -1,7 +1,7 @@
 {
   "rule": "oblast from two agreeing sources when the text names one, else the registry facet alone; then exactly one district inside it from the citation, or from the title when the citation names none",
   "counts": {
-    "mapped": 156,
+    "mapped": 148,
     "unmapped-no-district-matched": 5,
     "unmapped-jurisdiction-type-not-stated": 2
   },
@@ -911,24 +911,6 @@
       "district_source": "citation"
     },
     {
-      "document_id": "G25GD00552M",
-      "rate": 0.02,
-      "year": 2026,
-      "decision_ref": "Решение Жуалынского районного маслихата Жамбылской области от 26 ноября 2025 года № 55-2",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GD00552M",
-      "outcome": "mapped",
-      "oblast_kato": "310000000",
-      "oblast_name": "Жамбылская область",
-      "candidates": [
-        "Жуалынский район"
-      ],
-      "oblast_source": "both",
-      "kato": "314200000",
-      "name_ru": "Жуалынский район",
-      "name_kk": "Жуалы ауданы",
-      "district_source": "citation"
-    },
-    {
       "document_id": "G25GG00442M",
       "rate": 0.02,
       "year": 2026,
@@ -1034,24 +1016,6 @@
       "kato": "621800000",
       "name_ru": "Каражал Г.А.",
       "name_kk": "Қаражал Қ.Ә.",
-      "district_source": "citation"
-    },
-    {
-      "document_id": "G25HE00236M",
-      "rate": 0.03,
-      "year": 2026,
-      "decision_ref": "Решение Улытауского районного маслихата области Ұлытау от 27 ноября 2025 года № 236",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25HE00236M",
-      "outcome": "mapped",
-      "oblast_kato": "620000000",
-      "oblast_name": "область Ұлытау",
-      "candidates": [
-        "Улытауский район"
-      ],
-      "oblast_source": "both",
-      "kato": "623800000",
-      "name_ru": "Улытауский район",
-      "name_kk": "Ұлытау ауданы",
       "district_source": "citation"
     },
     {
@@ -1841,24 +1805,6 @@
       "district_source": "citation"
     },
     {
-      "document_id": "G25PD23040M",
-      "rate": 0.03,
-      "year": 2026,
-      "decision_ref": "Решение Актогайского районного маслихата Павлодарской области от 25 ноября 2025 года № 230/40",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25PD23040M",
-      "outcome": "mapped",
-      "oblast_kato": "550000000",
-      "oblast_name": "Павлодарская область",
-      "candidates": [
-        "Актогайский район"
-      ],
-      "oblast_source": "both",
-      "kato": "553200000",
-      "name_ru": "Актогайский район",
-      "name_kk": "Ақтоғай ауданы",
-      "district_source": "citation"
-    },
-    {
       "document_id": "G25PE36839M",
       "rate": 0.03,
       "year": 2026,
@@ -2422,24 +2368,6 @@
       "district_source": "citation"
     },
     {
-      "document_id": "G25UF33195M",
-      "rate": 0.02,
-      "year": 2026,
-      "decision_ref": "Решение Казыгуртского районного маслихата Туркестанской области от 25 ноября 2025 года № 33/195-VIII",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25UF33195M",
-      "outcome": "mapped",
-      "oblast_kato": "610000000",
-      "oblast_name": "Туркестанская область",
-      "candidates": [
-        "Казыгуртский район"
-      ],
-      "oblast_source": "both",
-      "kato": "614000000",
-      "name_ru": "Казыгуртский район",
-      "name_kk": "Қазығұрт ауданы",
-      "district_source": "citation"
-    },
-    {
       "document_id": "G25UG32204M",
       "rate": 0.02,
       "year": 2026,
@@ -2455,42 +2383,6 @@
       "kato": "614400000",
       "name_ru": "Мактааральский район",
       "name_kk": "Мақтаарал ауданы",
-      "district_source": "citation"
-    },
-    {
-      "document_id": "G25UH00373M",
-      "rate": 0.02,
-      "year": 2026,
-      "decision_ref": "Решение Ордабасинского районного маслихата Туркестанской области от 24 ноября 2025 года № 37/3",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25UH00373M",
-      "outcome": "mapped",
-      "oblast_kato": "610000000",
-      "oblast_name": "Туркестанская область",
-      "candidates": [
-        "Ордабасынский район"
-      ],
-      "oblast_source": "both",
-      "kato": "614600000",
-      "name_ru": "Ордабасынский район",
-      "name_kk": "Ордабасы ауданы",
-      "district_source": "citation"
-    },
-    {
-      "document_id": "G25UI28166M",
-      "rate": 0.02,
-      "year": 2026,
-      "decision_ref": "Решение Отрарского районного маслихата Туркестанской области от 21 ноября 2025 года № 28/166-VIII",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25UI28166M",
-      "outcome": "mapped",
-      "oblast_kato": "610000000",
-      "oblast_name": "Туркестанская область",
-      "candidates": [
-        "Отрарский район"
-      ],
-      "oblast_source": "both",
-      "kato": "614800000",
-      "name_ru": "Отрарский район",
-      "name_kk": "Отырар ауданы",
       "district_source": "citation"
     },
     {
@@ -2593,42 +2485,6 @@
       "kato": "616400000",
       "name_ru": "Шардаринский район",
       "name_kk": "Шардара ауданы",
-      "district_source": "citation"
-    },
-    {
-      "document_id": "G25UP32197M",
-      "rate": 0.02,
-      "year": 2026,
-      "decision_ref": "Решение Жетысайского районного маслихата Туркестанской области от 25 ноября 2025 года № 32-197-VIII",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25UP32197M",
-      "outcome": "mapped",
-      "oblast_kato": "610000000",
-      "oblast_name": "Туркестанская область",
-      "candidates": [
-        "Жетысайский район"
-      ],
-      "oblast_source": "both",
-      "kato": "613800000",
-      "name_ru": "Жетысайский район",
-      "name_kk": "Жетісай ауданы",
-      "district_source": "citation"
-    },
-    {
-      "document_id": "G25UQ02921M",
-      "rate": 0.02,
-      "year": 2026,
-      "decision_ref": "Решение Келесского районного маслихата Туркестанской области от 28 ноября 2025 года № 29-212-VIII",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25UQ02921M",
-      "outcome": "mapped",
-      "oblast_kato": "610000000",
-      "oblast_name": "Туркестанская область",
-      "candidates": [
-        "Келесский район"
-      ],
-      "oblast_source": "both",
-      "kato": "613900000",
-      "name_ru": "Келесский район",
-      "name_kk": "Келес ауданы",
       "district_source": "citation"
     },
     {

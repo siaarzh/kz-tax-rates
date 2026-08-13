@@ -215,6 +215,39 @@ SUPERSEDED_MARKERS = (
     "Внесены изменения",
 )
 
+# Article 726 also establishes a SEPARATE special regime, розничный налог
+# (retail tax), whose rate councils lower with a near-identical sentence —
+# same verb ("Понизить"/"Установить снижение"), same "с X на|до Y" shape, same
+# article. Nothing above tells the two apart: a retail-tax decision reads
+# cleanly, every reader agrees, and the row confirms — wrong regime entirely.
+# Measured: seven published districts were exactly that
+# (`.claude/decisions/…` names them), read correctly and published as if they
+# were simplified-declaration rates.
+#
+# So the regime is checked on THE SAME SENTENCE the rate comes from, never the
+# document as a whole — a title can name one regime while the operative
+# clause governs the other. Measured on G25GD00552M and two siblings: the
+# title says «упрощенной декларации», the "Понизить…" clause that actually
+# carries the rate says «розничного налога».
+REGIME_RETAIL = re.compile(r"розничного\s+налог\w*")
+REGIME_SIMPLIFIED = re.compile(r"упрощ(?:е|ё)нн\w*\s+деклараци\w*")
+
+# The generic phrase that introduces EITHER regime name. Present in the rate
+# sentence but followed by neither spelling above is not silence — it is a
+# document naming a regime this reader cannot read, and that is a real
+# failure mode, not a hypothetical one: G25UF33195M and G25UH00373M extract
+# «упрощ» + one corrupted character (U+04B0, a Kazakh letter, not a Cyrillic
+# «е») + «нной», where «упрощенной» belongs — a PDF-extraction artefact, not a
+# retail-tax decision, but this reader cannot tell that from a genuine retail
+# decision and must not guess either way.
+#
+# Widening REGIME_SIMPLIFIED to tolerate the corruption would make it
+# invisible and confirm the row anyway — the same shape of mistake as the
+# stopword list that stopped matching when a stem length moved by one
+# character. An unidentifiable regime refuses; it is never assumed to be the
+# one this dataset publishes.
+REGIME_MARKER = re.compile(r"специальн\w*\s+налогов\w*\s+режим\w*")
+
 CONFIRMED, CONFLICT, UNPARSED = "confirmed", "conflict", "unparsed"
 
 # Marks a reading that failed to happen rather than one that disagreed. The
@@ -482,6 +515,64 @@ def read_transition(sentence: str, year: int | None) -> Reading:
     return Reading("transition", new, match.group(0).strip())
 
 
+def read_regime(sentence: str) -> Reading:
+    """READER 5 — which special regime the rate sentence actually governs.
+
+    Never originates a rate; it only objects. A sentence naming «розничного
+    налога» (retail tax) and not «упрощенной декларации» is not a
+    simplified-declaration rate at all, however cleanly the other four
+    readers parse its digits — the two regimes cite the same article and
+    move by the same shape of sentence, so the digit/word/transition/kazakh
+    readers cannot see the difference and were not designed to.
+
+    - both names in one sentence → refuse ambiguous: which clause is
+      operative is not this reader's call (`G25PD23040M`: одно предложение,
+      «розничного налога на основе упрощенной декларации», оба слова).
+    - «розничного» alone → refuse, naming the regime.
+    - «упрощенной декларации» alone → fine, this is the regime published here.
+    - neither name, but the generic "специального налогового режима" marker
+      is present → the regime cannot be identified (see REGIME_MARKER above)
+      → refuse rather than assume it is the one this dataset publishes.
+    - neither name and no marker at all → says nothing about the regime one
+      way or the other; left to the other readers. This is the COMMON case:
+      documents that cite «частью первой … статьи 726» directly never name a
+      regime by word (`G25BE08332M` and its siblings), and some cite article
+      726 without even «частью первой» (`G25BI84692M`) — both are genuine
+      simplified-declaration rows this reader must not touch.
+    """
+    retail = REGIME_RETAIL.search(sentence)
+    simplified = REGIME_SIMPLIFIED.search(sentence)
+    if retail and simplified:
+        return Reading(
+            "regime",
+            None,
+            "sentence names BOTH the retail tax regime (розничного налога) and the "
+            f"simplified declaration (упрощенной декларации) — cannot tell which governs: "
+            f"{sentence!r}",
+            SUBSTANTIVE,
+        )
+    if retail:
+        return Reading(
+            "regime",
+            None,
+            "sentence governs the retail tax regime (розничного налога) — a separate "
+            f"special regime under the same article, not a simplified-declaration rate: "
+            f"{sentence!r}",
+            SUBSTANTIVE,
+        )
+    if simplified:
+        return Reading("regime", None, "governs the simplified declaration regime", NO_MATCH)
+    if REGIME_MARKER.search(sentence):
+        return Reading(
+            "regime",
+            None,
+            "sentence names a special regime this reader cannot identify — neither "
+            f"'розничного налога' nor 'упрощенной декларации' matched: {sentence!r}",
+            SUBSTANTIVE,
+        )
+    return Reading("regime", None, "no regime named in the sentence", NO_MATCH)
+
+
 # The tax year the rate applies to, said three ways. **Reading only the first
 # of them switched off a check without saying so:** 15 of the 16 documents
 # confirmed on 2026-08-12 phrase the period differently, so `year` was None,
@@ -637,10 +728,13 @@ def classify(
     kazakh_text: str | None = None,
     kazakh_error: str | None = None,
 ) -> dict[str, Any]:
-    """Read the document four ways and report agreement, disagreement or silence.
+    """Read the document four ways, check the regime a fifth, and report the result.
 
     Returns the outcome and every reading. It never picks a winner: choosing
     between disagreeing readers is exactly the judgement this design refuses.
+    The fifth reader (`read_regime`) never picks a rate either — it only
+    objects when the sentence the other four agree on turns out to govern a
+    different special regime entirely.
     """
     superseded = [marker for marker in SUPERSEDED_MARKERS if marker in text]
     sentence = rate_sentence(text)
@@ -683,6 +777,7 @@ def classify(
         read_word(sentence),
         read_transition(sentence, year),
         kazakh,
+        read_regime(sentence),
     ]
     values = {reading.rate_percent for reading in readings if reading.rate_percent is not None}
     result: dict[str, Any] = {

@@ -230,6 +230,12 @@
           "rate_percent": 2,
           "detail": "4 ( төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации за отчетный налоговый период в районе Мақаншы с 4 (четырех) процентов на 2 (два) процента.",
@@ -272,6 +278,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в городе Тараз.",
@@ -314,6 +326,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации по Байзакскому району с 4 (четырех) процентов на 2 (два) процента по доходам, полученным ( подлежащим получению) за налоговый период.",
@@ -356,6 +374,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процентов в Жамбылском районе.",
@@ -365,6 +389,54 @@
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
       "reason": "readers disagree: [2, 4]"
+    },
+    {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25gd00552m.26-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "529c521eec8f8e424362eb39b6fa3540711243c8794aa2e5dd102fc3471de5eb",
+      "document_id": "G25GD00552M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GD00552M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/512/g25gd00552m.26-11-2025.rus.pdf",
+      "pdf_sha256": "064ce75c463b5c399b8a822f11209f9c4b716bc54472f1f33ed725f9b4cf795e",
+      "pdf_bytes": 44755,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 2,
+          "detail": "на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": null,
+          "detail": "no `(<слово>) процент` in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 2,
+          "detail": "с 4% на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4% - дан 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Жуалынском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Жуалынском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Жуалынского районного маслихата Жамбылской области от 26 ноября 2025 года № 55-2",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Жуалынском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'"
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/776/g25ge00514m.12-11-2025.kaz.pdf",
@@ -398,6 +470,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в Кордайском районе.",
@@ -440,6 +518,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процентов в Меркенском районе.",
@@ -482,6 +566,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального режима на основе упрощенной декларации в Таласском районе с 4 ( четырех) процентов на 2 (два) процента.",
@@ -524,6 +614,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогооблажения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в Шуском районе.",
@@ -577,6 +673,54 @@
       "sentence": null,
       "year": 2026,
       "year_source": "in-force-date"
+    },
+    {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/680/g25he00236m.27-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "13cafc9cd93f84fc5bfdae71bc9fd470b53e2772812133b8dd4ff1d89eedf0d4",
+      "document_id": "G25HE00236M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25HE00236M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/328/g25he00236m.27-11-2025.rus.pdf",
+      "pdf_sha256": "fe21d2d4d115c207dc7bd8bb225edcc6d49752c3c0caf1a079a5b08e0cb852ee",
+      "pdf_bytes": 46630,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 3,
+          "detail": "на 3%",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": null,
+          "detail": "no `(<слово>) процент` in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 3,
+          "detail": "с 4% на 3%",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 3,
+          "detail": "4% - дан 3%",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога с 4% на 3% по доходам, полученным (подлежащим получению) за налоговый период.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "Понизить размер ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога с 4% на 3% по доходам, полученным (подлежащим получению) за налоговый период.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Улытауского районного маслихата области Ұлытау от 27 ноября 2025 года № 236",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога с 4% на 3% по доходам, полученным (подлежащим получению) за налоговый период.'"
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25id00563m.02-12-2025.kaz.pdf",
@@ -720,6 +864,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального режима на основе упрощенной декларации в Шетском районе с 4 ( четырех) процентов на 2 (два) процента.",
@@ -784,6 +934,12 @@
           "rate_percent": null,
           "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
           "kind": "unavailable"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации по Аральскому району с 4 (четырех) процентов до 2 (двух) процентов к объекту налогообложения за отчетный налоговый период.",
@@ -826,6 +982,12 @@
           "rate_percent": null,
           "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
           "kind": "unavailable"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации по Жалагашскому району с 4 (четырех) процентов на 2 (два) процента.",
@@ -868,6 +1030,12 @@
           "rate_percent": null,
           "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
           "kind": "unavailable"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации по Шиелийскому району с 4 (четырех) процентов на 2 (два) процента.",
@@ -1033,6 +1201,54 @@
       "year_source": "in-force-date"
     },
     {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/552/g25pd23040m.25-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "8cb52d8f66fccf681567c3f0caa31d17bb77e00b95ead75aa07297e074e362ab",
+      "document_id": "G25PD23040M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25PD23040M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/456/g25pd23040m.25-11-2025.rus.pdf",
+      "pdf_sha256": "45c930671610a5b642c9d77bc5859f203ee2934a356dc97a4b777f2d590867ee",
+      "pdf_bytes": 46675,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 3,
+          "detail": "на 3 (",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": 3,
+          "detail": "(три) процент",
+          "kind": "read"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 3,
+          "detail": "с 4 (четырех) процентов на 3 (",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 3,
+          "detail": "4 (төрт) пайыздан 3 (үш) пайыз",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence names BOTH the retail tax regime (розничного налога) and the simplified declaration (упрощенной декларации) — cannot tell which governs: 'Понизить размер ставки исчисления корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период в Актогайском районе с 4 (четырех) процентов на 3 (три) процента за налоговый период.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "Понизить размер ставки исчисления корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период в Актогайском районе с 4 (четырех) процентов на 3 (три) процента за налоговый период.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Актогайского районного маслихата Павлодарской области от 25 ноября 2025 года № 230/40",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence names BOTH the retail tax regime (розничного налога) and the simplified declaration (упрощенной декларации) — cannot tell which governs: 'Понизить размер ставки исчисления корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период в Актогайском районе с 4 (четырех) процентов на 3 (три) процента за налоговый период.'"
+    },
+    {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/256/g25pe37642m.19-12-2025.kaz.pdf",
       "kazakh_pdf_sha256": "23785357189c7aaf14ec8b966b27427cd59497dafa01b8e95cc37fd37be54915",
       "document_id": "G25PE37642M",
@@ -1086,6 +1302,12 @@
           "rate_percent": 3,
           "detail": "4%-дан 3%",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации в Железинском районе с 4 % на 3 % к объекту налогообложения за отчетный налоговый период.",
@@ -1326,6 +1548,12 @@
           "rate_percent": 2,
           "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
           "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в Исатайском районе.",
@@ -1359,6 +1587,198 @@
       "year_source": "in-force-date"
     },
     {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/360/g25uf33195m.25-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "903e1db1f4cae4efd1a0c9c5d813d6594b10e74e699c5f178e28bdfeec30a3ce",
+      "document_id": "G25UF33195M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UF33195M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/648/g25uf33195m.25-11-2025.rus.pdf",
+      "pdf_sha256": "c9e04cf1b7325bc8d586f8046ee9653ca9027986b30f9d8c44fa259d58cbd8fe",
+      "pdf_bytes": 47086,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 2,
+          "detail": "до 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": null,
+          "detail": "no `(<слово>) процент` in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 2,
+          "detail": "с 4% до 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4% - дан 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'Установить, что на территории Казыгуртского района, за исключением налогов, удерживаемых у источника выплаты, ставка налога при применении специального налогового режима на основе упрощҰнной декларации для исчисления корпоративного подоходного налога или индивидуального подоходного налога снижается с 4% до 2%.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "Установить, что на территории Казыгуртского района, за исключением налогов, удерживаемых у источника выплаты, ставка налога при применении специального налогового режима на основе упрощҰнной декларации для исчисления корпоративного подоходного налога или индивидуального подоходного налога снижается с 4% до 2%.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Казыгуртского районного маслихата Туркестанской области от 25 ноября 2025 года № 33/195-VIII",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'Установить, что на территории Казыгуртского района, за исключением налогов, удерживаемых у источника выплаты, ставка налога при применении специального налогового режима на основе упрощҰнной декларации для исчисления корпоративного подоходного налога или индивидуального подоходного налога снижается с 4% до 2%.'"
+    },
+    {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/g25uh00373m.24-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "15ad0299057722a99f25633d51b95d5990e4216154769de1e5d7c29c4ae7564a",
+      "document_id": "G25UH00373M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UH00373M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/000/g25uh00373m.24-11-2025.rus.pdf",
+      "pdf_sha256": "a98728c78c54e923957e42789a100c3d56c9db9cf83b23c3b69a0a8b7592b022",
+      "pdf_bytes": 46370,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 2,
+          "detail": "до 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": null,
+          "detail": "no `(<слово>) процент` in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 2,
+          "detail": "с 4% до 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4% - дан 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'В Ордабасинском районе установить снижение ставки корпоративного или индивидуального подоходного налога (за исключением налогов, удерживаемых у источника выплаты) с 4% до 2% при применении специального налогового режима на основе упрощҰнной декларации.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "В Ордабасинском районе установить снижение ставки корпоративного или индивидуального подоходного налога (за исключением налогов, удерживаемых у источника выплаты) с 4% до 2% при применении специального налогового режима на основе упрощҰнной декларации.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Ордабасинского районного маслихата Туркестанской области от 24 ноября 2025 года № 37/3",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'В Ордабасинском районе установить снижение ставки корпоративного или индивидуального подоходного налога (за исключением налогов, удерживаемых у источника выплаты) с 4% до 2% при применении специального налогового режима на основе упрощҰнной декларации.'"
+    },
+    {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/768/g25ui28166m.21-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "84627f300a221c0c574ea739c40d571feccb659c7621d92b4b7a5630810efaca",
+      "document_id": "G25UI28166M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UI28166M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/224/g25ui28166m.21-11-2025.rus.pdf",
+      "pdf_sha256": "b02f99bb068ef5ab9a0868e7a72e34a70d9d23fb7f0606a17fe96703927b5426",
+      "pdf_bytes": 46262,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 2,
+          "detail": "на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": null,
+          "detail": "no `(<слово>) процент` in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 2,
+          "detail": "с 4% на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4% - дан 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Отырарском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Отырарском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Отрарского районного маслихата Туркестанской области от 21 ноября 2025 года № 28/166-VIII",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Отырарском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'"
+    },
+    {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/1000/g25up32197m.25-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "06e205ff35c0c9180b89ea6e5c29f297d778761178d942c94195713e9cbe598b",
+      "document_id": "G25UP32197M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UP32197M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/008/g25up32197m.25-11-2025.rus.pdf",
+      "pdf_sha256": "54129c925e2cc8961eeb954e7de12197b137d143fdae3a7ee1582363e2db09dc",
+      "pdf_bytes": 45565,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 2,
+          "detail": "на 2 (",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": 2,
+          "detail": "(два) процент",
+          "kind": "read"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 2,
+          "detail": "с 4 (четырех) процентов на 2 (",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в районе Жетысай с 4 (четырех) процентов на 2 (два) процента по доходам, полученным (подлежащим получению) за налоговый период.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в районе Жетысай с 4 (четырех) процентов на 2 (два) процента по доходам, полученным (подлежащим получению) за налоговый период.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Жетысайского районного маслихата Туркестанской области от 25 ноября 2025 года № 32-197-VIII",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить размер ставки корпоративного или индивидуального подоходного налога за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в районе Жетысай с 4 (четырех) процентов на 2 (два) процента по доходам, полученным (подлежащим получению) за налоговый период.'"
+    },
+    {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/192/g25up32198m.25-11-2025.kaz.pdf",
       "kazakh_pdf_sha256": "ff476c7dce984d24dcc7e028a5124f59830326ace4186658e8c87d2499de6fc3",
       "document_id": "G25UP32198M",
@@ -1379,6 +1799,54 @@
       "sentence": null,
       "year": 2026,
       "year_source": "in-force-date"
+    },
+    {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/392/g25uq02921m.28-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "6a4a3f765236bcdc89e548a80aa3b7a2a7bc3473732a344de3d7c9f910e7dfa2",
+      "document_id": "G25UQ02921M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UQ02921M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/616/g25uq02921m.28-11-2025.rus.pdf",
+      "pdf_sha256": "9d45a23fe20eb93acbd71e06406ebd888309e296ef67995245319afb3e0f95e4",
+      "pdf_bytes": 45238,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 2,
+          "detail": "на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": null,
+          "detail": "no `(<слово>) процент` in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 2,
+          "detail": "с 4% на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4% - ден 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Келесском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'",
+          "kind": "substantive"
+        }
+      ],
+      "sentence": "Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Келесском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Келесского районного маслихата Туркестанской области от 28 ноября 2025 года № 29-212-VIII",
+      "in_force_from": "2026-01-01",
+      "outcome": "conflict",
+      "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Келесском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'"
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/712/g25vd00336m.19-12-2025.kaz.pdf",
@@ -1566,6 +2034,12 @@
           "rate_percent": null,
           "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
           "kind": "unavailable"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "no regime named in the sentence",
+          "kind": "no-match"
         }
       ],
       "sentence": "Понизить размер ставки, установленной частью первой Налогового статьи 726 кодекса Республики Казахстан в Жаксынском районе с 4 % на 2%.",
