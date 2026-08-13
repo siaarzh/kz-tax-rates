@@ -40,7 +40,13 @@ jobs:
       # silently corrupted the sentence the rate readers parse, turning
       # `4 (четырех) процентов` into `4 (четырех процентов`. See the docstring
       # of pdf_text() in scripts/extract_rates.py.
-      - run: pip install ruff==0.6.9 mypy==1.11.2 pytest==8.3.3 pypdf==6.13.3
+      # Pinned so an unpinned upgrade cannot change the meaning of a green run.
+      # Keep these matching the versions a contributor actually has: ruff was
+      # pinned at 0.6.9 while this machine ran 0.15.22, so `ruff format --check`
+      # passed locally and failed here, on the same file, with no code change
+      # between them. A pin nobody can reproduce locally is a pin that only ever
+      # reports drift as a build failure.
+      - run: pip install ruff==0.15.22 mypy==1.11.2 pytest==8.3.3 pypdf==6.13.3
 
       - run: ruff check scripts tests
       - run: ruff format --check scripts tests
