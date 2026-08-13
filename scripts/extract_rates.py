@@ -141,6 +141,17 @@ NUMERAL_WORDS = {
 # preposition and reading the last spelled numeral instead.
 TO_NEW_RATE = r"(?:на|до)"
 
+# How a decision names the rate it lowers FROM. `с 4 (четырех) процентов` is the
+# common form; Astana makes the origin a property of the article it cites,
+# «ставку, установленную частью первой … в размере 4 процентов, до 3 процентов»,
+# with no `с` anywhere. The sentence selector found no rate clause at all, so the
+# capital sat in the queue unparsed.
+#
+# Widening a reader is the move that empties a queue while breaking a dataset,
+# so this stays narrow: `в размере` must be followed by a number and a percent
+# word, exactly as `с` must.
+FROM_OLD_RATE = r"(?:с|в\s+размере)"
+
 # READER 4's vocabulary. Only the three numerals actually observed across the
 # nineteen 2026 decisions. **бес (5) and алты (6) are deliberately absent**:
 # adding them would be extrapolation, and an unknown word must refuse rather
@@ -159,7 +170,7 @@ KAZAKH_NUMERALS = {"екі": 2, "үш": 3, "төрт": 4}
 # perfectly readable document reported as unreadable.
 KAZAKH_PAIR = re.compile(
     r"(\d+)\s*(?:\(\s*([^()]{1,15}?)\s*\))?\s*(?:пайыз\S*|%\S*)"
-    r"\s+(\d+)\s*(?:\(\s*([^()]{1,15}?)\s*\))?\s*(?:пайыз|%)"
+    r"[^.\d]{0,24}?\s*(\d+)\s*(?:\(\s*([^()]{1,15}?)\s*\))?\s*(?:пайыз|%)"
 )
 
 # A document that has been amended or repealed still serves its original text,
@@ -363,7 +374,7 @@ def rate_sentence(text: str) -> str | None:
         sentence.strip()
         for sentence in re.split(r"(?<=[.]) ", text)
         if ("процент" in sentence or "%" in sentence)
-        and re.search(r"\bс\s*\d", sentence)
+        and re.search(rf"\b{FROM_OLD_RATE}\s*\d", sentence)
         and re.search(rf"\b{TO_NEW_RATE}\s+\d", sentence)
     ]
     return sentences[0] if len(sentences) == 1 else None
@@ -407,11 +418,11 @@ def read_transition(sentence: str, year: int | None) -> Reading:
     from something other than the statutory base for that year.
     """
     match = re.search(
-        rf"\bс\s+(\d+)\s*(?:\(|%|процент).*?\b{TO_NEW_RATE}\s+(\d+)\s*(?:\(|%|процент)",
+        rf"\b{FROM_OLD_RATE}\s+(\d+)\s*(?:\(|%|процент).*?\b{TO_NEW_RATE}\s+(\d+)\s*(?:\(|%|процент)",
         sentence,
     )
     if not match:
-        return Reading("transition", None, "no `с X … на|до Y` pair", NO_MATCH)
+        return Reading("transition", None, "no `с|в размере X … на|до Y` pair", NO_MATCH)
     old, new = int(match.group(1)), int(match.group(2))
     if new >= old:
         return Reading("transition", None, f"not a понижение: {old} -> {new}", SUBSTANTIVE)
@@ -543,12 +554,16 @@ def read_year_from_in_force(text: str) -> int | None:
 
     It reads only 1 January. A decision in force from another date is not a
     plain calendar-year enactment and is left to the year-less path.
+
+    **It derives the date from `read_in_force` rather than matching the phrasing
+    again.** It used to carry its own copy of «вводится в действие», so when
+    `read_in_force` learned Astana's «вступает в силу» this did not, and the
+    capital still had no year. Two functions holding one phrasing list drift the
+    moment either is taught something, and nothing goes red: the corpus simply
+    keeps a hole wherever the newer wording appears.
     """
-    match = re.search(r"вводится в действие с 0?1\.0?1\.(\d{4})", text)
-    if match:
-        return int(match.group(1))
-    written = re.search(r"вводится в действие с 1 января (\d{4}) года", text)
-    return int(written.group(1)) if written else None
+    in_force = read_in_force(text)
+    return int(in_force[:4]) if in_force and in_force.endswith("-01-01") else None
 
 
 def read_decision_ref(text: str) -> str | None:
@@ -558,11 +573,30 @@ def read_decision_ref(text: str) -> str | None:
 
 
 def read_in_force(text: str) -> str | None:
-    match = re.search(r"вводится в действие с (\d{2})\.(\d{2})\.(\d{4})", text)
-    if match:
-        day, month, year = match.groups()
-        return f"{year}-{month}-{day}"
-    return None
+    months = {
+        "января": "01",
+        "февраля": "02",
+        "марта": "03",
+        "апреля": "04",
+        "мая": "05",
+        "июня": "06",
+        "июля": "07",
+        "августа": "08",
+        "сентября": "09",
+        "октября": "10",
+        "ноября": "11",
+        "декабря": "12",
+    }
+    marker = r"(?:вводится\s+в\s+действие|вступает\s+в\s+силу)\s+с\s+"
+    found = {
+        f"{m.group(3)}-{m.group(2)}-{m.group(1)}"
+        for m in re.finditer(marker + r"(\d{2})\.(\d{2})\.(\d{4})", text, re.IGNORECASE)
+    }
+    for m in re.finditer(marker + r"(\d{1,2})\s+(\w+)\s+(\d{4})\s+года", text, re.IGNORECASE):
+        month = months.get(m.group(2).lower())
+        if month:
+            found.add(f"{m.group(3)}-{month}-{int(m.group(1)):02d}")
+    return found.pop() if len(found) == 1 else None
 
 
 def classify(

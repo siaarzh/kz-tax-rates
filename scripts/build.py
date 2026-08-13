@@ -9,13 +9,23 @@ from __future__ import annotations
 import csv
 import json
 import os
+import re
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from validate import RATES_CSV, REPO_ROOT, validate_file
+from validate import KATO_CSV, RATES_CSV, REPO_ROOT, validate_file
 
 DIST = REPO_ROOT / "dist"
+SCRIPTS = Path(__file__).resolve().parent
+
+# Places with no decision of their own that sit inside a jurisdiction that has
+# one: villages, rural okrugs, city boroughs. They are searchable, never rows.
+ALIASES_JSON = REPO_ROOT / "data" / "place-aliases.json"
+
+# MiniSearch 7.0.0, MIT, vendored. Inlined into the page rather than fetched
+# from a CDN, because the page must issue no request at all.
+VENDOR_SEARCH = SCRIPTS / "vendor-minisearch.js"
 
 SCHEMA_VERSION = "1.0"
 
@@ -39,14 +49,17 @@ LICENCE = "MIT"
 NOT_TAX_ADVICE = (
     "Not tax advice. This is a machine-readable copy of published legal facts, "
     "each row citing its primary source. It interprets nothing and does not say "
-    "what you owe. A rate is only as current as its verified_at date — read the "
-    "linked decision before relying on it."
+    "what you owe. A rate is only as current as its verified_at date, so read "
+    "the linked decision before relying on it."
 )
+# «правовых фактов» was a calque colliding with «юридический факт», which means
+# something else in Kazakh and Russian law, so the notice now names the acts.
 NOT_TAX_ADVICE_RU = (
-    "Не является налоговой консультацией. Это машиночитаемая копия опубликованных "
-    "правовых фактов, каждая строка ссылается на первоисточник. Здесь нет "
-    "толкования и нет расчёта того, сколько платить. Ставка актуальна на дату "
-    "verified_at — перед использованием откройте само решение."
+    "Не является налоговой консультацией. Это машиночитаемая копия сведений из "
+    "опубликованных нормативных правовых актов; в каждой строке стоит ссылка на "
+    "первоисточник. Здесь нет ни толкования норм, ни расчёта налога. Ставка "
+    "достоверна только по состоянию на дату verified_at, поэтому прежде чем "
+    "полагаться на неё, откройте само решение."
 )
 
 
@@ -74,18 +87,43 @@ def read_rows() -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def oblast_names() -> dict[str, dict[str, str]]:
+    """КАТО two-digit prefix -> the oblast's own names, read from the classifier.
+
+    Derived rather than typed. The classifier already carries one row per oblast
+    at `level == "oblast"`, so a hand-written prefix table would be a second copy
+    of a fact we already hold — and two copies of one fact drift apart in silence.
+
+    Why it matters at all: without an oblast on the row, searching «алматы»
+    returns the city alone and every district of Алматинская область looks
+    absent, which reads as a gap in the data rather than a gap in the search.
+    """
+    names: dict[str, dict[str, str]] = {}
+    if not KATO_CSV.exists():
+        return names
+    with KATO_CSV.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("level") == "oblast":
+                names[row["kato"][:2]] = {"ru": row["name_ru"], "kk": row["name_kk"]}
+    return names
+
+
 def build(rows: list[dict[str, str]]) -> dict[str, Any]:
     years: dict[str, dict[str, Any]] = {}
     kato_versions = {row["kato_version"] for row in rows}
+    oblasts = oblast_names()
 
     for row in rows:
         year = row["valid_from"][:4]
         bucket = years.setdefault(year, {"base_rate": float(row["base_rate"]), "rates": []})
+        oblast = oblasts.get(row["kato"][:2], {})
         bucket["rates"].append(
             {
                 "kato": row["kato"],
                 "name_ru": row["name_ru"],
                 "name_kk": row["name_kk"],
+                "oblast_ru": oblast.get("ru", ""),
+                "oblast_kk": oblast.get("kk", ""),
                 "rate": float(row["rate"]),
                 "decision_ref": row["decision_ref"],
                 "source_url": row["source_url"],
@@ -111,21 +149,52 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
     }
 
 
-def render_index(payload: dict[str, Any]) -> str:
-    """The lookup page, with the dataset inlined (SPEC.md §8.1).
+def read_aliases() -> list[list[str]]:
+    """[kato, name_ru, name_kk, resolves_to_kato] for places with no decision.
 
-    Inlined rather than fetched, so the page needs no request at all: it works
-    from file://, from Pages and from a copy on a laptop with no network. A
-    fetch would also fail silently under file:// and leave an empty table that
-    looks like a complete one.
-
-    `</script>` inside the data would end the tag early, so the sequence is
-    escaped. It cannot occur in this dataset today, and a check that only holds
-    while the data stays convenient is not a check.
+    An alias is searchable and is never a row: the page states the jurisdiction
+    whose decision covers it. Missing file yields an empty index rather than a
+    build failure, because the aliases improve search and carry no rate.
     """
-    template = (Path(__file__).resolve().parent / "index.template.html").read_text("utf-8")
-    data = json.dumps(payload, ensure_ascii=False, indent=2).replace("</", "<\\/")
-    return template.replace("/*DATA*/", data)
+    if not ALIASES_JSON.exists():
+        return []
+    loaded: list[list[str]] = json.loads(ALIASES_JSON.read_text("utf-8"))
+    return loaded
+
+
+def render_index(payload: dict[str, Any]) -> str:
+    """The lookup page, with the dataset, the aliases and the search inlined.
+
+    SPEC.md §8.1. Inlined rather than fetched, so the page needs no request at
+    all: it works from file://, from Pages and from a copy on a laptop with no
+    network. A fetch would also fail silently under file:// and leave an empty
+    table that looks like a complete one.
+
+    `</script>` inside a payload would end the tag early, so the sequence is
+    escaped in both JSON blobs. It cannot occur in either today, and a check
+    that only holds while the data stays convenient is not a check. The vendor
+    JavaScript cannot be escaped that way, so the same sequence there stops the
+    build instead of producing a page that silently loses its search.
+
+    One pass over the three placeholders, not three passes: a second pass would
+    scan the text just inlined, and whichever blob went in first would have its
+    own contents read as a placeholder.
+    """
+    template = (SCRIPTS / "index.template.html").read_text("utf-8")
+    search = VENDOR_SEARCH.read_text("utf-8") if VENDOR_SEARCH.exists() else ""
+    if "</" in search:
+        raise SystemExit(f"{VENDOR_SEARCH.name} contains '</' and cannot be inlined safely")
+
+    parts = {
+        "/*DATA*/": json.dumps(payload, ensure_ascii=False, indent=2).replace("</", "<\\/"),
+        "/*ALIASES*/": json.dumps(
+            read_aliases(), ensure_ascii=False, separators=(",", ":")
+        ).replace("</", "<\\/"),
+        "/*MINISEARCH*/": search,
+    }
+    return re.sub(
+        r"/\*(?:DATA|ALIASES|MINISEARCH)\*/", lambda match: parts[match.group(0)], template
+    )
 
 
 # Frictionless field types for the two CSVs. Read out of three real

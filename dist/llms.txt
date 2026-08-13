@@ -2,7 +2,7 @@
 
 Income tax rate under Kazakhstan's simplified regime (СНР на основе упрощённой декларации), per administrative-territorial unit, by year, keyed on КАТО.
 
-Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date — read the linked decision before relying on it.
+Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date, so read the linked decision before relying on it.
 
 Licence: MIT, covering this compilation and the scripts. The underlying maslikhat decisions are legal acts and are not copyrightable.
 

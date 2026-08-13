@@ -19,7 +19,7 @@ import zipfile
 from pathlib import Path
 
 import pytest
-from build import build, datapackage, render_index, render_llms_txt
+from build import build, datapackage, read_aliases, render_index, render_llms_txt
 from fetch_kato import FIELDS as KATO_CSV_FIELDS
 from fetch_kato import TYPE_CODE_LEGEND, find_workbook_url, level_of, read_sheet, to_rows
 from validate import (
@@ -211,7 +211,97 @@ def test_the_page_carries_the_citation_of_every_row() -> None:
     page = render_index(build([VALID]))
     assert VALID["source_url"] in page
     assert VALID["decision_ref"] in page
-    assert "link.href = row.r.source_url" in page
+    assert "link.href = rate.source_url" in page
+
+
+# Anything that would make the browser open a connection: a stylesheet or
+# preload link, a script with a src, a CSS import, a font declaration, or any
+# absolute URL sitting in an attribute or a CSS url(). A source_url inside the
+# JSON payload is none of these — it is data the page prints as a link, and it
+# is the whole point of the project.
+EXTERNAL = (
+    r"<link\b",
+    r"<script[^>]*\bsrc\s*=",
+    r"@import",
+    r"@font-face",
+    r"url\(\s*['\"]?https?:",
+    r"(?:src|href)\s*=\s*['\"]\s*(?:https?:)?//",
+)
+
+
+def test_the_built_page_references_no_external_script_style_or_font() -> None:
+    """The invariant that had no guard, which is how it would quietly regress.
+
+    MiniSearch is vendored and inlined for exactly this reason. A CDN tag would
+    look fine on a laptop with a network and would leave the page with no search
+    for the reader who has none, and offline is the case this page is built for.
+    """
+    page = render_index(build([VALID]))
+    for pattern in EXTERNAL:
+        assert not re.search(pattern, page, re.IGNORECASE), pattern
+    for host in ("cdn.jsdelivr.net/npm", "unpkg.com", "fonts.googleapis.com", "cdnjs"):
+        assert host not in page
+
+
+def test_the_search_library_is_inlined_rather_than_fetched() -> None:
+    page = render_index(build([VALID]))
+    assert "MiniSearch" in page
+    assert "/*MINISEARCH*/" not in page
+
+
+def test_the_alias_index_is_inlined_and_the_two_places_named_medeu_both_survive() -> None:
+    """Two unrelated places are called Медеу and they resolve to different rates.
+
+    One is a rural okrug in области Абай, the other is a borough of Алматы.
+    Preferring either one silently would answer a question the reader did not
+    ask, so both must reach the page.
+    """
+    page = render_index(build([VALID]))
+    assert "/*ALIASES*/" not in page
+    aliases = json.loads(page.split('id="aliases">')[1].split("</script>")[0].replace("<\\/", "</"))
+    medeu = {row[0]: row[3] for row in aliases if row[1].startswith("Медеу") or row[1] == "с.Медеу"}
+    assert medeu["751710000"] == "750000000"
+    assert medeu["103245000"] == "103200000"
+
+
+def test_every_decision_link_opens_in_a_new_tab_and_cannot_reach_back() -> None:
+    """A citation followed mid-search must not cost the reader their place."""
+    page = render_index(build([VALID]))
+    assert 'link.target = "_blank"' in page
+    assert 'link.rel = "noopener noreferrer"' in page
+    assert 'kazLink.target = "_blank"' in page
+    assert 'kazLink.rel = "noopener noreferrer"' in page
+
+
+def test_the_kazakh_url_is_derived_and_omitted_when_the_shape_does_not_match() -> None:
+    """adilet serves the same act at /rus/ and /kaz/, so the second URL is derived.
+
+    A source_url of another shape gets no Kazakh link at all. Guessing one would
+    publish a plausible URL that 404s, and that reads as a fact until somebody
+    clicks it.
+    """
+    page = render_index(build([VALID]))
+    body = page.split("function kazakhUrl")[1].split("}")[0]
+    assert 'url.replace("/rus/", "/kaz/")' in body
+    assert "null" in body
+    assert "data/rates.csv" not in body
+
+
+def test_the_kazakh_link_is_marked_as_kazakh_for_a_screen_reader() -> None:
+    page = render_index(build([VALID]))
+    assert 'kazLink.setAttribute("lang", "kk")' in page
+    assert "Текст решения на казахском языке" in page
+
+
+def test_an_alias_carries_no_rate_of_its_own() -> None:
+    """An alias row is [kato, name_ru, name_kk, resolves_to]. There is no rate in it.
+
+    If a rate ever appeared here it would be one nobody read out of a decision,
+    which is the failure the whole project is built to refuse.
+    """
+    for row in read_aliases():
+        assert len(row) == 4
+        assert all(isinstance(field, str) for field in row)
 
 
 def test_the_json_carries_the_licence_and_the_notice() -> None:

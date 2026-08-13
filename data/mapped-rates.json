@@ -1,12 +1,27 @@
 {
   "rule": "oblast from two agreeing sources, then exactly one district inside it",
   "counts": {
-    "mapped": 127,
-    "unmapped-no-oblast-named-in-text": 3,
-    "unmapped-no-district-matched": 6,
+    "mapped": 150,
+    "unmapped-no-oblast-named-in-text": 4,
+    "unmapped-no-district-matched": 7,
     "unmapped-jurisdiction-type-not-stated": 2
   },
   "rows": [
+    {
+      "document_id": "G25AAZ3494M",
+      "rate": 0.03,
+      "year": 2026,
+      "decision_ref": "Решение маслихата города Астаны от 28 ноября 2025 года № 349/46-VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25AAZ3494M",
+      "outcome": "mapped",
+      "oblast_kato": "710000000",
+      "oblast_name": "г.Астана",
+      "kato": "710000000",
+      "name_ru": "г.Астана",
+      "candidates": [
+        "г.Астана"
+      ]
+    },
     {
       "document_id": "G25BA00262M",
       "rate": 0.03,
@@ -24,6 +39,22 @@
       "name_kk": "Көкшетау Қ.Ә."
     },
     {
+      "document_id": "G25BB08265M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Степногорского городского маслихата Акмолинской области от 25 ноября 2025 года № 8С-26/5",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25BB08265M",
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "Степногорск Г.А."
+      ],
+      "kato": "111800000",
+      "name_ru": "Степногорск Г.А.",
+      "name_kk": "Степногор Қ.Ә."
+    },
+    {
       "document_id": "G25BC00491M",
       "rate": 0.02,
       "year": 2026,
@@ -38,6 +69,22 @@
       "kato": "113200000",
       "name_ru": "Аккольский район",
       "name_kk": "Ақкөл ауданы"
+    },
+    {
+      "document_id": "G25BD00432M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Аршалынского районного маслихата Акмолинской области от 21 ноября 2025 года № 43/2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25BD00432M",
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "Аршалынский район"
+      ],
+      "kato": "113400000",
+      "name_ru": "Аршалынский район",
+      "name_kk": "Аршалы ауданы"
     },
     {
       "document_id": "G25BE08332M",
@@ -72,6 +119,22 @@
       "name_kk": "Астрахан ауданы"
     },
     {
+      "document_id": "G25BG83411M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Буландынского районного маслихата Акмолинской области от 24 ноября 2025 года № 8С-34/11",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25BG83411M",
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "Буландынский район"
+      ],
+      "kato": "114000000",
+      "name_ru": "Буландынский район",
+      "name_kk": "Бұланды ауданы"
+    },
+    {
       "document_id": "G25BH08344M",
       "rate": 0.02,
       "year": 2026,
@@ -86,6 +149,54 @@
       "kato": "114400000",
       "name_ru": "Егиндыкольский район",
       "name_kk": "Егіндікөл ауданы"
+    },
+    {
+      "document_id": "G25BI84692M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Ерейментауского районного маслихата Акмолинской области от 13 ноября 2025 года № 8С-46/9-25",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25BI84692M",
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "Ерейментауский район"
+      ],
+      "kato": "114600000",
+      "name_ru": "Ерейментауский район",
+      "name_kk": "Ерейментау ауданы"
+    },
+    {
+      "document_id": "G25BJ00273M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение маслихата района Биржан сал Акмолинской области от 13 ноября 2025 года № С-27/3",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25BJ00273M",
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "район Биржан сал"
+      ],
+      "kato": "114500000",
+      "name_ru": "район Биржан сал",
+      "name_kk": "Біржан сал ауданы"
+    },
+    {
+      "document_id": "G25BK08403M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Есильского районного маслихата Акмолинской области от 27 ноября 2025 года № 8С-40/3",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25BK08403M",
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "Есильский район"
+      ],
+      "kato": "114800000",
+      "name_ru": "Есильский район",
+      "name_kk": "Есіл ауданы"
     },
     {
       "document_id": "G25BL08593M",
@@ -175,6 +286,22 @@
       "source_url": "https://adilet.zan.kz/rus/docs/G25BR08443M",
       "outcome": "unmapped-no-oblast-named-in-text",
       "body": "Акмолинская область"
+    },
+    {
+      "document_id": "G25BS08362M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Бурабайского районного маслихата Акмолинской области от 29 октября 2025 года № 8С-36/2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25BS08362M",
+      "outcome": "mapped",
+      "oblast_kato": "110000000",
+      "oblast_name": "Акмолинская область",
+      "candidates": [
+        "Бурабайский район"
+      ],
+      "kato": "117000000",
+      "name_ru": "Бурабайский район",
+      "name_kk": "Бурабай ауданы"
     },
     {
       "document_id": "G25BT20651M",
@@ -523,6 +650,22 @@
       ]
     },
     {
+      "document_id": "G25FA51272M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение маслихата города Семей области Абай от 26 ноября 2025 года № 51/272-VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25FA51272M",
+      "outcome": "mapped",
+      "oblast_kato": "100000000",
+      "oblast_name": "область Абай",
+      "candidates": [
+        "Семей Г.А."
+      ],
+      "kato": "101000000",
+      "name_ru": "Семей Г.А.",
+      "name_kk": "Семей Қ.Ә."
+    },
+    {
       "document_id": "G25FB33213M",
       "rate": 0.02,
       "year": 2026,
@@ -646,6 +789,38 @@
       "name_kk": "Көкпекті ауданы"
     },
     {
+      "document_id": "G25FL22251M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение маслихата района Жаңасемей области Абай от 27 ноября 2025 года № 22/251-",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25FL22251M",
+      "outcome": "mapped",
+      "oblast_kato": "100000000",
+      "oblast_name": "область Абай",
+      "candidates": [
+        "район Жаңасемей"
+      ],
+      "kato": "104100000",
+      "name_ru": "район Жаңасемей",
+      "name_kk": "Жаңасемей ауданы"
+    },
+    {
+      "document_id": "G25GD00552M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Жуалынского районного маслихата Жамбылской области от 26 ноября 2025 года № 55-2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GD00552M",
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "Жуалынский район"
+      ],
+      "kato": "314200000",
+      "name_ru": "Жуалынский район",
+      "name_kk": "Жуалы ауданы"
+    },
+    {
       "document_id": "G25GG00442M",
       "rate": 0.02,
       "year": 2026,
@@ -733,6 +908,22 @@
       "kato": "621800000",
       "name_ru": "Каражал Г.А.",
       "name_kk": "Қаражал Қ.Ә."
+    },
+    {
+      "document_id": "G25HE00236M",
+      "rate": 0.03,
+      "year": 2026,
+      "decision_ref": "Решение Улытауского районного маслихата области Ұлытау от 27 ноября 2025 года № 236",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25HE00236M",
+      "outcome": "mapped",
+      "oblast_kato": "620000000",
+      "oblast_name": "область Ұлытау",
+      "candidates": [
+        "Улытауский район"
+      ],
+      "kato": "623800000",
+      "name_ru": "Улытауский район",
+      "name_kk": "Ұлытау ауданы"
     },
     {
       "document_id": "G25IA46254M",
@@ -895,6 +1086,31 @@
       "name_kk": "Сарқан ауданы"
     },
     {
+      "document_id": "G25KA00318M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Карагандинского городского маслихата от 28 ноября 2025 года № 318",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25KA00318M",
+      "outcome": "unmapped-no-oblast-named-in-text",
+      "body": "Карагандинская область"
+    },
+    {
+      "document_id": "G25KC00364M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Темиртауского городского маслихата Карагандинской области от 27 ноября 2025 года № 36/4",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25KC00364M",
+      "outcome": "mapped",
+      "oblast_kato": "350000000",
+      "oblast_name": "Карагандинская область",
+      "candidates": [
+        "Темиртау Г.А."
+      ],
+      "kato": "352400000",
+      "name_ru": "Темиртау Г.А.",
+      "name_kk": "Теміртау Қ.Ә."
+    },
+    {
       "document_id": "G25KD25205M",
       "rate": 0.02,
       "year": 2026,
@@ -909,6 +1125,22 @@
       "kato": "351600000",
       "name_ru": "Балхаш Г.А.",
       "name_kk": "Балқаш Қ.Ә."
+    },
+    {
+      "document_id": "G25KG00252M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Саранского городского маслихата Карагандинской области от 25 ноября 2025 года № 252",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25KG00252M",
+      "outcome": "mapped",
+      "oblast_kato": "350000000",
+      "oblast_name": "Карагандинская область",
+      "candidates": [
+        "Сарань Г.А."
+      ],
+      "kato": "352200000",
+      "name_ru": "Сарань Г.А.",
+      "name_kk": "Саран Қ.Ә."
     },
     {
       "document_id": "G25KH45824M",
@@ -1021,6 +1253,22 @@
       "kato": "355600000",
       "name_ru": "Осакаровский район",
       "name_kk": "Осакаров ауданы"
+    },
+    {
+      "document_id": "G25KR34255M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Приозерского городского маслихата Карагандинской области от 28 ноября 2025 года № 34/255",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25KR34255M",
+      "outcome": "mapped",
+      "oblast_kato": "350000000",
+      "oblast_name": "Карагандинская область",
+      "candidates": [
+        "Приозерск Г.А."
+      ],
+      "kato": "352100000",
+      "name_ru": "Приозерск Г.А.",
+      "name_kk": "Приозерск Қ.Ә."
     },
     {
       "document_id": "G25LA30944M",
@@ -1386,22 +1634,6 @@
       "name_kk": "Баянауыл ауданы"
     },
     {
-      "document_id": "G25PF02058M",
-      "rate": 0.03,
-      "year": 2026,
-      "decision_ref": "Решение Железинского районного маслихата Павлодарской области от 28 ноября 2025 года № 205/8",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25PF02058M",
-      "outcome": "mapped",
-      "oblast_kato": "550000000",
-      "oblast_name": "Павлодарская область",
-      "candidates": [
-        "Железинский район"
-      ],
-      "kato": "554200000",
-      "name_ru": "Железинский район",
-      "name_kk": "Железин ауданы"
-    },
-    {
       "document_id": "G25PG14342M",
       "rate": 0.03,
       "year": 2026,
@@ -1416,6 +1648,54 @@
       "kato": "554600000",
       "name_ru": "Иртышский район",
       "name_kk": "Ертіс ауданы"
+    },
+    {
+      "document_id": "G25PH00236M",
+      "rate": 0.03,
+      "year": 2026,
+      "decision_ref": "Решение маслихата района Тереңкөл Павлодарской области от 26 ноября 2025 года № 2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25PH00236M",
+      "outcome": "mapped",
+      "oblast_kato": "550000000",
+      "oblast_name": "Павлодарская область",
+      "candidates": [
+        "район Тереңкөл"
+      ],
+      "kato": "554800000",
+      "name_ru": "район Тереңкөл",
+      "name_kk": "Тереңкөл ауданы"
+    },
+    {
+      "document_id": "G25PI16338M",
+      "rate": 0.03,
+      "year": 2026,
+      "decision_ref": "Решение маслихата района Аққулы Павлодарской области от 27 ноября 2025 года № 163/38",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25PI16338M",
+      "outcome": "mapped",
+      "oblast_kato": "550000000",
+      "oblast_name": "Павлодарская область",
+      "candidates": [
+        "район Аққулы"
+      ],
+      "kato": "555200000",
+      "name_ru": "район Аққулы",
+      "name_kk": "Аққулы ауданы"
+    },
+    {
+      "document_id": "G25PJ00133M",
+      "rate": 0.03,
+      "year": 2026,
+      "decision_ref": "Решение Майского районного маслихата Павлодарской области от 28 ноября 2025 года № 1/33",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25PJ00133M",
+      "outcome": "mapped",
+      "oblast_kato": "550000000",
+      "oblast_name": "Павлодарская область",
+      "candidates": [
+        "Майский район"
+      ],
+      "kato": "555600000",
+      "name_ru": "Майский район",
+      "name_kk": "Май ауданы"
     },
     {
       "document_id": "G25PK38320M",
@@ -1807,6 +2087,22 @@
       "candidates": []
     },
     {
+      "document_id": "G25UC00221M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Кентауского городского маслихата Туркестанской области от 27 ноября 2025 года № 221",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UC00221M",
+      "outcome": "mapped",
+      "oblast_kato": "610000000",
+      "oblast_name": "Туркестанская область",
+      "candidates": [
+        "Кентау Г.А."
+      ],
+      "kato": "612000000",
+      "name_ru": "Кентау Г.А.",
+      "name_kk": "Кентау Қ.Ә."
+    },
+    {
       "document_id": "G25UE34201M",
       "rate": 0.02,
       "year": 2026,
@@ -1823,6 +2119,22 @@
       "name_kk": "Бәйдібек ауданы"
     },
     {
+      "document_id": "G25UF33195M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Казыгуртского районного маслихата Туркестанской области от 25 ноября 2025 года № 33/195-VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UF33195M",
+      "outcome": "mapped",
+      "oblast_kato": "610000000",
+      "oblast_name": "Туркестанская область",
+      "candidates": [
+        "Казыгуртский район"
+      ],
+      "kato": "614000000",
+      "name_ru": "Казыгуртский район",
+      "name_kk": "Қазығұрт ауданы"
+    },
+    {
       "document_id": "G25UG32204M",
       "rate": 0.02,
       "year": 2026,
@@ -1837,6 +2149,38 @@
       "kato": "614400000",
       "name_ru": "Мактааральский район",
       "name_kk": "Мақтаарал ауданы"
+    },
+    {
+      "document_id": "G25UH00373M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Ордабасинского районного маслихата Туркестанской области от 24 ноября 2025 года № 37/3",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UH00373M",
+      "outcome": "mapped",
+      "oblast_kato": "610000000",
+      "oblast_name": "Туркестанская область",
+      "candidates": [
+        "Ордабасынский район"
+      ],
+      "kato": "614600000",
+      "name_ru": "Ордабасынский район",
+      "name_kk": "Ордабасы ауданы"
+    },
+    {
+      "document_id": "G25UI28166M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Отрарского районного маслихата Туркестанской области от 21 ноября 2025 года № 28/166-VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UI28166M",
+      "outcome": "mapped",
+      "oblast_kato": "610000000",
+      "oblast_name": "Туркестанская область",
+      "candidates": [
+        "Отрарский район"
+      ],
+      "kato": "614800000",
+      "name_ru": "Отрарский район",
+      "name_kk": "Отырар ауданы"
     },
     {
       "document_id": "G25UJ33228M",
@@ -1869,6 +2213,17 @@
       "kato": "615400000",
       "name_ru": "Сарыагашский район",
       "name_kk": "Сарыағаш ауданы"
+    },
+    {
+      "document_id": "G25UL00221M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Созакского районного маслихата Туркестанской области от 21 ноября 2025 года № 221",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UL00221M",
+      "outcome": "unmapped-no-district-matched",
+      "oblast_kato": "610000000",
+      "oblast_name": "Туркестанская область",
+      "candidates": []
     },
     {
       "document_id": "G25UM30178M",
@@ -1935,6 +2290,22 @@
       "name_kk": "Жетісай ауданы"
     },
     {
+      "document_id": "G25UQ02921M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Келесского районного маслихата Туркестанской области от 28 ноября 2025 года № 29-212-VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25UQ02921M",
+      "outcome": "mapped",
+      "oblast_kato": "610000000",
+      "oblast_name": "Туркестанская область",
+      "candidates": [
+        "Келесский район"
+      ],
+      "kato": "613900000",
+      "name_ru": "Келесский район",
+      "name_kk": "Келес ауданы"
+    },
+    {
       "document_id": "G25UR00281M",
       "rate": 0.02,
       "year": 2026,
@@ -1965,6 +2336,22 @@
       "kato": "631000000",
       "name_ru": "Усть-Каменогорск Г.А.",
       "name_kk": "Өскемен Қ.Ә."
+    },
+    {
+      "document_id": "G25VD00323M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Риддерского городского маслихата Восточно-Казахстанской области от 28 ноября 2025 года № 32/3-VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25VD00323M",
+      "outcome": "mapped",
+      "oblast_kato": "630000000",
+      "oblast_name": "Восточно-Казахстанская область",
+      "candidates": [
+        "Риддер Г.А."
+      ],
+      "kato": "632400000",
+      "name_ru": "Риддер Г.А.",
+      "name_kk": "Риддер Қ.Ә."
     },
     {
       "document_id": "G25VI00283M",
