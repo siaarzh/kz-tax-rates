@@ -1,0 +1,27 @@
+# Tool configuration only. Nothing here is packaged or published to PyPI:
+# the deliverable is the dataset in data/ and dist/, and the scripts are run
+# from the repo root by CI and by hand. A [project] table would imply an
+# installable distribution that does not exist.
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+disallow_untyped_defs = true
+warn_unused_ignores = true
+warn_return_any = true
+strict_equality = true
+files = ["scripts", "tests"]
+# scripts/ is a plain directory of runnable scripts, not a package, so build.py
+# imports validate.py as a top-level module. Both mypy and pytest need that
+# directory on the path or the import reads as unresolved.
+mypy_path = "scripts"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]

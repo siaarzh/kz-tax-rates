@@ -1,0 +1,53 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Editor and OS droppings. Nobody's local setup belongs in a public dataset repo.
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+*~
+
+# Source workbooks. `fetch_kato.py` holds the .xlsx in memory and never writes
+# one, but its `--workbook <path>` flag invites downloading a copy into the tree.
+# The workbook is 916 KB of binary that regenerates from a URL recorded in
+# data/kato.source.json, so it is never the thing to commit — the CSV is.
+*.xlsx
+*.xls
+*.docx
+*.rar
+
+# dist/ is NOT ignored. GitHub Pages and jsDelivr serve it straight from the
+# repository, so the generated artifacts are committed by design (SPEC.md §3).
+
+# data/ is NOT ignored, and data/rates.csv least of all. It is the dataset —
+# hand-curated, cited, and the entire point of the project.
+
+# Fetched documents, keyed by id. Reproducible from the site, and the sha256
+# that matters is recorded on every extracted row, so the bytes are not tracked.
+.cache/
+
+# ── Internal working files. Deliberately NOT published. ──────────────────────
+# The agent process — roles, decisions, evidence, handoffs, the work queue — is
+# how this repository was built, not what it publishes. A reader wants the
+# parser, the tests and the data. A copy lives outside the repository, so
+# removing these from git does not delete them — but it does mean they stop
+# being backed up by pushing.
+.claude/
+.plans/
+
+# Market sizing, revenue ceilings and build costs. Internal, and not the product.
+docs/BUSINESS.md
+
+# Agent orchestration glue: reads broker credentials from a local container and
+# starts a session on this machine. Internal infrastructure, not part of the
+# dataset or its pipeline.
+scripts/trigger_reconcile.py

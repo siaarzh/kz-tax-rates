@@ -1,0 +1,28 @@
+{
+  "publisher": "Бюро национальной статистики АСПР РК (stat.gov.kz)",
+  "official": true,
+  "listing_url": "https://stat.gov.kz/ru/classifiers/statistical/21/",
+  "workbook_url": "https://stat.gov.kz/upload/iblock/e8d/92t4frru65491vyyh6shknzda5d7cgi5/%D0%9A%D0%90%D0%A2%D0%9E_17.07.2026.xlsx",
+  "kato_version": "NK RK 11-2025",
+  "classifier_document_url": "https://stat.gov.kz/upload/iblock/b79/39nf76eyu5gsa6jn83vsz6u6leiiz1hv/%D0%9D%D0%9A%20%D0%A0%D0%9A%2011-2025.docx",
+  "approved": "Приказ Председателя Комитета технического регулирования и метрологии МТИ РК № 2-НҚ от 16 января 2025 года",
+  "in_force_from": "2025-02-01",
+  "actualised_at": "2026-07-17",
+  "type_code_legend": {
+    "0": "республика, область",
+    "1": "городская местность",
+    "2": "сельская местность",
+    "3": "г.а. или п.а, имеющая в подчинении населенные пункты, относящиеся к сельской местности",
+    "4": "район, имеющий в подчинении населенные пункты, относящиеся к городской местности"
+  },
+  "retrieved_at": "2026-08-12T16:27:14+00:00",
+  "sha256": "5346ade0ec37a5a6f6b186e626527a17685121eb73b57152aa09e7f370fcff09",
+  "bytes": 916052,
+  "rows": 15594,
+  "rows_by_level": {
+    "oblast": 20,
+    "district": 209,
+    "sub_district": 2379,
+    "settlement": 12986
+  }
+}

@@ -1,0 +1,94 @@
+# Validate, build, test. Any failure blocks.
+#
+# **No runner has ever executed this file.** It was written and its steps were
+# run one by one locally, which proves the commands, not the workflow.
+#
+# **This workflow validates, builds and checks; it does not deploy.** There is no
+# Pages deploy job here, and the fetch of a live published URL that would check
+# one is not part of it either. Adding a deploy job before the site exists would
+# be YAML nobody can run, guarding a page nobody can fetch.
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # fetch-depth: 0, not the default 1. The build pins SOURCE_DATE_EPOCH to
+      # the last commit that touched data/, and a one-commit clone cannot see
+      # that commit — `git log -1 --format=%at -- data/rates.csv` then returns HEAD's own
+      # author date instead, silently. Run 31618850069 failed exactly there.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Pinned, because an unpinned tool version changes the meaning of a green
+      # run without anyone editing the repository.
+      # pypdf is the one runtime dependency, and it is deliberate. Two
+      # standard-library PDF extractors were written and measured first; both
+      # silently corrupted the sentence the rate readers parse, turning
+      # `4 (четырех) процентов` into `4 (четырех процентов`. See the docstring
+      # of pdf_text() in scripts/extract_rates.py.
+      - run: pip install ruff==0.6.9 mypy==1.11.2 pytest==8.3.3 pypdf==6.13.3
+
+      - run: ruff check scripts tests
+      - run: ruff format --check scripts tests
+      - run: mypy
+      - run: pytest
+
+      # The epoch is resolved in its own step and checked, because the way it
+      # goes wrong is by being silently plausible. `fetch-depth: 0` above is a
+      # flag; this is the assertion that the flag worked.
+      #
+      # Both conditions were reproduced locally against `git clone --depth 1`
+      # before being written here: a shallow clone reports `is-shallow-repository
+      # true`, returns HEAD's author date for the data/ pathspec, and reports
+      # that HEAD touched no file under data/. So the second check does fire —
+      # the two are independent, not one restated.
+      - name: Resolve and check SOURCE_DATE_EPOCH
+        run: |
+          set -euo pipefail
+          if [ "$(git rev-parse --is-shallow-repository)" != "false" ]; then
+            echo "::error::shallow clone — SOURCE_DATE_EPOCH cannot be resolved. Set fetch-depth: 0."
+            exit 1
+          fi
+          epoch=$(git log -1 --format=%at -- data/rates.csv)
+          if [ -z "$epoch" ]; then
+            echo "::error::no commit touching data/rates.csv is visible from this clone"
+            exit 1
+          fi
+          # HEAD's own date is the value a too-shallow clone produces. If HEAD
+          # did not touch data/, the epoch must not equal it. A real commit
+          # touching data/rates.csv in the same second as HEAD would trip this; that is
+          # a false alarm which goes red, not a wrong build which does not.
+          if [ -z "$(git diff-tree --no-commit-id --name-only -r HEAD -- data/rates.csv)" ] \
+             && [ "$epoch" = "$(git log -1 --format=%at)" ]; then
+            echo "::error::epoch equals HEAD's author date though HEAD did not touch data/rates.csv"
+            exit 1
+          fi
+          echo "SOURCE_DATE_EPOCH=$epoch" >> "$GITHUB_ENV"
+          echo "resolved SOURCE_DATE_EPOCH=$epoch ($(date -u -d "@$epoch" +%FT%TZ))"
+
+      # Pinned to the last commit that touched data/, never to HEAD: HEAD moves
+      # on documentation commits that cannot change the output, which would
+      # leave dist/ permanently dirty and train everyone to ignore a modified
+      # generated file.
+      - name: Rebuild dist/ from the data
+        run: python scripts/build.py
+
+      # dist/ is committed because Pages and jsDelivr serve it from the
+      # repository. If a rebuild differs from what was committed, the published
+      # artefact does not match the data it claims to come from.
+      - name: Fail if the committed artefacts are not what the data generates
+        run: git diff --exit-code -- dist/ datapackage.json

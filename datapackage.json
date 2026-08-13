@@ -1,0 +1,137 @@
+{
+  "name": "kz-tax-rates",
+  "title": "Kazakhstan simplified-regime tax rate by district, keyed on КАТО",
+  "description": "Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date — read the linked decision before relying on it.",
+  "profile": "tabular-data-package",
+  "licenses": [
+    {
+      "name": "MIT",
+      "path": "https://opensource.org/licenses/MIT",
+      "title": "MIT License — covers this compilation and the scripts, not the underlying legal acts, which are not copyrightable"
+    }
+  ],
+  "resources": [
+    {
+      "name": "rates",
+      "path": "data/rates.csv",
+      "profile": "tabular-data-resource",
+      "format": "csv",
+      "encoding": "utf-8",
+      "title": "One rate per district per validity period, each citing its decision",
+      "schema": {
+        "fields": [
+          {
+            "name": "kato",
+            "type": "string",
+            "constraints": {
+              "pattern": "^\\d{9}$"
+            }
+          },
+          {
+            "name": "kato_version",
+            "type": "string"
+          },
+          {
+            "name": "name_ru",
+            "type": "string"
+          },
+          {
+            "name": "name_kk",
+            "type": "string"
+          },
+          {
+            "name": "rate",
+            "type": "number",
+            "constraints": {
+              "minimum": 0.02,
+              "maximum": 0.06
+            }
+          },
+          {
+            "name": "base_rate",
+            "type": "number"
+          },
+          {
+            "name": "valid_from",
+            "type": "date"
+          },
+          {
+            "name": "valid_to",
+            "type": "date"
+          },
+          {
+            "name": "decision_ref",
+            "type": "string"
+          },
+          {
+            "name": "source_url",
+            "type": "string",
+            "format": "uri",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "verified_by",
+            "type": "string",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "verified_at",
+            "type": "date"
+          }
+        ],
+        "primaryKey": [
+          "kato",
+          "kato_version",
+          "valid_from"
+        ]
+      }
+    },
+    {
+      "name": "kato",
+      "path": "data/kato.csv",
+      "profile": "tabular-data-resource",
+      "format": "csv",
+      "encoding": "utf-8",
+      "title": "КАТО classifier, from stat.gov.kz — see data/kato.source.json",
+      "schema": {
+        "fields": [
+          {
+            "name": "kato",
+            "type": "string",
+            "constraints": {
+              "pattern": "^\\d{9}$"
+            }
+          },
+          {
+            "name": "kato_version",
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "type": "string"
+          },
+          {
+            "name": "type_code",
+            "type": "string"
+          },
+          {
+            "name": "name_ru",
+            "type": "string"
+          },
+          {
+            "name": "name_kk",
+            "type": "string"
+          }
+        ],
+        "primaryKey": [
+          "kato",
+          "kato_version"
+        ]
+      }
+    }
+  ]
+}
