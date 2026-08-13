@@ -498,11 +498,18 @@ def test_the_in_force_reader_reads_both_written_forms_and_only_january() -> None
 
 
 def test_a_year_with_no_known_statutory_base_is_refused() -> None:
-    """2027's base is not recorded, so the check cannot run and must not pass."""
-    future = YEARLESS + " Настоящее решение вводится в действие с 01.01.2027."
+    """A check that cannot run has not passed, so the row must not confirm.
+
+    The year here has to be one the statute does not reach. It was 2027 until
+    the code was read and article 726 turned out to name no year at all, which
+    gave 2027 a base and made this test pass for the wrong reason. Any year
+    added to the table later will do the same, so this deliberately picks one
+    far outside it rather than the next one along.
+    """
+    future = YEARLESS + " Настоящее решение вводится в действие с 01.01.2035."
     result = classify(future, kazakh_text=YEARLESS_KAZ)
     transition = next(r for r in result["readings"] if r["reader"] == "transition")
-    assert "no statutory base known for year 2027" in transition["detail"]
+    assert "no statutory base known for year 2035" in transition["detail"]
     assert result["outcome"] != CONFIRMED
 
 

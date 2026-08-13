@@ -101,9 +101,41 @@ CACHE = REPO_ROOT / ".cache" / "documents"
 EXTRACTED = REPO_ROOT / "data" / "extracted-rates.json"
 QUEUE = REPO_ROOT / "data" / "extraction-queue.json"
 
-# НК РК art. 726. A "понижение" must start from this, so a document claiming to
-# lower the rate from anything else is not the document we think it is.
-BASE_RATE_PERCENT = {2026: 4}
+# Article 726 of the Tax Code of the Republic of Kazakhstan, 18 July 2025
+# № 214-VIII ЗРК, read from the act itself:
+#
+#   «…производится налогоплательщиком самостоятельно путем применения к объекту
+#    налогообложения за отчетный налоговый период ставки в размере 4 процентов.»
+#
+# The article names no year, so the base holds for as long as the code does. A
+# "понижение" must start from it, and a document claiming to lower the rate from
+# anything else is not the document we think it is.
+#
+# 2027 is listed because a decision adopted in 2026 for 2027 already exists and
+# was refused for want of a base. The same article governs it.
+BASE_RATE_PERCENT = {2026: 4, 2027: 4}
+
+# **The same article permits councils to RAISE the rate, not only lower it:**
+# «Местные представительные органы имеют право понижать или повышать размер
+# ставки … не более чем на 50 процентов». So the lawful range is 2% to 6%, and a
+# decision that raises a rate is a valid decision, not a defect.
+#
+# This pipeline cannot see one. Discovery searches for «понижени», and the
+# transition reader treats new >= old as a refusal. No document in the corpus so
+# far actually raises, so nothing is currently wrong — but a district that did
+# raise its rate would be absent rather than reported, and absence here is
+# already the failure the project works hardest to avoid.
+#
+# Fixing it means widening discovery to «повышени» and teaching the transition
+# reader that direction is a property to record rather than a test to pass.
+# Deliberately not done in the same change that found it.
+COUNCILS_MAY_ALSO_RAISE = True
+
+# Article 726 again, and it is why the in-force date is a sound source for the
+# tax year rather than a convention: «Такое решение … принимается … не позднее
+# 1 декабря года, предшествующего году его введения, вводится в действие с
+# 1 января года, следующего за годом его принятия».
+YEAR_FOLLOWS_IN_FORCE_DATE_BY_STATUTE = True
 
 # Читается независимо от цифры. Genitive and nominative both occur: the old
 # rate is written "с 4 (четырех) процентов", the new one "на 3 (три) процента".

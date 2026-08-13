@@ -782,7 +782,7 @@
         {
           "reader": "kazakh",
           "rate_percent": null,
-          "detail": "UNAVAILABLE: SSLError: [SSL: DECRYPTION_FAILED_OR_BAD_RECORD_MAC] decryption failed or bad record mac (_ssl.c:2559)",
+          "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
           "kind": "unavailable"
         }
       ],
@@ -792,7 +792,7 @@
       "decision_ref": "Решение Аральского районного маслихата Кызылординской области от 24 ноября 2025 года № 433",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (SSLError: [SSL: DECRYPTION_FAILED_OR_BAD_RECORD_MAC] decryption failed or bad record mac (_ssl.c:2559))"
+      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )"
     },
     {
       "kazakh_pdf_url": null,
@@ -824,7 +824,7 @@
         {
           "reader": "kazakh",
           "rate_percent": null,
-          "detail": "UNAVAILABLE: URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate signature failure (_ssl.c:1000)>",
+          "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
           "kind": "unavailable"
         }
       ],
@@ -834,7 +834,7 @@
       "decision_ref": "Решение Жалагашского районного маслихата Кызылординской области от 21 ноября 2025 года № 35-3",
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
-      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate signature failure (_ssl.c:1000)>)"
+      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )"
     },
     {
       "kazakh_pdf_url": null,
@@ -1557,14 +1557,14 @@
         },
         {
           "reader": "transition",
-          "rate_percent": null,
-          "detail": "no statutory base known for year 2027 — the origin check cannot run",
-          "kind": "substantive"
+          "rate_percent": 2,
+          "detail": "с 4 % на 2%",
+          "kind": "read"
         },
         {
           "reader": "kazakh",
           "rate_percent": null,
-          "detail": "UNAVAILABLE: URLError: <urlopen error [SSL: DIGEST_CHECK_FAILED] digest check failed (_ssl.c:1000)>",
+          "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
           "kind": "unavailable"
         }
       ],
@@ -1574,7 +1574,7 @@
       "decision_ref": "Решение Жаксынского районного маслихата Акмолинской области от 10 июля 2026 года № 8С-57-2",
       "in_force_from": "2027-01-01",
       "outcome": "conflict",
-      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (URLError: <urlopen error [SSL: DIGEST_CHECK_FAILED] digest check failed (_ssl.c:1000)>)"
+      "reason": "kazakh could not be fetched — a transport failure, NOT a disagreement. Re-run before reading this as a defect. (HTTPError: HTTP Error 404: )"
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/616/g26dg44198m.06-01-2026.kaz.pdf",
