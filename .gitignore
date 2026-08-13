@@ -35,6 +35,17 @@ Thumbs.db
 # that matters is recorded on every extracted row, so the bytes are not tracked.
 .cache/
 
+# Blind task files `scripts/validate_readings.py --emit` writes for the LLM
+# validation gate. Regenerable from `.cache/documents/` (also gitignored) plus
+# that script, and read by nothing else — committing them would mean tracking
+# a derived artifact that a fresh clone must regenerate before `--ingest` can
+# verify anything anyway (see the module docstring for what that means).
+data/validation-tasks/
+
+# Which documents the last `--emit` run could not fetch a task for. Same
+# reasoning as validation-tasks/: a snapshot of the last run, not a source.
+data/validation-unavailable.json
+
 # ── Internal working files. Deliberately NOT published. ──────────────────────
 # The agent process — roles, decisions, evidence, handoffs, the work queue — is
 # how this repository was built, not what it publishes. A reader wants the

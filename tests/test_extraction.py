@@ -31,6 +31,7 @@ from pathlib import Path
 
 import discover_decisions
 import enumerate_decisions
+import validate_readings
 from extract_rates import (
     CONFIRMED,
     CONFLICT,
@@ -39,6 +40,7 @@ from extract_rates import (
     rate_sentence,
     read_digit,
     read_kazakh,
+    read_regime,
     read_transition,
     read_word,
     read_year,
@@ -85,10 +87,20 @@ def test_the_confirmed_row_carries_the_sentence_it_was_read_from() -> None:
 
 
 def test_all_four_readers_agree_on_the_real_document() -> None:
-    """Three over the Russian text, one over the separately published Kazakh file."""
+    """Three over the Russian text, one over the separately published Kazakh file.
+
+    The fifth reading is `regime` — it never carries a rate, only an
+    objection, and this document's sentence names no regime marker at all.
+    """
     readings = classify(REAL, kazakh_text=REAL_KAZ)["readings"]
-    assert [reading["rate_percent"] for reading in readings] == [3, 3, 3, 3]
-    assert [reading["reader"] for reading in readings] == ["digit", "word", "transition", "kazakh"]
+    assert [reading["rate_percent"] for reading in readings] == [3, 3, 3, 3, None]
+    assert [reading["reader"] for reading in readings] == [
+        "digit",
+        "word",
+        "transition",
+        "kazakh",
+        "regime",
+    ]
 
 
 def test_the_digit_reader_reads_digits_only() -> None:
@@ -107,6 +119,123 @@ def test_the_transition_reader_refuses_a_rise_and_a_wrong_starting_point() -> No
     assert read_transition(CLAUSE, 2026).rate_percent == 3
     assert read_transition("с 3 (три) процентов на 4 (четыре) процента", 2026).rate_percent is None
     assert read_transition("с 5 (пяти) процентов на 3 (три) процента", 2026).rate_percent is None
+
+
+# --- READER 5: which special regime the sentence governs --------------------
+#
+# Article 726 also sets the rate for розничный налог (retail tax), a separate
+# special regime, in near-identical wording. Seven published districts were
+# retail-tax decisions, read correctly by every reader above and published as
+# if they were simplified-declaration rates — nothing checked which regime the
+# sentence actually governed. `read_regime` is the fifth reader that does.
+RETAIL_ONLY = (
+    "Решение маслихата Тестового района от 20 ноября 2025 года № 1. "
+    "Понизить размер ставки корпоративного или индивидуального подоходного налога, "
+    "за исключением налогов, удерживаемых у источника выплаты, при применении "
+    "специального налогового режима розничного налога в Тестовом районе "
+    "с 4 (четырех) процентов на 3 (три) процента за налоговый период в 2026 году."
+)
+
+BOTH_REGIMES_NAMED = (
+    "Решение маслихата Тестового района от 20 ноября 2025 года № 2. "
+    "Понизить размер ставки корпоративного или индивидуального подоходного налога, "
+    "за исключением налогов, удерживаемых у источника выплаты, при применении "
+    "специального налогового режима розничного налога на основе упрощенной декларации "
+    "в Тестовом районе с 4 (четырех) процентов на 3 (три) процента за налоговый период в "
+    "2026 году."
+)
+
+# «частью первой … статьи 726», the phrasing ten published documents rely on
+# (G25BE08332M and its siblings): the sentence names no regime by word at all,
+# it cites the statutory base directly, and that must still confirm.
+ARTICLE_726_PART_ONE = (
+    "Решение маслихата Тестового района от 20 ноября 2025 года № 3. "
+    "Понизить размер ставки, установленной частью первой статьи 726 Налогового кодекса "
+    "Республики Казахстан, в Тестовом районе с 4 (четырех) процентов на 3 (три) процента "
+    "за налоговый период в 2026 году."
+)
+
+# A benign Kazakh companion with no rate pair at all, so the Kazakh reader
+# returns NO_MATCH rather than UNAVAILABLE — these tests are about the regime
+# reader, not about the Kazakh transport path.
+NO_KAZAKH_RATE = "Мәслихат шешімі. Ставка көрсетілмеген."
+
+
+def test_a_retail_tax_sentence_refuses_rather_than_publishing_as_simplified() -> None:
+    """The defect that was found live: seven districts, read correctly, wrong regime."""
+    result = classify(RETAIL_ONLY, kazakh_text=NO_KAZAKH_RATE)
+    assert result["outcome"] == CONFLICT
+    assert "rate" not in result
+    assert "regime objected" in result["reason"]
+    assert "розничного налога" in result["reason"]
+
+
+def test_a_sentence_naming_both_regimes_is_refused_as_ambiguous_not_guessed() -> None:
+    """G25PD23040M's shape: one sentence, both regime names — no clause to prefer."""
+    result = classify(BOTH_REGIMES_NAMED, kazakh_text=NO_KAZAKH_RATE)
+    assert result["outcome"] == CONFLICT
+    assert "rate" not in result
+    assert "regime objected" in result["reason"]
+    assert "BOTH" in result["reason"]
+
+
+def test_a_non_genitive_retail_form_naming_both_regimes_is_ambiguous_not_confirmed() -> None:
+    """The genitive-only bug: `розничному налогу` (dative) used to slip past retail entirely.
+
+    `REGIME_RETAIL` used to match only the genitive `розничного налог\\w*`.
+    `розничный налог`, `розничному налогу` and `розничном налоге` all missed
+    it, and — because the "simplified alone" branch returned before the
+    generic marker fallback was ever reached — a sentence naming BOTH the
+    dative retail form and the simplified declaration confirmed silently as
+    simplified. Widening the pattern to `розничн\\w*\\s+налог\\w*` and
+    reordering the marker check ahead of the "simplified alone" return both
+    close this; either alone was verified insufficient while diagnosing it.
+    """
+    dative_and_simplified = (
+        "Решение маслихата Тестового района от 20 ноября 2025 года № 4. "
+        "Понизить размер ставки при применении специального налогового режима "
+        "розничному налогу на основе упрощенной декларации "
+        "с 4 (четырех) процентов на 3 (три) процента за налоговый период в 2026 году."
+    )
+    reading = read_regime(dative_and_simplified)
+    assert reading.kind == "substantive"
+    assert "BOTH" in reading.detail
+
+    result = classify(dative_and_simplified, kazakh_text=NO_KAZAKH_RATE)
+    assert result["outcome"] == CONFLICT
+    assert "rate" not in result
+
+
+def test_article_726_part_one_still_confirms_with_no_regime_named() -> None:
+    """Ten documents rely on this: no regime word at all, article cited directly."""
+    result = classify(ARTICLE_726_PART_ONE, kazakh_text=NO_KAZAKH_RATE)
+    regime = next(r for r in result["readings"] if r["reader"] == "regime")
+    assert regime["rate_percent"] is None
+    assert regime["kind"] == "no-match"
+    assert result["outcome"] == CONFIRMED
+    assert result["rate"] == 0.03
+
+
+def test_the_regime_reader_directly() -> None:
+    """`read_regime` in isolation, one branch at a time."""
+    assert read_regime(RETAIL_ONLY).kind == "substantive"
+    assert read_regime(BOTH_REGIMES_NAMED).kind == "substantive"
+    assert read_regime(ARTICLE_726_PART_ONE).kind == "no-match"
+    assert read_regime("с 4% на 3%, режим не указан.").kind == "no-match"
+
+
+def test_the_regime_reader_refuses_a_corrupted_regime_name_rather_than_confirming() -> None:
+    """G25UF33195M and G25UH00373M: `упрощ` + a corrupted character + `нной`.
+
+    A real PDF-extraction artefact (U+04B0, a Kazakh letter, in place of the
+    Cyrillic `е`), not a retail decision — but this reader cannot tell that
+    from a genuine retail decision, and treats an unidentifiable regime the
+    same way it treats a directly-named one: refuse, never guess.
+    """
+    corrupted = RETAIL_ONLY.replace("розничного налога", "на основе упрощҰнной декларации")
+    reading = read_regime(corrupted)
+    assert reading.kind == "substantive"
+    assert "cannot identify" in reading.detail
 
 
 def _corrupt(replacement: str) -> str:
@@ -177,7 +306,8 @@ def test_the_до_form_is_confirmed_and_its_number_is_written_in_its_own_sentenc
     """
     result = classify(DO_FORM, kazakh_text=DO_FORM_KAZ)
     assert result["outcome"] == CONFIRMED
-    assert {reading["rate_percent"] for reading in result["readings"]} == {_rate_percent(result)}
+    rate_readings = {r["rate_percent"] for r in result["readings"] if r["rate_percent"] is not None}
+    assert rate_readings == {_rate_percent(result)}
     assert f"до {_rate_percent(result)} (" in result["sentence"]
     assert DO_CLAUSE in result["sentence"]
 
@@ -281,7 +411,7 @@ def test_the_transition_reader_alone_refusing_produces_a_conflict_not_a_row() ->
     assert result["outcome"] == CONFLICT
     assert "rate" not in result
     readings = {r["reader"]: r["rate_percent"] for r in result["readings"]}
-    assert readings == {"digit": 3, "word": 3, "transition": None, "kazakh": 3}
+    assert readings == {"digit": 3, "word": 3, "transition": None, "kazakh": 3, "regime": None}
 
 
 def test_the_rise_case_defends_the_transition_reader_and_says_so() -> None:
@@ -294,7 +424,7 @@ def test_the_rise_case_defends_the_transition_reader_and_says_so() -> None:
     """
     result = classify(_corrupt("с 3 (три) процентов на 4 (четыре) процента"), kazakh_text=REAL_KAZ)
     readings = {r["reader"]: r["rate_percent"] for r in result["readings"]}
-    assert readings == {"digit": 4, "word": 4, "transition": None, "kazakh": 3}
+    assert readings == {"digit": 4, "word": 4, "transition": None, "kazakh": 3, "regime": None}
     assert result["outcome"] == CONFLICT
     assert "rate" not in result
 
@@ -373,7 +503,7 @@ def test_the_bare_word_form_confirms_from_two_sources() -> None:
     assert result["outcome"] == CONFIRMED
     assert result["rate"] == 0.03
     readings = {r["reader"]: r["rate_percent"] for r in result["readings"]}
-    assert readings == {"digit": 3, "word": None, "transition": 3, "kazakh": 3}
+    assert readings == {"digit": 3, "word": None, "transition": 3, "kazakh": 3, "regime": None}
 
 
 def test_the_bare_percent_form_confirms_from_two_sources() -> None:
@@ -403,7 +533,7 @@ def test_the_two_russian_numeral_readers_alone_do_not_confirm() -> None:
     """
     result = classify(BARE_WORDS, kazakh_text=KAZ_WITHOUT_A_RATE)
     readings = {r["reader"]: r["rate_percent"] for r in result["readings"]}
-    assert readings == {"digit": 3, "word": None, "transition": 3, "kazakh": None}
+    assert readings == {"digit": 3, "word": None, "transition": 3, "kazakh": None, "regime": None}
     assert result["outcome"] == UNPARSED
     assert "only one independent reading" in result["reason"]
     assert "rate" not in result
@@ -534,6 +664,13 @@ def test_the_limiter_is_one_shared_place_rather_than_one_per_script() -> None:
     assert enumerate_decisions.PAUSE_SECONDS == extract_rates.MIN_REQUEST_INTERVAL
     for module in (discover_decisions, enumerate_decisions):
         assert module.fetch is extract_rates.fetch
+
+    # validate_readings.py fetches too (`emit_tasks` -> `cached_document`), but
+    # through extract_rates's own `cached_document` rather than reimplementing
+    # a fetch path of its own -- this was the enrolment missing here: nothing
+    # asserted that the LLM validation gate's emitter goes through the same
+    # limiter as everything else that talks to adilet.zan.kz.
+    assert validate_readings.cached_document is extract_rates.cached_document
 
 
 def test_the_limiter_actually_waits(monkeypatch) -> None:  # type: ignore[no-untyped-def]

@@ -1,0 +1,1146 @@
+{
+  "results": [
+    {
+      "document_id": "G25AAZ3494M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25BA00262M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25BB08265M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BC00491M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BD00432M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BE08332M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BF08432M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BG83411M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BH08344M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BI84692M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BJ00273M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BK08403M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BL08593M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BN36276M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BO00138M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BP00253M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BQ41054M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BR08443M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BS08362M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25BT20651M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CA00356M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25CB00406M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CC00349M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CD00324M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CF00378M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CG00395M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25CH00266M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25CI00452M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CJ00382M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CK00280M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CL00403M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25CM00534M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25DB54177M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25DG40184M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25DH50225M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25DJ52172M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25DK00453M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25DR50204M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25DS85123M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25DU02465M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25E030271M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FA51272M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FB33213M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FC00352M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FD00333M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FE30522M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FF00345M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FG00382M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FH31524M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FJ00342M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25FL22251M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25GD00552M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.02,
+      "parser_rate": null,
+      "reason": "G25GD00552M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25GG00442M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25GH00415M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25GI00454M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25HA36207M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25HB00228M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25HC00319M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25HE00236M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.03,
+      "parser_rate": null,
+      "reason": "G25HE00236M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.03) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25IA46254M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25IB37154M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25IC61259M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25ID00552M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25IE54156M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25IF49133M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25IG30227M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25IH49201M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25II85022M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25IJ49191M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25KA00318M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KC00364M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KD25205M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KG00252M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KH45824M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KI41376M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KJ00335M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KK03807M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KM42327M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KN00188M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KO40407M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25KR34255M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25LA30944M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25LD00480M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25LE00334M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25LG00441M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25LH00216M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25MA26167M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25MB32281M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25MC35268M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25MD31262M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25ME24190M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25MF35169M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25MG37210M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25NA00200M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25NB00249M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25ND00200M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25NG00389M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25NJ00343M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25NN00309M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25NQ00359M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PA27332M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PB24142M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PC28937M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PD23040M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.03,
+      "parser_rate": null,
+      "reason": "G25PD23040M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.03) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25PE36839M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PG14342M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PH00236M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PI16338M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PJ00133M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PK38320M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PL20042M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25PM14750M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25R000256M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SA00529M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SB02812M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SC83411M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SD00331M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SE00332M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SF35529M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SG00342M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SH00273M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SI00331M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SJ00482M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SK39427M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SL00302M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25SM00334M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    },
+    {
+      "document_id": "G25TA00190M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25TB00381M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25TC00237M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25TE00352M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25TF00186M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25TG00189M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25TH00242M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UB38216M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UC00221M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UE34201M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UF33195M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.02,
+      "parser_rate": null,
+      "reason": "G25UF33195M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25UG32204M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UH00373M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.02,
+      "parser_rate": null,
+      "reason": "G25UH00373M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25UI28166M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.02,
+      "parser_rate": null,
+      "reason": "G25UI28166M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25UJ33228M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UK35264M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UL00221M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UM30178M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UN38108M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UO43236M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25UP32197M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.02,
+      "parser_rate": null,
+      "reason": "G25UP32197M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25UQ02921M",
+      "outcome": "published_support_withdrawn",
+      "model_rate": 0.02,
+      "parser_rate": null,
+      "reason": "G25UQ02921M IS PUBLISHED in data/rates.csv, but the parser no longer confirms a rate for it (model read 0.02) -- a human must check whether this district's row is still supported"
+    },
+    {
+      "document_id": "G25UR00281M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VA00383M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VD00323M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VI00283M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VK00432M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VL00342M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VM31352M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VN00453M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VP00333M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VQ00264M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VS00413M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VT00252M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VU17184M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25VV00322M",
+      "outcome": "agree",
+      "model_rate": 0.02,
+      "parser_rate": 0.02,
+      "reason": "model agrees with the parser: 0.02"
+    },
+    {
+      "document_id": "G25ZA00249M",
+      "outcome": "agree",
+      "model_rate": 0.03,
+      "parser_rate": 0.03,
+      "reason": "model agrees with the parser: 0.03"
+    }
+  ],
+  "parser_rates_fingerprint": "9f7e3cc23b057bd74a6d0cf356b63506b4fdd89a00cdea00ef3fb3d525efd984"
+}

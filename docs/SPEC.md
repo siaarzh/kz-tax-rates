@@ -202,6 +202,33 @@ produced. That is correlated redundancy, which reads as coverage on a dashboard 
 provides almost none. Verifier agents also bias toward approval when handed a
 plausible-looking artifact.
 
+**This is why the LLM validation gate (`scripts/validate_readings.py`) is not a second
+agent verifying the first.** The failure mode above is specifically "shown a number, asked
+if it looks right" — agreement is the plausible continuation once the number is in view. The
+gate never does that. It asks a model "what rate does this text set?", blind to the parser's
+own reading (`task_fields()` has no parameter through which a rate could reach the task
+file — see `tests/test_validation_leak.py`), and only afterwards compares the two answers
+**in code**. And the comparison is asymmetric on purpose: the model may **veto** a rate
+(refuse to publish where the parser was confident) and may **break a tie** between two
+disagreeing deterministic readers, but it may **never originate** one — a parser silent on a
+document plus a model reporting a rate is `escalated` or `published_support_withdrawn`,
+never a publication. A veto-only, blind second opinion is not the correlated-redundancy
+shape this section forbids.
+
+### 7.2.1 The eight regime refusals — a change of scope, not the gate's mistake
+
+The gate's most useful result so far was a set of eight `escalated` /
+`published_support_withdrawn` disagreements that were, on inspection, not disagreements
+about the rate at all: the parser's `read_regime` reader had been tightened to refuse
+retail-tax (`розничный налог`) decisions — a distinct special regime under the same tax-code
+article — and the blind model, reading the same documents with no regime check of its own,
+still reported the rate those sentences state. That is not the model being wrong; it read
+correctly. It is the parser correctly refusing a document that governs a different regime
+than the one this dataset publishes. `scripts/trigger_reconcile.py` marks these `terminal`
+and never fires an unattended "fix the parser" session over them — the only move that brief
+could satisfy is widening the regime check back open, which is how those rows got published
+wrong the first time.
+
 ### 7.3 Canary test — deterministic
 
 ```python
@@ -356,4 +383,8 @@ Steps 1–5 are the deliverable. Steps 6–7 are enhancements.
 - КАТО codes are strings. Never parse them as integers.
 - Prefer boring, deterministic assertions over model judgement everywhere in the pipeline.
 - If a check would be "ask a model whether this looks right," replace it with an assertion
-  or remove it.
+  or remove it. **The one narrow exception is the blind gate described in §7.2**: "what
+  rate does this text set" (never shown the parser's answer), compared in code afterwards,
+  with the model able only to veto or break a tie — never to originate a rate. That is not
+  "does this look right", and it is not a second copy of the same model checking the first;
+  see §7.2 for why the distinction holds.
