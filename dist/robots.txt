@@ -1,0 +1,9 @@
+# kz-tax-rates — a free, cited table of Kazakhstan's simplified-regime tax rate
+# per district. Crawl it, index it, and take the data.
+User-agent: *
+Allow: /
+
+# The machine-readable copies, which are what most automated readers want.
+# rates.json holds every year; rates-<year>.json holds one, same schema.
+# llms.txt describes the schema in plain text.
+Sitemap: https://siaarzh.github.io/kz-tax-rates/sitemap.xml

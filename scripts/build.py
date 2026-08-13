@@ -63,6 +63,19 @@ NOT_TAX_ADVICE_RU = (
 )
 
 
+# Article 726 НК РК gives a maslikhat until 1 December of the preceding year to
+# adopt the next year's rate, so a future year's column is partly decided and
+# mostly not. It is said on the page only while a future column is drawn.
+#
+# Here rather than in the template, for the same reason the disclaimer is here:
+# a sentence about what the data means is a claim, and the page must not be able
+# to make one the build did not give it.
+FUTURE_YEAR_NOTE_RU = (
+    "Ставки на следующий год маслихаты принимают до 1 декабря. "
+    "Пока эта дата не прошла, столбец заполнен лишь частично."
+)
+
+
 def generated_at() -> str:
     """Build time, overridable so an unchanged rebuild is byte-identical.
 
@@ -149,6 +162,35 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
     }
 
 
+def page_view(payload: dict[str, Any]) -> dict[str, Any]:
+    """What the page needs to draw one year, or several, decided here.
+
+    The multi-year layout turns itself on with the data: one year draws exactly
+    the page it draws today, with no year column and nothing hinting that one
+    exists. Two or more draw a column each, oldest to newest.
+
+    `current_year` comes from `generated_at`, never from the reader's clock. A
+    rebuild of last year's data has to produce last year's page; reading the
+    clock instead would silently re-rank the columns of an archived build and
+    make the tests depend on the day they run.
+
+    It is a view of the payload and is inlined into the page alone. It is
+    deliberately not a field of the payload: dist/rates.json is a published
+    schema with consumers, and presentation is not part of it.
+    """
+    years = sorted(payload["years"])
+    current = str(payload["generated_at"])[:4]
+    future = [year for year in years if year > current]
+    return {
+        "years": years,
+        "current_year": current,
+        # Empty unless a future column is actually drawn. With one year there is
+        # no column to qualify, and with no future year there is nothing partly
+        # decided to warn about.
+        "future_note_ru": FUTURE_YEAR_NOTE_RU if len(years) > 1 and future else "",
+    }
+
+
 def read_aliases() -> list[list[str]]:
     """[kato, name_ru, name_kk, resolves_to_kato] for places with no decision.
 
@@ -190,10 +232,13 @@ def render_index(payload: dict[str, Any]) -> str:
         "/*ALIASES*/": json.dumps(
             read_aliases(), ensure_ascii=False, separators=(",", ":")
         ).replace("</", "<\\/"),
+        "/*VIEW*/": json.dumps(page_view(payload), ensure_ascii=False, indent=2).replace(
+            "</", "<\\/"
+        ),
         "/*MINISEARCH*/": search,
     }
     return re.sub(
-        r"/\*(?:DATA|ALIASES|MINISEARCH)\*/", lambda match: parts[match.group(0)], template
+        r"/\*(?:DATA|ALIASES|VIEW|MINISEARCH)\*/", lambda match: parts[match.group(0)], template
     )
 
 

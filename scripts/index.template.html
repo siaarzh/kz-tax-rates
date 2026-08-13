@@ -19,10 +19,20 @@
   An alias is a village, a rural okrug or a city borough with no decision of its
   own. It is never drawn as a row. It is drawn as a sentence naming the
   jurisdiction whose decision actually covers it.
+
+  Several years are drawn side by side, oldest to newest, and only when the
+  payload actually holds more than one. With one year the page has no year
+  column and no hint that one exists, which is the state today. The current year
+  is read from generated_at rather than the clock, so rebuilding old data
+  produces the same page rather than a page that quietly re-ranks its columns.
+
+  A year cell with no rate says «нет данных». It never falls back to the base
+  rate: the district's decision for that year has not been read, which is not
+  the same fact as the district having the base rate.
 -->
 <style>
-  :root { color-scheme: light dark; --fg: #16181d; --bg: #fff; --muted: #5b6270; --line: #d9dde5; --accent: #0a58ca; --warn-bg: #fff6e5; --warn-line: #e0b34d; --tint-0: #e8f2ec; --tint-1: #e7eef8; --tint-2: #f4eee6; --tint-3: #f0ecf6; }
-  @media (prefers-color-scheme: dark) { :root { --fg: #e6e8ec; --bg: #14161a; --muted: #9aa1ae; --line: #2c313a; --accent: #7aa7ff; --warn-bg: #2a2313; --warn-line: #6b5320; --tint-0: #1b2620; --tint-1: #1a2230; --tint-2: #2a241b; --tint-3: #241f2e; } }
+  :root { color-scheme: light dark; --fg: #16181d; --bg: #fff; --muted: #5b6270; --line: #d9dde5; --accent: #0a58ca; --warn-bg: #fff6e5; --warn-line: #e0b34d; --tint-0: #e8f2ec; --tint-1: #e7eef8; --tint-2: #f4eee6; --tint-3: #f0ecf6; --cur-bg: #f4f7fc; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #e6e8ec; --bg: #14161a; --muted: #9aa1ae; --line: #2c313a; --accent: #7aa7ff; --warn-bg: #2a2313; --warn-line: #6b5320; --tint-0: #1b2620; --tint-1: #1a2230; --tint-2: #2a241b; --tint-3: #241f2e; --cur-bg: #1a1f28; } }
   * { box-sizing: border-box; }
   body { margin: 0 auto; padding: 1rem 1rem 4rem; max-width: 54rem; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; }
   h1 { font-size: 1.3rem; line-height: 1.25; margin: 0 0 .35rem; }
@@ -63,6 +73,31 @@
   .empty { padding: 1.2rem 0; }
   footer { margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: .8rem; color: var(--muted); font-size: .85rem; }
 
+  /* Several years side by side. Every rule below is scoped to .multi-year or to
+     a class only the multi-year renderer emits, so the one-year page cannot be
+     reached by any of it. */
+  body.multi-year { max-width: 66rem; }
+
+  /* Fixed layout, so the place column keeps a readable width and the years
+     split what is left evenly however many of them there are. Left to itself
+     the browser gives the long decision reference all the room and squeezes
+     each year down to one word per line. */
+  table.multi { table-layout: fixed; }
+  table.multi th.place-head { width: 26%; }
+  thead th.yr { color: var(--muted); }
+  thead th.yr.cur { color: var(--fg); font-weight: 700; }
+  .cur-tag { display: block; font-size: .7rem; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--muted); }
+  th.yr.cur, td.yr.cur { background: var(--cur-bg); }
+  td.yr { white-space: normal; }
+  td.yr .value { display: inline-block; }
+  /* The current year keeps the size and weight the single rate has today. Past
+     and future years are legible and plainly secondary. */
+  td.yr.past .value, td.yr.future .value { font-size: .95rem; font-weight: 600; background: none; border: 1px solid var(--line); color: var(--muted); }
+  td.yr .decision { margin-top: .25rem; font-size: .78rem; overflow-wrap: break-word; }
+  td.yr.past .decision a, td.yr.future .decision a { color: var(--muted); }
+  td.yr .nodata { display: inline-block; font-size: .85rem; color: var(--muted); font-style: italic; }
+  .ylabel { display: none; }
+
   @media (max-width: 640px) {
     .results { overflow-x: auto; }
     thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
@@ -74,6 +109,17 @@
     td.decision { grid-column: 2; grid-row: 2; }
     tr.group { display: block; }
     tr.group th { display: block; top: 4.2rem; }
+
+    /* One year per line rather than side by side: three columns of a decision
+       reference at 390px is a horizontal scrollbar, and the phone is where most
+       of this page is read. */
+    body.multi-year { max-width: none; }
+    tbody tr.mrow { display: block; padding: .55rem 0 .35rem; border-bottom: 1px solid var(--line); }
+    tr.mrow td.place { display: block; margin-bottom: .4rem; }
+    tr.mrow td.yr { display: block; width: auto; padding: .3rem .5rem; margin-bottom: .3rem; border-left: 3px solid var(--line); border-radius: .2rem; }
+    tr.mrow td.yr.cur { border-left-color: var(--accent); }
+    tr.mrow .ylabel { display: inline-block; min-width: 3rem; font-size: .8rem; color: var(--muted); }
+    tr.mrow td.yr.cur .ylabel { color: var(--fg); font-weight: 600; }
   }
 </style>
 </head>
@@ -98,22 +144,45 @@
 
 <script type="application/json" id="payload">/*DATA*/</script>
 <script type="application/json" id="aliases">/*ALIASES*/</script>
+<script type="application/json" id="view">/*VIEW*/</script>
 <script>/*MINISEARCH*/</script>
 <script>
 (function () {
   "use strict";
   var payload = JSON.parse(document.getElementById("payload").textContent);
   var aliasRows = JSON.parse(document.getElementById("aliases").textContent);
+  // Which years there are, which one is current, and whether a future column
+  // needs qualifying are all decided by the build, not here. See page_view() in
+  // scripts/build.py.
+  var view = JSON.parse(document.getElementById("view").textContent);
   var years = Object.keys(payload.years).sort().reverse();
+  // Left to right on the page, oldest first. `years` stays newest-first because
+  // the coverage line and the payload lookups below already read it that way.
+  var yearsAsc = view.years;
+  // The feature turns itself on with the data and is invisible until then.
+  var multi = yearsAsc.length > 1;
+  var currentYear = view.current_year;
+
+  // One entry per district, holding every year we have for it. With one year in
+  // the payload this is exactly the old one-entry-per-row list, in the same
+  // order, which is what keeps the single-year page unchanged.
   var rows = [];
+  var byKato = {};
   years.forEach(function (year) {
     payload.years[year].rates.forEach(function (rate) {
-      rows.push({ year: year, base: payload.years[year].base_rate, r: rate });
+      var entry = byKato[rate.kato];
+      if (!entry) {
+        // Names come from the newest year that has the district, because that
+        // is the newest reading of what the place is called.
+        entry = { kato: rate.kato, base: payload.years[year].base_rate, r: rate, years: {}, bases: {} };
+        byKato[rate.kato] = entry;
+        rows.push(entry);
+      }
+      entry.years[year] = rate;
+      entry.bases[year] = payload.years[year].base_rate;
     });
   });
   var total = rows.length;
-  var byKato = {};
-  rows.forEach(function (row) { byKato[row.r.kato] = row; });
 
   // The rate is stored as a fraction and shown as a percentage. Multiplying
   // floats gives 3.0000000000000004, so round to two decimals and trim. No
@@ -147,11 +216,22 @@
     return String(value).toLowerCase().replace(/[әғқңөұүһіё]/g, function (c) { return FOLD[c]; });
   }
 
-  var base = rows.length ? rows[0].base : null;
+  // The current year's base rate where we have that year, otherwise the newest
+  // year's. Read from the payload either way; this page states no rate it was
+  // not given.
+  var base = payload.years[currentYear]
+    ? payload.years[currentYear].base_rate
+    : (rows.length ? rows[0].base : null);
+
+  if (multi) {
+    document.body.className = "multi-year";
+    document.title = "Ставка налога по упрощённой декларации (упрощёнка) по районам Казахстана, " +
+      yearsAsc.join(" · ") + " · КАТО";
+  }
 
   document.getElementById("title").textContent =
     "Ставка налога по упрощённой декларации: районы и города" +
-    (years.length === 1 ? ", " + years[0] : "");
+    (yearsAsc.length ? ", " + yearsAsc.join(" · ") : "");
 
   // The base rate is read out of the payload, never typed here. It is a rate,
   // and this page states no rate it was not given.
@@ -204,6 +284,17 @@
   coverage.appendChild(coverageSummary);
   coverage.appendChild(text("p", coverageWarning));
 
+  // A future year's rate is not the same kind of fact as this year's, and the
+  // page says so while a future column is on screen. The sentence itself comes
+  // from the build; the page states no claim it was not given.
+  if (view.future_note_ru) {
+    // Created rather than filled in, so the one-year page carries no element
+    // for it at all: the dormant page must be the page it is today, node for
+    // node, not that page plus an empty hidden one.
+    var slot = document.getElementById("results");
+    slot.parentNode.insertBefore(text("p", view.future_note_ru, "muted future-note"), slot);
+  }
+
   // Both notices again, in full, at the foot of the page. Findable twice, and a
   // wall of text in neither place.
   var footer = document.getElementById("footer");
@@ -227,7 +318,11 @@
   // A faint tint per distinct rate, paired with the number itself. The colour
   // is never the only carrier of the value.
   var tints = {};
-  rows.map(function (row) { return row.r.rate; })
+  var everyRate = [];
+  years.forEach(function (year) {
+    payload.years[year].rates.forEach(function (rate) { everyRate.push(rate.rate); });
+  });
+  everyRate
     .filter(function (rate, i, all) { return all.indexOf(rate) === i; })
     .sort(function (a, b) { return a - b; })
     .forEach(function (rate, i) { tints[rate] = i % 4; });
@@ -304,12 +399,7 @@
     return cell;
   }
 
-  function rowNode(row) {
-    var tr = document.createElement("tr");
-    tr.className = "row";
-    tr.id = "k" + row.r.kato;
-    tr.appendChild(rateCell(row));
-
+  function placeCell(row) {
     var place = document.createElement("td");
     place.className = "place";
     place.appendChild(text("div", row.r.name_ru));
@@ -317,11 +407,59 @@
     kk.setAttribute("lang", "kk");
     place.appendChild(kk);
     place.appendChild(text("div", row.r.kato, "kato"));
-    tr.appendChild(place);
+    return place;
+  }
 
+  function rowNode(row) {
+    var tr = document.createElement("tr");
+    tr.className = "row";
+    tr.id = "k" + row.r.kato;
+    tr.appendChild(rateCell(row));
+    tr.appendChild(placeCell(row));
     tr.appendChild(decisionCell(row.r, "td"));
     return tr;
   }
+
+  function whenClass(year) {
+    if (year === currentYear) { return "cur"; }
+    return year > currentYear ? "future" : "past";
+  }
+
+  // One year of one district: its rate, whether that rate is the base one, and
+  // its own citation, because each year is a different decision.
+  function yearCell(row, year) {
+    var cell = document.createElement("td");
+    cell.className = "rate yr " + whenClass(year);
+    cell.appendChild(text("span", year, "ylabel"));
+
+    var rate = row.years[year];
+    // No decision read for this district and year. The base rate is not the
+    // answer to that, and neither is a blank cell that reads as one.
+    if (!rate) {
+      var missing = text("span", "нет данных", "nodata");
+      missing.title = "Решение за " + year + " год по этому району ещё не прочитано";
+      cell.appendChild(missing);
+      return cell;
+    }
+
+    var value = text("span", percent(rate.rate), "value");
+    if (tints[rate.rate]) { value.className = "value t" + tints[rate.rate]; }
+    cell.appendChild(value);
+    if (rate.rate === row.bases[year]) { cell.appendChild(text("span", "= база", "base")); }
+    cell.appendChild(decisionCell(rate, "div"));
+    return cell;
+  }
+
+  function multiRowNode(row) {
+    var tr = document.createElement("tr");
+    tr.className = "mrow";
+    tr.id = "k" + row.r.kato;
+    tr.appendChild(placeCell(row));
+    yearsAsc.forEach(function (year) { tr.appendChild(yearCell(row, year)); });
+    return tr;
+  }
+
+  function bodyRow(row) { return multi ? multiRowNode(row) : rowNode(row); }
 
   // Both links open in a new tab, so following a citation does not cost a
   // reader their place in a long table.
@@ -353,8 +491,18 @@
   function headRow() {
     var head = document.createElement("thead");
     var tr = document.createElement("tr");
-    ["Ставка", "Район или город", "Решение"].forEach(function (title) {
-      tr.appendChild(text("th", title));
+    if (!multi) {
+      ["Ставка", "Район или город", "Решение"].forEach(function (title) {
+        tr.appendChild(text("th", title));
+      });
+      head.appendChild(tr);
+      return head;
+    }
+    tr.appendChild(text("th", "Район или город", "place-head"));
+    yearsAsc.forEach(function (year) {
+      var th = text("th", year, "yr " + whenClass(year));
+      if (year === currentYear) { th.appendChild(text("span", "текущий", "cur-tag")); }
+      tr.appendChild(th);
     });
     head.appendChild(tr);
     return head;
@@ -382,8 +530,26 @@
   var CITIES = ["город", "города", "городов"];
   var DISTRICTS = ["район", "района", "районов"];
 
+  // The band a group is summarised by is the current year's, so the headline
+  // number is the one the reader is here for. Where no member has the current
+  // year, every year we do hold is used rather than none.
+  function bandRates(members) {
+    if (!multi) { return members.map(function (row) { return row.r.rate; }); }
+    var rates = [];
+    members.forEach(function (row) {
+      if (row.years[currentYear]) { rates.push(row.years[currentYear].rate); }
+    });
+    if (rates.length) { return rates; }
+    members.forEach(function (row) {
+      yearsAsc.forEach(function (year) {
+        if (row.years[year]) { rates.push(row.years[year].rate); }
+      });
+    });
+    return rates;
+  }
+
   function groupRow(label, members, forms) {
-    var rates = members.map(function (row) { return row.r.rate; });
+    var rates = bandRates(members);
     var low = Math.min.apply(null, rates);
     var high = Math.max.apply(null, rates);
     var band = low === high ? percent(low) : "от " + percent(low) + " до " + percent(high);
@@ -391,17 +557,18 @@
     tr.className = "group";
     var th = text("th", label + " · " + members.length + " " +
       plural(members.length, forms) + " · " + band);
-    th.setAttribute("colspan", "3");
+    th.setAttribute("colspan", multi ? String(1 + yearsAsc.length) : "3");
     tr.appendChild(th);
     return tr;
   }
 
   function table(found, grouped) {
     var node = document.createElement("table");
+    if (multi) { node.className = "multi"; }
     node.appendChild(headRow());
     var body = document.createElement("tbody");
     if (!grouped) {
-      found.forEach(function (row) { body.appendChild(rowNode(row)); });
+      found.forEach(function (row) { body.appendChild(bodyRow(row)); });
       node.appendChild(body);
       return node;
     }
@@ -412,7 +579,7 @@
     var capitals = found.filter(function (row) { return tier(row.r) === 0; }).sort(byTierThenKato);
     if (capitals.length) {
       body.appendChild(groupRow("Города республиканского значения", capitals, CITIES));
-      capitals.forEach(function (row) { body.appendChild(rowNode(row)); });
+      capitals.forEach(function (row) { body.appendChild(bodyRow(row)); });
     }
 
     var order = [];
@@ -425,7 +592,7 @@
     order.forEach(function (key) {
       var members = groups[key].sort(byTierThenKato);
       if (key) { body.appendChild(groupRow(key, members, DISTRICTS)); }
-      members.forEach(function (row) { body.appendChild(rowNode(row)); });
+      members.forEach(function (row) { body.appendChild(bodyRow(row)); });
     });
     node.appendChild(body);
     return node;
@@ -440,16 +607,25 @@
     // generated sentence announces that nobody read it.
     var name = target.r.name_ru;
     var stop = name.slice(-1) === "." ? "" : ".";
+    // With several years the sentence has to say which year it is quoting, and
+    // it quotes the current one wherever we hold it.
+    var shown = multi ? (target.years[currentYear] || null) : target.r;
+    var shownYear = multi && shown ? currentYear : null;
+    if (multi && !shown) {
+      for (var y = yearsAsc.length - 1; y >= 0 && !shown; y -= 1) {
+        if (target.years[yearsAsc[y]]) { shown = target.years[yearsAsc[y]]; shownYear = yearsAsc[y]; }
+      }
+    }
     node.appendChild(text(
       "p",
       alias[1] + " входит в " + name + stop + " Действует ставка " +
-      name + ": " + percent(target.r.rate) + "."
+      name + (shownYear ? " на " + shownYear + " год" : "") + ": " + percent(shown.rate) + "."
     ));
     var kk = text("span", alias[2], "kk");
     kk.setAttribute("lang", "kk");
     node.appendChild(kk);
     node.appendChild(text("span", alias[0] + " → " + target.r.kato, "kato"));
-    node.appendChild(decisionCell(target.r, "div"));
+    node.appendChild(decisionCell(shown, "div"));
     return node;
   }
 

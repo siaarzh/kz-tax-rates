@@ -16,6 +16,7 @@ import shutil
 import subprocess
 import sys
 import zipfile
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
@@ -323,6 +324,139 @@ def test_the_page_states_the_terms_from_the_payload_not_from_the_template() -> N
     assert "payload.not_tax_advice_ru" in template
     assert "payload.licence" in template
     assert "MIT" not in template
+
+
+# ---------------------------------------------------------------------------
+# Several years at once.
+#
+# The page draws the year columns in JavaScript, and CI has no browser, so the
+# tests below pin the part that decides: page_view() and the view blob the page
+# is handed. Everything a year column does is downstream of that blob, and the
+# one thing the blob cannot state — that a missing rate is never drawn as the
+# base rate — is checked against the renderer's own source.
+# ---------------------------------------------------------------------------
+
+TEMPLATE = REPO_ROOT / "scripts" / "index.template.html"
+
+
+def _for_year(year: int, kato: str = "750000000", rate: str = "0.03") -> dict[str, str]:
+    return {
+        **VALID,
+        "kato": kato,
+        "rate": rate,
+        "valid_from": f"{year}-01-01",
+        "valid_to": f"{year}-12-31",
+        "decision_ref": f"Тестовое решение за {year} год",
+    }
+
+
+def _view_of(page: str) -> dict[str, object]:
+    """The view blob the built page was handed, read back out of the page."""
+    blob = re.search(r'id="view">(.*?)</script>', page, re.S)
+    assert blob, "the page carries no view blob"
+    loaded: dict[str, object] = json.loads(blob.group(1))
+    return loaded
+
+
+def _pin(monkeypatch: pytest.MonkeyPatch, year: int) -> None:
+    """Pin the build clock, so the current year is a fact of the fixture."""
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", str(int(datetime(year, 6, 1, tzinfo=UTC).timestamp())))
+
+
+def test_one_year_draws_no_year_column(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Today's state, and it must stay a page with no hint that a feature exists."""
+    _pin(monkeypatch, 2026)
+    view = _view_of(render_index(build([_for_year(2026)])))
+    assert view["years"] == ["2026"]
+    assert view["future_note_ru"] == ""
+    # The columns are gated on this one expression; nothing else turns them on.
+    assert "var multi = yearsAsc.length > 1;" in TEMPLATE.read_text(encoding="utf-8")
+
+
+def test_two_years_are_drawn_oldest_first_with_the_current_one_marked(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _pin(monkeypatch, 2026)
+    page = render_index(build([_for_year(2026), _for_year(2025, rate="0.04")]))
+    view = _view_of(page)
+    assert view["years"] == ["2025", "2026"], "oldest to newest, left to right"
+    assert view["current_year"] == "2026"
+    # Which column is the loud one is decided by that year, in the renderer.
+    assert 'if (year === currentYear) { return "cur"; }' in TEMPLATE.read_text(encoding="utf-8")
+
+
+def test_the_current_year_comes_from_the_build_not_the_clock(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A rebuild of old data must produce the old page, not today's ranking.
+
+    Reading the reader's clock instead would silently re-rank an archived
+    build's columns, and would make every test here expire.
+    """
+    _pin(monkeypatch, 2025)
+    view = _view_of(render_index(build([_for_year(2026), _for_year(2025, rate="0.04")])))
+    assert view["current_year"] == "2025"
+
+
+def test_a_future_year_says_the_column_is_only_partly_filled(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Art. 726 НК РК: the next year's rate is adopted by 1 December, so until
+    that date passes the column is partly decided and mostly not."""
+    _pin(monkeypatch, 2025)
+    page = render_index(build([_for_year(2026), _for_year(2025, rate="0.04")]))
+    assert _view_of(page)["future_note_ru"] == (
+        "Ставки на следующий год маслихаты принимают до 1 декабря. "
+        "Пока эта дата не прошла, столбец заполнен лишь частично."
+    )
+    assert "маслихаты принимают до 1 декабря" in page
+
+
+def test_the_sentence_is_absent_when_no_future_column_is_drawn(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """It qualifies a column. With no future column there is nothing to qualify,
+    and a warning shown where it does not apply is noise that trains a reader to
+    skip the one that does."""
+    _pin(monkeypatch, 2026)
+    two_past = render_index(build([_for_year(2026), _for_year(2025, rate="0.04")]))
+    one_year = render_index(build([_for_year(2026)]))
+    for page in (two_past, one_year):
+        assert _view_of(page)["future_note_ru"] == ""
+        assert "1 декабря" not in page
+
+
+def test_a_year_the_district_has_no_decision_for_is_absent_not_filled_in(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """An empty cell means no decision was read. It never means the base rate.
+
+    Two halves: the build invents nothing, and the renderer's missing branch
+    returns before it can reach a rate at all.
+    """
+    _pin(monkeypatch, 2026)
+    only_2025 = _for_year(2025, kato="751710000", rate="0.02")
+    payload = build([_for_year(2026), only_2025])
+    katos_2026 = [entry["kato"] for entry in payload["years"]["2026"]["rates"]]
+    assert "751710000" not in katos_2026, "the build filled in a year it was not given"
+
+    template = TEMPLATE.read_text(encoding="utf-8")
+    branch = re.search(r"if \(!rate\) \{(.*?)\n    \}", template, re.S)
+    assert branch, "the missing-rate branch is not where this test thinks it is"
+    body = branch.group(1)
+    assert "нет данных" in body, "a missing rate must read as no data"
+    assert "base" not in body and "rate.rate" not in body, (
+        "the missing-rate branch can reach a rate; it must state none"
+    )
+    assert "percent(" not in body
+
+
+def test_the_page_carries_no_em_or_en_dash_in_any_language() -> None:
+    """A typographic dash is not in the house style, in Russian or in English."""
+    page = render_index(build([_for_year(2026)]))
+    body = page[page.index("<body>") :]
+    for dash in ("—", "–"):
+        assert dash not in body, f"the rendered page carries {dash!r}"
 
 
 def test_the_datapackage_types_every_column_of_both_csvs() -> None:
