@@ -36,7 +36,7 @@ Every row carries source_url, a link to the decision it was read from, and verif
 the person who read it. No rate is generated, inferred or filled in by a model.
 
 Years present: 2026.
-Built: 2026-08-12T15:54:22Z.
+Built: 2026-08-13T04:44:13Z.
 
 ## Published copies
 
