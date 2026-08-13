@@ -12,15 +12,24 @@ ambiguity by choosing; every unmapped document is counted and named.
 
 ## The rule
 
-1. **The oblast comes from two independent sources and they must agree**: the
-   issuing body the enumeration recorded (a search facet) and the oblast the
-   decision text names («Решение Уральского городского маслихата **Западно-
-   Казахстанской области**»). Disagreement is a refusal, not a tie to break.
-2. **Inside that oblast, exactly one district must match the name in the text.**
-   The oblast fixes the first two digits of the code, which cuts ~209
+1. **The oblast normally comes from two independent sources and they must
+   agree**: the issuing body the enumeration recorded (a search facet) and the
+   oblast the decision text names («Решение Уральского городского маслихата
+   **Западно-Казахстанской области**»). Disagreement is a refusal, not a tie
+   to break. When the text names an oblast and the facet is silent, that is
+   also a refusal (the facet is the more structured of the two and its
+   silence is not evidence). **When the text names no oblast at all — an
+   oblast capital never repeats its own oblast's name — the facet decides
+   alone**, because the text is not a source that failed to agree, it is a
+   source with nothing to say.
+2. **Inside that oblast, exactly one district must match the name in the
+   text.** The oblast fixes the first two digits of the code, which cuts ~209
    candidates to about twenty — and that is precisely what makes the three
-   «Жамбылский район» distinguishable, since the ambiguity was only ever across
-   oblasts.
+   «Жамбылский район» distinguishable, since the ambiguity was only ever
+   across oblasts. **When the citation names no district, the enumeration
+   title is read as a fallback second source; when both the citation and the
+   title resolve to different districts, that is a refusal, not a tie to
+   break.** The title never overrides an agreeing citation.
 3. **Zero matches or several is a refusal**, counted and reported.
 
 ## What is measured and what is not
@@ -58,10 +67,11 @@ NO_DISTRICT = "unmapped-no-district-matched"
 SEVERAL_DISTRICTS = "unmapped-several-districts-matched"
 OBLAST_DISAGREEMENT = "unmapped-oblast-sources-disagree"
 NO_BODY = "unmapped-no-issuing-body-recorded"
-NO_OBLAST_IN_TEXT = "unmapped-no-oblast-named-in-text"
+NO_OBLAST_NAMED_BY_EITHER_SOURCE = "unmapped-no-oblast-named-by-either-source"
 NO_OBLAST_FROM_BODY = "unmapped-body-names-no-oblast"
 JURISDICTION_UNKNOWN = "unmapped-jurisdiction-type-not-stated"
 JURISDICTION_DISAGREEMENT = "unmapped-jurisdiction-sources-disagree"
+TITLE_CONTRADICTS_CITATION = "unmapped-title-contradicts-citation"
 
 CITY, DISTRICT = "city", "district"
 
@@ -81,6 +91,15 @@ TITLE_DISTRICT = re.compile(r"\bрайон[аеу]\b")
 # районного, 30 naming neither.
 MASLIKHAT_CITY = re.compile(r"городско\w*\s+маслихат")
 MASLIKHAT_DISTRICT = re.compile(r"районно\w*\s+маслихат")
+
+# The same clue, genitive word order: «маслихата города Костаная» instead of
+# «Костанайского городского маслихата», «маслихата Костанайского района»
+# instead of «Костанайского районного маслихата». Kostanay writes it this way
+# for both its city and its district, and the adjective-only patterns above
+# read neither. Each still recognises exactly one shape — a form outside both
+# still returns None, which is the refusal this widening must keep.
+MASLIKHAT_CITY_GENITIVE = re.compile(r"маслихат\w*\s+город[ае]\b")
+MASLIKHAT_DISTRICT_GENITIVE = re.compile(r"маслихат\w*\s+\w+\s+район[ае]\b")
 
 # Words that appear in every decision and would match every district.
 # Written as words and truncated to STEM at use. They were written as
@@ -213,12 +232,29 @@ def oblast_from_text(text: str, oblasts: dict[str, str]) -> str | None:
     return matches[0] if len(matches) == 1 else None
 
 
+def _title_kind_and_span(text: str) -> tuple[str, tuple[int, int]] | None:
+    city_match, district_match = TITLE_CITY.search(text), TITLE_DISTRICT.search(text)
+    if bool(city_match) == bool(district_match):
+        return None
+    match = city_match or district_match
+    assert match is not None
+    return (CITY if city_match else DISTRICT), match.span()
+
+
 def jurisdiction_from_title(text: str) -> str | None:
     """SOURCE A — the form the title uses for the place itself."""
-    city, district = bool(TITLE_CITY.search(text)), bool(TITLE_DISTRICT.search(text))
-    if city == district:
+    found = _title_kind_and_span(text)
+    return found[0] if found else None
+
+
+def _maslikhat_kind_and_span(text: str) -> tuple[str, tuple[int, int]] | None:
+    city_match = MASLIKHAT_CITY.search(text) or MASLIKHAT_CITY_GENITIVE.search(text)
+    district_match = MASLIKHAT_DISTRICT.search(text) or MASLIKHAT_DISTRICT_GENITIVE.search(text)
+    if bool(city_match) == bool(district_match):
         return None
-    return CITY if city else DISTRICT
+    match = city_match or district_match
+    assert match is not None
+    return (CITY if city_match else DISTRICT), match.span()
 
 
 def jurisdiction_from_maslikhat(text: str) -> str | None:
@@ -226,11 +262,20 @@ def jurisdiction_from_maslikhat(text: str) -> str | None:
 
     Independent of source A in the same way the facet is independent of the
     text: one describes the place, the other names the institution.
+
+    Two word orders are recognised, adjective and genitive: «Кокшетауского
+    ГОРОДСКОГО маслихата» and «маслихата ГОРОДА Костаная» both say city;
+    «Аккольского РАЙОННОГО маслихата» and «маслихата Костанайского РАЙОНА»
+    both say district. A form outside these four patterns still returns
+    None — widening here is safe only because the refusal on unrecognised
+    input never went away.
     """
-    city, district = bool(MASLIKHAT_CITY.search(text)), bool(MASLIKHAT_DISTRICT.search(text))
-    if city == district:
-        return None
-    return CITY if city else DISTRICT
+    found = _maslikhat_kind_and_span(text)
+    return found[0] if found else None
+
+
+def _spans_overlap(a: tuple[int, int], b: tuple[int, int]) -> bool:
+    return a[0] < b[1] and b[0] < a[1]
 
 
 def candidate_kind(name: str) -> str:
@@ -242,6 +287,25 @@ def strip_oblast_phrase(text: str) -> str:
     """Drop «X области» / «области X», keeping every other mention intact."""
     without = OBLAST_BEFORE.sub(" ", text)
     return OBLAST_AFTER.sub(" ", without)
+
+
+def name_matches(name: str, text_stems: set[str], text_lower: str) -> bool:
+    """A district name matches by stem — or, when every word in it is too
+    short to produce one, by appearing as a complete word instead.
+
+    «Аксу» is four characters. stems() floors words at STEM=5, so it yields
+    NO stem for this name at all, and a name with no stem can never match
+    any text at any spelling. Whole-word matching only fires when stems()
+    found nothing to compare — every name that already matches by stem
+    keeps matching by stem, unchanged, so this cannot regress a name that
+    already worked. The global floor is not lowered: lowering it would
+    loosen matching for all 209 names, not just the one that needs it.
+    """
+    name_stems = stems(name)
+    if name_stems:
+        return bool(name_stems & text_stems)
+    words = [word for word in re.findall(WORD, name.lower()) if len(word) >= 2]
+    return any(re.search(rf"\b{re.escape(word)}\b", text_lower) for word in words)
 
 
 def district_in_oblast(
@@ -260,9 +324,13 @@ def district_in_oblast(
     района Костанайской области», refusing a district whose name simply
     resembles its oblast's.
     """
-    text_stems = stems(strip_oblast_phrase(text))
+    stripped = strip_oblast_phrase(text)
+    text_stems = stems(stripped)
+    text_lower = stripped.lower()
     candidates = [
-        row for row in grouped.get(oblast_code[:2], []) if stems(row["name_ru"]) & text_stems
+        row
+        for row in grouped.get(oblast_code[:2], [])
+        if name_matches(row["name_ru"], text_stems, text_lower)
     ]
     if not candidates:
         return NO_DISTRICT, []
@@ -273,9 +341,21 @@ def district_in_oblast(
     # «Костанай Г.А.» and «Костанайский район». **They are different
     # jurisdictions with different maslikhats**, so two independent sources
     # must say which, exactly as the oblast needs two.
-    from_title = jurisdiction_from_title(text)
-    from_maslikhat = jurisdiction_from_maslikhat(text)
-    if from_title is None or from_maslikhat is None:
+    title_found = _title_kind_and_span(text)
+    maslikhat_found = _maslikhat_kind_and_span(text)
+    if title_found is None or maslikhat_found is None:
+        return JURISDICTION_UNKNOWN, candidates
+    from_title, title_span = title_found
+    from_maslikhat, maslikhat_span = maslikhat_found
+
+    # Two sources reading one substring are one source, not two — the same
+    # rule the rate readers live under. «Решение маслихата города Костаная
+    # Костанайской области»: TITLE_CITY matches «города К» and
+    # MASLIKHAT_CITY_GENITIVE matches «маслихата города», both anchored on
+    # the same «города» token. Comparing match SPANS catches this even
+    # though the two patterns are textually distinct regexes; comparing only
+    # the booleans they produce cannot, because both happily return True.
+    if _spans_overlap(title_span, maslikhat_span):
         return JURISDICTION_UNKNOWN, candidates
     if from_title != from_maslikhat:
         return JURISDICTION_DISAGREEMENT, candidates
@@ -293,11 +373,26 @@ def bodies_by_document() -> dict[str, str]:
     return {entry["document_id"]: entry["body"] for entry in payload["documents"]}
 
 
+def titles_by_document() -> dict[str, str]:
+    """The enumeration title, a second reading of which district an act names.
+
+    «О понижении размера ставки налогов ... в городе Караганда» — titles read
+    like this: a fixed preamble followed by the place. It is used only as a
+    FALLBACK when the citation resolves nothing, and as a VETO when both
+    resolve and disagree. Never as a replacement for the citation path.
+    """
+    if not ENUMERATED.exists():
+        return {}
+    payload = json.loads(ENUMERATED.read_text(encoding="utf-8"))
+    return {entry["document_id"]: entry["title"] for entry in payload["documents"]}
+
+
 def map_row(
     row: dict[str, Any],
     bodies: dict[str, str],
     oblasts: dict[str, str],
     grouped: dict[str, list[dict[str, str]]],
+    titles: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """One confirmed rate -> a code, or a named refusal."""
     text = " ".join(str(part) for part in (row.get("decision_ref"), row.get("sentence")) if part)
@@ -314,51 +409,117 @@ def map_row(
         return {**result, "outcome": NO_BODY}
     from_body = oblast_from_body(body, oblasts)
     from_text = oblast_from_text(text, oblasts)
+
+    # The oblast normally needs two agreeing sources. An oblast capital does
+    # not repeat its own oblast's name, so its text names none — and the text
+    # is the source that fails there, not the facet. When the text is silent,
+    # the registry facet alone is accepted; when the text DOES speak, both
+    # sources must still agree, exactly as before. Measured over 159 rows
+    # where the text spoke: facet and text agreed 159/159, never once
+    # disagreed — the facet is structured registry metadata, not a parse of
+    # prose, so it fails differently from the text reader. That measurement
+    # is agreement on rows where the text spoke; it is not proof for the rows
+    # where the text stays silent and the facet decides alone.
     if from_text is None:
-        return {**result, "outcome": NO_OBLAST_IN_TEXT, "body": body}
-    if from_body is None:
-        return {
-            **result,
-            "outcome": NO_OBLAST_FROM_BODY,
-            "body": body,
-            "oblast_from_text": from_text,
-        }
-    if from_body != from_text:
-        return {
-            **result,
-            "outcome": OBLAST_DISAGREEMENT,
-            "body": body,
-            "oblast_from_body": from_body,
-            "oblast_from_text": from_text,
-        }
+        if from_body is None:
+            return {**result, "outcome": NO_OBLAST_NAMED_BY_EITHER_SOURCE, "body": body}
+        oblast_kato = from_body
+        oblast_source = "body-only"
+    else:
+        if from_body is None:
+            return {
+                **result,
+                "outcome": NO_OBLAST_FROM_BODY,
+                "body": body,
+                "oblast_from_text": from_text,
+            }
+        if from_body != from_text:
+            return {
+                **result,
+                "outcome": OBLAST_DISAGREEMENT,
+                "body": body,
+                "oblast_from_body": from_body,
+                "oblast_from_text": from_text,
+            }
+        oblast_kato = from_text
+        oblast_source = "both"
 
     # A city of republican significance has no district-level codes under it,
     # and its maslikhat legislates for the city itself — so the oblast-level
     # code IS the district here. Not an exception to the rule: the same rule,
     # applied where the hierarchy has one level fewer.
-    if not grouped.get(from_text[:2]):
+    if not grouped.get(oblast_kato[:2]):
         return {
             **result,
             "outcome": MAPPED_ONE,
-            "oblast_kato": from_text,
-            "oblast_name": oblasts[from_text],
-            "kato": from_text,
-            "name_ru": oblasts[from_text],
-            "candidates": [oblasts[from_text]],
+            "oblast_kato": oblast_kato,
+            "oblast_name": oblasts[oblast_kato],
+            "kato": oblast_kato,
+            "name_ru": oblasts[oblast_kato],
+            "candidates": [oblasts[oblast_kato]],
+            "oblast_source": oblast_source,
+            "district_source": "oblast-level",
         }
 
-    outcome, candidates = district_in_oblast(text, from_text, grouped, oblasts[from_text])
+    outcome, candidates = district_in_oblast(text, oblast_kato, grouped, oblasts[oblast_kato])
+    district_source = "citation" if outcome == MAPPED_ONE else None
+
+    # The title as a SECOND district source: a fallback ONLY when the citation
+    # resolves NOTHING (NO_DISTRICT), a veto when both resolve and disagree.
+    # Measured over the 150 already-mapped rows: 133 agree, 0 disagree, 17
+    # silent — the title never contradicts the citation, which is the only
+    # safe shape for a second source.
+    #
+    # The gate is `outcome == NO_DISTRICT`, not `outcome != MAPPED_ONE`. The
+    # citation can also refuse as SEVERAL_DISTRICTS, JURISDICTION_UNKNOWN or
+    # JURISDICTION_DISAGREEMENT — those are not silence, they are the
+    # citation naming candidates and this module refusing to choose among
+    # them. Falling back to the title there let the title choose alone, with
+    # nothing checking its pick was even among the citation's candidates.
+    title_text = (titles or {}).get(row["document_id"])
+    if title_text:
+        title_outcome, title_candidates = district_in_oblast(
+            title_text, oblast_kato, grouped, oblasts[oblast_kato]
+        )
+        if outcome == MAPPED_ONE and title_outcome == MAPPED_ONE:
+            if title_candidates[0]["kato"] != candidates[0]["kato"]:
+                # Both sources speak and name different districts. Neither
+                # is trusted over the other — refuse rather than pick.
+                outcome = TITLE_CONTRADICTS_CITATION
+                candidates = candidates + title_candidates
+                district_source = None
+        elif outcome == NO_DISTRICT and title_outcome == MAPPED_ONE:
+            # Belt-and-suspenders: even here, if the citation had somehow
+            # produced named candidates, a title pick outside that set would
+            # not be trusted. NO_DISTRICT always carries an empty candidate
+            # list today, so this can only ever pass through, not silently
+            # loosen if that ever changes.
+            if candidates and title_candidates[0]["kato"] not in {c["kato"] for c in candidates}:
+                pass
+            else:
+                outcome, candidates = title_outcome, title_candidates
+                district_source = "title"
+
     mapped = {
         **result,
         "outcome": outcome,
-        "oblast_kato": from_text,
-        "oblast_name": oblasts[from_text],
+        "oblast_kato": oblast_kato,
+        "oblast_name": oblasts[oblast_kato],
         "candidates": [candidate["name_ru"] for candidate in candidates],
+        "oblast_source": oblast_source,
     }
     if outcome == MAPPED_ONE:
         mapped["kato"] = candidates[0]["kato"]
         mapped["name_ru"] = candidates[0]["name_ru"]
         mapped["name_kk"] = candidates[0]["name_kk"]
+        # Unconditional, not `district_source or "citation"`: whenever outcome
+        # is MAPPED_ONE here, district_source has already been set to
+        # "citation" or "title" above — never None. A fallback default would
+        # be unreachable today, and if the veto logic above ever loosened to
+        # let a vetoed row reach here with district_source left None, a
+        # silent `or "citation"` would mislabel it as citation-sourced
+        # instead of raising. Assign directly so that failure is loud.
+        mapped["district_source"] = district_source
     return mapped
 
 
@@ -369,7 +530,8 @@ def main() -> int:
 
     rows = json.loads(EXTRACTED.read_text(encoding="utf-8"))["rows"]
     bodies, oblasts, grouped = bodies_by_document(), oblast_codes(), districts_by_oblast()
-    results = [map_row(row, bodies, oblasts, grouped) for row in rows]
+    titles = titles_by_document()
+    results = [map_row(row, bodies, oblasts, grouped, titles) for row in rows]
 
     counts: dict[str, int] = {}
     for result in results:
@@ -378,7 +540,11 @@ def main() -> int:
     MAPPED.write_text(
         json.dumps(
             {
-                "rule": "oblast from two agreeing sources, then exactly one district inside it",
+                "rule": (
+                    "oblast from two agreeing sources when the text names one, else the "
+                    "registry facet alone; then exactly one district inside it from the "
+                    "citation, or from the title when the citation names none"
+                ),
                 "counts": counts,
                 # No mapped-percentage. A number mixing "we found a document"
                 # with "we can attribute it" is what made 11% look like 95%.
