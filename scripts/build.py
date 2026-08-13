@@ -75,11 +75,12 @@ TAX_CODE_NAME = (
 )
 TAX_CODE_URL = "https://adilet.zan.kz/rus/docs/K2500000214"
 
-# What scripts/extract_rates.py writes into verified_by for a row it read by
-# rule rather than a person reading it. The footer and llms.txt say which of the
-# two a reader is looking at, and they count rather than assert it, so the
+# extract_rates.py writes "deterministic-readers" into extraction_method for
+# a row it read by rule rather than a person reading it (plan 9 split this out
+# of verified_by, which now holds a person's name or stays empty — never a
+# status sentence). The footer and llms.txt say which of the two a reader is
+# looking at, and they count from verified_by rather than assert it, so the
 # sentence changes by itself the day a person verifies a row.
-MACHINE_MARKER = "machine-extracted"
 
 # Searchable in both languages, because the reader typing «упрощенка ставка
 # район» and the crawler indexing "Kazakhstan tax rate dataset" are looking for
@@ -224,9 +225,14 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
     # this they would have no way to tell a row a person read from a row a
     # parser produced — and that difference is the whole subject of the project.
     #
+    # A row is human-verified when verified_by actually names someone.
+    # verified_by is empty on every machine-extracted row (plan 9 moved the
+    # old status sentence into extraction_method), so testing for a non-empty
+    # name is now the whole rule — no marker substring to look for any more.
+    #
     # Additive and top level, so schema_version stays 1.0: a consumer reading
     # the keys it already knows is unaffected.
-    human = sum(1 for row in rows if MACHINE_MARKER not in row.get("verified_by", ""))
+    human = sum(1 for row in rows if (row.get("verified_by") or "").strip())
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -634,7 +640,14 @@ RATES_FIELDS: list[dict[str, Any]] = [
     {"name": "valid_to", "type": "date"},
     {"name": "decision_ref", "type": "string"},
     {"name": "source_url", "type": "string", "format": "uri", "constraints": {"required": True}},
-    {"name": "verified_by", "type": "string", "constraints": {"required": True}},
+    # How the number was obtained. Always set — unlike verified_by below, this
+    # one is required, because every row has a method even before anyone has
+    # checked it (plan 9).
+    {"name": "extraction_method", "type": "string", "constraints": {"required": True}},
+    # A person's name, or empty until someone has actually checked the row.
+    # Not required: the schema promises a name here, never a status sentence,
+    # and "nobody has verified this yet" is a legitimate, common state.
+    {"name": "verified_by", "type": "string"},
     {"name": "verified_at", "type": "date"},
 ]
 

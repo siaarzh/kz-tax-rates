@@ -61,6 +61,7 @@ VALID = {
     "valid_to": "2026-12-31",
     "decision_ref": "Тестовое решение №1 от 28.11.2025",
     "source_url": "https://adilet.zan.kz/rus/docs/EXAMPLE",
+    "extraction_method": "deterministic-readers",
     "verified_by": "fixture",
     "verified_at": "2026-08-12",
 }
@@ -73,6 +74,38 @@ def test_the_real_csv_has_the_agreed_header() -> None:
 
 def test_the_real_csv_validates() -> None:
     assert validate_file() == []
+
+
+MAPPED_RATES_JSON = REPO_ROOT / "data" / "mapped-rates.json"
+
+
+def test_published_rows_match_the_currently_mapped_set_exactly() -> None:
+    """The gate whose absence let eight retail-tax rows stay published.
+
+    data/mapped-rates.json is the parser's own current conclusion about which
+    document maps to which district. Nothing before this test compared
+    data/rates.csv against that conclusion, so a row could sit published long
+    after the parser stopped confirming it — which is exactly what happened:
+    eight rows kept publishing a retail-tax rate as the simplified-declaration
+    rate after the mapping repair stopped confirming them (plan 9).
+
+    Reads mapped-rates.json directly rather than through a helper, so a
+    missing or malformed file raises here instead of the check silently
+    passing on no input — a check that cannot run has not passed.
+    """
+    mapped = json.loads(MAPPED_RATES_JSON.read_text(encoding="utf-8"))
+    mapped_katos = {row["kato"] for row in mapped["rows"] if row.get("outcome") == "mapped"}
+
+    with RATES_CSV.open(encoding="utf-8", newline="") as handle:
+        published_katos = {row["kato"] for row in csv.DictReader(handle)}
+
+    missing_from_publication = sorted(mapped_katos - published_katos)
+    published_but_not_mapped = sorted(published_katos - mapped_katos)
+
+    assert not missing_from_publication, f"mapped but not published: {missing_from_publication}"
+    assert not published_but_not_mapped, (
+        f"published but not (currently) mapped: {published_but_not_mapped}"
+    )
 
 
 def test_build_script_runs_and_writes_json(tmp_path: Path) -> None:
@@ -118,6 +151,23 @@ def test_a_row_without_a_source_is_rejected() -> None:
 def test_a_kato_that_lost_its_leading_zero_is_rejected() -> None:
     """КАТО is a string. An integer round-trip drops the zero and shortens it."""
     assert validate_row({**VALID, "kato": "35000000"}, line=2)
+
+
+def test_a_row_without_an_extraction_method_is_rejected() -> None:
+    """Plan 9: extraction_method is the one of the pair that is always required."""
+    errors = validate_row({**VALID, "extraction_method": ""}, line=2)
+    assert any("extraction_method" in error for error in errors)
+
+
+def test_an_empty_verified_by_is_accepted() -> None:
+    """Unlike extraction_method, verified_by is optional — nobody has to have checked yet."""
+    assert validate_row({**VALID, "verified_by": ""}, line=2) == []
+
+
+def test_a_verified_by_that_regresses_to_the_old_status_sentence_is_rejected() -> None:
+    """The exact failure plan 9 fixes: a sentence sitting where a name belongs."""
+    errors = validate_row({**VALID, "verified_by": "machine-extracted, NOT human-verified"}, line=2)
+    assert any("status sentence" in error for error in errors)
 
 
 def test_coverage_is_published_and_never_claims_completeness() -> None:
@@ -724,7 +774,7 @@ def test_the_footer_names_the_author_and_links_the_repository() -> None:
 
 def test_the_footer_says_no_person_verified_the_rates_while_none_has() -> None:
     """Counted from verified_by, so it corrects itself rather than standing stale."""
-    machine = {**_for_year(2026), "verified_by": "machine-extracted, NOT human-verified"}
+    machine = {**_for_year(2026), "verified_by": ""}
     view = _view_of(render_index(build([machine])))
     assert "Ни одну строку не проверял человек" in str(view["provenance_ru"])
 
@@ -760,7 +810,7 @@ def test_the_page_lists_its_machine_readable_files_near_the_top() -> None:
 
 def test_the_verification_count_reaches_the_published_json() -> None:
     """A consumer of rates.json alone cannot see verified_by, so it is counted here."""
-    machine = {**VALID, "verified_by": "machine-extracted, NOT human-verified"}
+    machine = {**VALID, "verified_by": ""}
     payload = build([VALID, machine])
     assert payload["verification"] == {"rows": 2, "human_verified": 1, "machine_extracted": 1}
     assert build([])["verification"] == {"rows": 0, "human_verified": 0, "machine_extracted": 0}
@@ -823,7 +873,7 @@ def test_llms_txt_states_what_an_absent_district_means_and_who_verified_the_rows
     assert "does NOT mean the district charges the base rate" in text.replace("\n", " ")
     assert "Rows: 2. Read by a person: 2. Extracted from the decision by rule: 0." in text
 
-    machine = {**VALID, "verified_by": "machine-extracted, NOT human-verified"}
+    machine = {**VALID, "verified_by": ""}
     assert "Read by a person: 0." in render_llms_txt(build([machine]))
 
 

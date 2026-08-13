@@ -42,6 +42,7 @@ FIELDS = [
     "valid_to",
     "decision_ref",
     "source_url",
+    "extraction_method",
     "verified_by",
     "verified_at",
 ]
@@ -133,9 +134,17 @@ def validate_row(row: dict[str, str], line: int) -> list[str]:
     if not KATO_RE.match(kato):
         fail(f"kato {kato!r} is not nine digits")
 
-    for field in ("decision_ref", "source_url", "verified_by", "kato_version"):
+    for field in ("decision_ref", "source_url", "extraction_method", "kato_version"):
         if not (row.get(field) or "").strip():
             fail(f"{field} is empty")
+
+    # verified_by is optional (empty until a person actually checks the row),
+    # but it can never regress into the old status sentence that used to sit
+    # here before the extraction_method/verified_by split (plan 9). Catches
+    # a script or a copy-paste writing the marker back into the wrong column.
+    verified_by = (row.get("verified_by") or "").strip()
+    if "machine-extracted" in verified_by or "NOT human-verified" in verified_by:
+        fail(f"verified_by {verified_by!r} looks like a status sentence, not a person's name")
 
     raw_rate = (row.get("rate") or "").strip()
     try:
