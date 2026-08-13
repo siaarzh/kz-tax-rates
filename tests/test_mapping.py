@@ -22,9 +22,11 @@ from map_districts import (
     jurisdiction_from_maslikhat,
     jurisdiction_from_title,
     map_row,
+    name_matches,
     oblast_codes,
     oblast_from_body,
     oblast_from_text,
+    stems,
     strip_oblast_phrase,
 )
 
@@ -106,13 +108,20 @@ def test_a_district_named_in_the_text_maps_to_exactly_one_code() -> None:
 
 
 def test_a_city_and_a_district_sharing_a_name_is_a_refusal_not_a_choice() -> None:
-    """«города Костаная» against «Костанай Г.А.» and «Костанайский район».
+    """«городу Костанай» against «Костанай Г.А.» and «Костанайский район».
 
-    The title says city and the citation names no kind of maslikhat, so only
-    one of the two sources speaks — and one source cannot settle a
-    jurisdiction any more than one reader can settle a rate.
+    The title says city and the citation names no kind of maslikhat in
+    either the adjective or the genitive form, so only one of the two
+    sources speaks — and one source cannot settle a jurisdiction any more
+    than one reader can settle a rate.
+
+    («Решение маслихата города Костаная Костанайской области» — the real
+    Kostanay city citation — is deliberately NOT used here any more: it now
+    speaks through the genitive pattern too, and correctly maps. That case
+    is covered by test_both_kostanay_rows_map_end_to_end_from_their_real_
+    citations below.)
     """
-    text = "Решение маслихата города Костаная Костанайской области"
+    text = "Решение маслихата Костанайской области по городу Костанай"
     outcome, candidates = district_in_oblast(text, "390000000", GROUPED, OBLASTS["390000000"])
     assert outcome == JURISDICTION_UNKNOWN
     assert len(candidates) > 1
@@ -200,9 +209,17 @@ def test_a_jurisdiction_neither_source_states_is_refused() -> None:
 
 
 def test_disagreeing_jurisdiction_sources_refuse_rather_than_pick() -> None:
-    """A title naming a city and a citation naming a районный маслихат."""
+    """A title naming a city and a citation naming a районный маслихат.
+
+    («…маслихата города Костаная Костанайского районного маслихата» is no
+    longer used here: the genitive city pattern now also fires on «маслихата
+    города», which would make source B agree with itself before it can
+    disagree with source A. «по городу X» keeps the title's city reading
+    without touching the «маслихата город…» phrase the genitive pattern
+    watches for.)
+    """
     outcome, _ = district_in_oblast(
-        "Решение маслихата города Костаная Костанайского районного маслихата",
+        "Решение по городу Костанай, Костанайского районного маслихата",
         "390000000",
         GROUPED,
         OBLASTS["390000000"],
@@ -350,3 +367,93 @@ def test_both_sources_speaking_and_disagreeing_still_refuses() -> None:
     result = map_row(row, {"TEST-DISAGREE": "Акмолинская область"}, OBLASTS, GROUPED)
     assert result["outcome"] == OBLAST_DISAGREEMENT
     assert "kato" not in result
+
+
+# --- A name shorter than the stem floor matches whole ------------------------
+#
+# .claude/decisions/kato/name-matching-widens-three-ways-and-each-widening-
+# carries-its-own-guard.md, section 1. «Аксу» is four characters and produces
+# NO stem at STEM=5, so it could never match at any spelling. The global
+# floor is not lowered; a name with no stem instead matches as a complete
+# word.
+
+AKSU_TEXT = "О понижении размера ставки налогов в городе Аксу"
+
+
+def test_a_name_below_the_stem_floor_produces_no_stem_at_all() -> None:
+    """The bug, demonstrated directly: stems() sees nothing to compare."""
+    assert stems("Аксу Г.А.") == set()
+
+
+def test_a_name_below_the_stem_floor_matches_the_complete_word_in_the_text() -> None:
+    outcome, candidates = district_in_oblast(AKSU_TEXT, "550000000", GROUPED, OBLASTS["550000000"])
+    assert outcome == MAPPED_ONE
+    assert candidates[0]["name_ru"] == "Аксу Г.А."
+
+
+def test_a_short_name_that_is_genuinely_absent_still_refuses() -> None:
+    """Whole-word matching does not turn into substring matching: a word that
+    merely starts with «аксу» — «Аксуском» — is not the same complete word,
+    so it must not match «Аксу Г.А.»."""
+    text = "О понижении размера ставки налогов в Аксуском районе"
+    assert name_matches("Аксу Г.А.", stems(text), text.lower()) is False
+
+    text_no_mention = "О понижении размера ставки налогов при применении специального режима"
+    outcome, _ = district_in_oblast(text_no_mention, "550000000", GROUPED, OBLASTS["550000000"])
+    assert outcome == NO_DISTRICT
+
+
+def test_a_name_at_or_above_the_stem_floor_still_matches_by_stem() -> None:
+    """The widening only fires when stems() finds nothing to compare. A name
+    with a real stem — «Костанайский район» — keeps matching by stem, not
+    by whole word, exactly as before this slice."""
+    text = "Решение маслихата Костанайского района"
+    name_stems, text_stems = stems("Костанайский район"), stems(text)
+    assert name_stems  # the stem path is reachable for this name
+    assert name_matches("Костанайский район", text_stems, text.lower()) is True
+    assert bool(name_stems & text_stems) is True  # and it is the stem path deciding
+
+
+# --- The jurisdiction reader learns the genitive word order ------------------
+#
+# Same decision record, section 2. «маслихата города Костаная» and «маслихата
+# Костанайского района» are Kostanay's own citations; the adjective-only
+# patterns («городского маслихата» / «районного маслихата») never fire on
+# either, so jurisdiction_from_maslikhat returned None for both and the rows
+# refused as JURISDICTION_UNKNOWN.
+
+KOSTANAY_CITY_REAL = (
+    "Решение маслихата города Костаная Костанайской области от 24 ноября 2025 года № 200"
+)
+KOSTANAY_DISTRICT_REAL = (
+    "Решение маслихата Костанайского района Костанайской области от 19 ноября 2025 года № 309"
+)
+
+
+def test_the_genitive_word_order_is_recognised_for_the_city() -> None:
+    assert jurisdiction_from_maslikhat(KOSTANAY_CITY_REAL) == CITY
+
+
+def test_the_genitive_word_order_is_recognised_for_the_district() -> None:
+    assert jurisdiction_from_maslikhat(KOSTANAY_DISTRICT_REAL) == DISTRICT
+
+
+def test_both_kostanay_rows_map_end_to_end_from_their_real_citations() -> None:
+    city_outcome, city = district_in_oblast(
+        KOSTANAY_CITY_REAL, "390000000", GROUPED, OBLASTS["390000000"]
+    )
+    assert city_outcome == MAPPED_ONE
+    assert city[0]["kato"] == "391000000"
+
+    district_outcome, district = district_in_oblast(
+        KOSTANAY_DISTRICT_REAL, "390000000", GROUPED, OBLASTS["390000000"]
+    )
+    assert district_outcome == MAPPED_ONE
+    assert district[0]["kato"] == "395400000"
+
+
+def test_an_invented_word_order_still_refuses() -> None:
+    """Widening the pattern is safe only because unrecognised input still
+    returns None. A word order neither the adjective nor the genitive form
+    uses — «маслихата района Костанайского» — must not be guessed."""
+    assert jurisdiction_from_maslikhat("Решение маслихата района Костанайского области") is None

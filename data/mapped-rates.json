@@ -1,9 +1,8 @@
 {
   "rule": "oblast from two agreeing sources, then exactly one district inside it",
   "counts": {
-    "mapped": 155,
-    "unmapped-no-district-matched": 6,
-    "unmapped-jurisdiction-type-not-stated": 2
+    "mapped": 158,
+    "unmapped-no-district-matched": 5
   },
   "rows": [
     {
@@ -1670,14 +1669,17 @@
       "year": 2026,
       "decision_ref": "Решение маслихата города Костаная Костанайской области от 24 ноября 2025 года № 200",
       "source_url": "https://adilet.zan.kz/rus/docs/G25NA00200M",
-      "outcome": "unmapped-jurisdiction-type-not-stated",
+      "outcome": "mapped",
       "oblast_kato": "390000000",
       "oblast_name": "Костанайская область",
       "candidates": [
-        "Костанай Г.А.",
-        "Костанайский район"
+        "Костанай Г.А."
       ],
-      "oblast_source": "both"
+      "oblast_source": "both",
+      "kato": "391000000",
+      "name_ru": "Костанай Г.А.",
+      "name_kk": "Қостанай Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25NB00249M",
@@ -1757,14 +1759,17 @@
       "year": 2026,
       "decision_ref": "Решение маслихата Костанайского района Костанайской области от 19 ноября 2025 года № 309",
       "source_url": "https://adilet.zan.kz/rus/docs/G25NN00309M",
-      "outcome": "unmapped-jurisdiction-type-not-stated",
+      "outcome": "mapped",
       "oblast_kato": "390000000",
       "oblast_name": "Костанайская область",
       "candidates": [
-        "Костанай Г.А.",
         "Костанайский район"
       ],
-      "oblast_source": "both"
+      "oblast_source": "both",
+      "kato": "395400000",
+      "name_ru": "Костанайский район",
+      "name_kk": "Қостанай ауданы",
+      "district_source": "citation"
     },
     {
       "document_id": "G25NQ00359M",
@@ -1808,11 +1813,17 @@
       "year": 2026,
       "decision_ref": "Решение Аксуского городского маслихата Павлодарской области от 28 ноября 2025 года № 241/42",
       "source_url": "https://adilet.zan.kz/rus/docs/G25PB24142M",
-      "outcome": "unmapped-no-district-matched",
+      "outcome": "mapped",
       "oblast_kato": "550000000",
       "oblast_name": "Павлодарская область",
-      "candidates": [],
-      "oblast_source": "both"
+      "candidates": [
+        "Аксу Г.А."
+      ],
+      "oblast_source": "both",
+      "kato": "551600000",
+      "name_ru": "Аксу Г.А.",
+      "name_kk": "Ақсу Қ.Ә.",
+      "district_source": "citation"
     },
     {
       "document_id": "G25PC28937M",

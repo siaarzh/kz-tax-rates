@@ -83,6 +83,15 @@ TITLE_DISTRICT = re.compile(r"\bрайон[аеу]\b")
 MASLIKHAT_CITY = re.compile(r"городско\w*\s+маслихат")
 MASLIKHAT_DISTRICT = re.compile(r"районно\w*\s+маслихат")
 
+# The same clue, genitive word order: «маслихата города Костаная» instead of
+# «Костанайского городского маслихата», «маслихата Костанайского района»
+# instead of «Костанайского районного маслихата». Kostanay writes it this way
+# for both its city and its district, and the adjective-only patterns above
+# read neither. Each still recognises exactly one shape — a form outside both
+# still returns None, which is the refusal this widening must keep.
+MASLIKHAT_CITY_GENITIVE = re.compile(r"маслихат\w*\s+город[ае]\b")
+MASLIKHAT_DISTRICT_GENITIVE = re.compile(r"маслихат\w*\s+\w+\s+район[ае]\b")
+
 # Words that appear in every decision and would match every district.
 # Written as words and truncated to STEM at use. They were written as
 # six-character prefixes once, and shortening STEM to 5 silently stopped them
@@ -227,8 +236,18 @@ def jurisdiction_from_maslikhat(text: str) -> str | None:
 
     Independent of source A in the same way the facet is independent of the
     text: one describes the place, the other names the institution.
+
+    Two word orders are recognised, adjective and genitive: «Кокшетауского
+    ГОРОДСКОГО маслихата» and «маслихата ГОРОДА Костаная» both say city;
+    «Аккольского РАЙОННОГО маслихата» and «маслихата Костанайского РАЙОНА»
+    both say district. A form outside these four patterns still returns
+    None — widening here is safe only because the refusal on unrecognised
+    input never went away.
     """
-    city, district = bool(MASLIKHAT_CITY.search(text)), bool(MASLIKHAT_DISTRICT.search(text))
+    city = bool(MASLIKHAT_CITY.search(text)) or bool(MASLIKHAT_CITY_GENITIVE.search(text))
+    district = bool(MASLIKHAT_DISTRICT.search(text)) or bool(
+        MASLIKHAT_DISTRICT_GENITIVE.search(text)
+    )
     if city == district:
         return None
     return CITY if city else DISTRICT
@@ -243,6 +262,25 @@ def strip_oblast_phrase(text: str) -> str:
     """Drop «X области» / «области X», keeping every other mention intact."""
     without = OBLAST_BEFORE.sub(" ", text)
     return OBLAST_AFTER.sub(" ", without)
+
+
+def name_matches(name: str, text_stems: set[str], text_lower: str) -> bool:
+    """A district name matches by stem — or, when every word in it is too
+    short to produce one, by appearing as a complete word instead.
+
+    «Аксу» is four characters. stems() floors words at STEM=5, so it yields
+    NO stem for this name at all, and a name with no stem can never match
+    any text at any spelling. Whole-word matching only fires when stems()
+    found nothing to compare — every name that already matches by stem
+    keeps matching by stem, unchanged, so this cannot regress a name that
+    already worked. The global floor is not lowered: lowering it would
+    loosen matching for all 209 names, not just the one that needs it.
+    """
+    name_stems = stems(name)
+    if name_stems:
+        return bool(name_stems & text_stems)
+    words = [word for word in re.findall(WORD, name.lower()) if len(word) >= 2]
+    return any(re.search(rf"\b{re.escape(word)}\b", text_lower) for word in words)
 
 
 def district_in_oblast(
@@ -261,9 +299,13 @@ def district_in_oblast(
     района Костанайской области», refusing a district whose name simply
     resembles its oblast's.
     """
-    text_stems = stems(strip_oblast_phrase(text))
+    stripped = strip_oblast_phrase(text)
+    text_stems = stems(stripped)
+    text_lower = stripped.lower()
     candidates = [
-        row for row in grouped.get(oblast_code[:2], []) if stems(row["name_ru"]) & text_stems
+        row
+        for row in grouped.get(oblast_code[:2], [])
+        if name_matches(row["name_ru"], text_stems, text_lower)
     ]
     if not candidates:
         return NO_DISTRICT, []
