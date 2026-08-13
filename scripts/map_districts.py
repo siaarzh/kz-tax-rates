@@ -12,15 +12,24 @@ ambiguity by choosing; every unmapped document is counted and named.
 
 ## The rule
 
-1. **The oblast comes from two independent sources and they must agree**: the
-   issuing body the enumeration recorded (a search facet) and the oblast the
-   decision text names («Решение Уральского городского маслихата **Западно-
-   Казахстанской области**»). Disagreement is a refusal, not a tie to break.
-2. **Inside that oblast, exactly one district must match the name in the text.**
-   The oblast fixes the first two digits of the code, which cuts ~209
+1. **The oblast normally comes from two independent sources and they must
+   agree**: the issuing body the enumeration recorded (a search facet) and the
+   oblast the decision text names («Решение Уральского городского маслихата
+   **Западно-Казахстанской области**»). Disagreement is a refusal, not a tie
+   to break. When the text names an oblast and the facet is silent, that is
+   also a refusal (the facet is the more structured of the two and its
+   silence is not evidence). **When the text names no oblast at all — an
+   oblast capital never repeats its own oblast's name — the facet decides
+   alone**, because the text is not a source that failed to agree, it is a
+   source with nothing to say.
+2. **Inside that oblast, exactly one district must match the name in the
+   text.** The oblast fixes the first two digits of the code, which cuts ~209
    candidates to about twenty — and that is precisely what makes the three
-   «Жамбылский район» distinguishable, since the ambiguity was only ever across
-   oblasts.
+   «Жамбылский район» distinguishable, since the ambiguity was only ever
+   across oblasts. **When the citation names no district, the enumeration
+   title is read as a fallback second source; when both the citation and the
+   title resolve to different districts, that is a refusal, not a tie to
+   break.** The title never overrides an agreeing citation.
 3. **Zero matches or several is a refusal**, counted and reported.
 
 ## What is measured and what is not
@@ -45,7 +54,6 @@ import argparse
 import csv
 import json
 import re
-from difflib import SequenceMatcher
 from typing import Any
 
 from extract_rates import EXTRACTED
@@ -59,7 +67,7 @@ NO_DISTRICT = "unmapped-no-district-matched"
 SEVERAL_DISTRICTS = "unmapped-several-districts-matched"
 OBLAST_DISAGREEMENT = "unmapped-oblast-sources-disagree"
 NO_BODY = "unmapped-no-issuing-body-recorded"
-NO_OBLAST_IN_TEXT = "unmapped-no-oblast-named-in-text"
+NO_OBLAST_NAMED_BY_EITHER_SOURCE = "unmapped-no-oblast-named-by-either-source"
 NO_OBLAST_FROM_BODY = "unmapped-body-names-no-oblast"
 JURISDICTION_UNKNOWN = "unmapped-jurisdiction-type-not-stated"
 JURISDICTION_DISAGREEMENT = "unmapped-jurisdiction-sources-disagree"
@@ -224,12 +232,29 @@ def oblast_from_text(text: str, oblasts: dict[str, str]) -> str | None:
     return matches[0] if len(matches) == 1 else None
 
 
+def _title_kind_and_span(text: str) -> tuple[str, tuple[int, int]] | None:
+    city_match, district_match = TITLE_CITY.search(text), TITLE_DISTRICT.search(text)
+    if bool(city_match) == bool(district_match):
+        return None
+    match = city_match or district_match
+    assert match is not None
+    return (CITY if city_match else DISTRICT), match.span()
+
+
 def jurisdiction_from_title(text: str) -> str | None:
     """SOURCE A — the form the title uses for the place itself."""
-    city, district = bool(TITLE_CITY.search(text)), bool(TITLE_DISTRICT.search(text))
-    if city == district:
+    found = _title_kind_and_span(text)
+    return found[0] if found else None
+
+
+def _maslikhat_kind_and_span(text: str) -> tuple[str, tuple[int, int]] | None:
+    city_match = MASLIKHAT_CITY.search(text) or MASLIKHAT_CITY_GENITIVE.search(text)
+    district_match = MASLIKHAT_DISTRICT.search(text) or MASLIKHAT_DISTRICT_GENITIVE.search(text)
+    if bool(city_match) == bool(district_match):
         return None
-    return CITY if city else DISTRICT
+    match = city_match or district_match
+    assert match is not None
+    return (CITY if city_match else DISTRICT), match.span()
 
 
 def jurisdiction_from_maslikhat(text: str) -> str | None:
@@ -245,13 +270,12 @@ def jurisdiction_from_maslikhat(text: str) -> str | None:
     None — widening here is safe only because the refusal on unrecognised
     input never went away.
     """
-    city = bool(MASLIKHAT_CITY.search(text)) or bool(MASLIKHAT_CITY_GENITIVE.search(text))
-    district = bool(MASLIKHAT_DISTRICT.search(text)) or bool(
-        MASLIKHAT_DISTRICT_GENITIVE.search(text)
-    )
-    if city == district:
-        return None
-    return CITY if city else DISTRICT
+    found = _maslikhat_kind_and_span(text)
+    return found[0] if found else None
+
+
+def _spans_overlap(a: tuple[int, int], b: tuple[int, int]) -> bool:
+    return a[0] < b[1] and b[0] < a[1]
 
 
 def candidate_kind(name: str) -> str:
@@ -282,64 +306,6 @@ def name_matches(name: str, text_stems: set[str], text_lower: str) -> bool:
         return bool(name_stems & text_stems)
     words = [word for word in re.findall(WORD, name.lower()) if len(word) >= 2]
     return any(re.search(rf"\b{re.escape(word)}\b", text_lower) for word in words)
-
-
-# Suffixes that vary with declension or jurisdiction label, and never carry
-# the distinguishing information a spelling-divergence match needs: «район»,
-# «Г.А.», «области»/«область», per .claude/decisions/kato/name-matching-
-# widens-three-ways-and-each-widening-carries-its-own-guard.md section 3.
-_MARGIN_STRIP = ("г.а.", "района", "район", "области", "область")
-
-
-def normalize_for_margin(name: str) -> str:
-    """Case-fold and drop the suffixes above, so «Хобдинский район» and the
-    declined «хобдинского» compare on the root they share rather than on a
-    suffix that is never what tells two districts apart."""
-    text = name.casefold()
-    for token in _MARGIN_STRIP:
-        text = text.replace(token, "")
-    return " ".join(text.split())
-
-
-def name_margin(name: str, oblast_district_names: list[str]) -> tuple[float, float, float]:
-    """(best, runner_up, margin) for `name` against every district name in
-    an already-fixed oblast, by difflib.SequenceMatcher on names normalised
-    with normalize_for_margin().
-
-    NOT wired into district_in_oblast() or map_row() — this is the measured,
-    reusable primitive a later slice widens matching with. See
-    .plans/state/orchestrator/plan-7/margin-calibration.md for the
-    calibration this floor and this function were derived from.
-    """
-    a = normalize_for_margin(name)
-    ratios = sorted(
-        (
-            SequenceMatcher(None, a, normalize_for_margin(candidate)).ratio()
-            for candidate in oblast_district_names
-        ),
-        reverse=True,
-    )
-    best = ratios[0] if ratios else 0.0
-    runner_up = ratios[1] if len(ratios) > 1 else 0.0
-    return best, runner_up, best - runner_up
-
-
-# Calibrated over the 154 already-correctly-mapped rows that have a district
-# match (data/mapped-rates.json, outcome == "mapped", district_source
-# present) — never over the 5 spelling-divergence rows this floor exists to
-# eventually accept, which is the exact "typed a constant to agree with the
-# answer" failure this repository has already made once. The correct-answer
-# margin distribution has p5 = 0.150. The wrong-answer distribution (each
-# row's runner-up treated as if it had been the top pick) reaches 0.407, so
-# the two distributions OVERLAP — no single margin cleanly separates a right
-# pick from a wrong one, driven by homonymous city/district pairs
-# (Павлодар/Павлодарский, Костанай/Костанайский, ...) whose names collide
-# once «район»/«Г.А.» is stripped. MARGIN_FLOOR is the boundary below which
-# even an already-correct match should escalate rather than auto-accept; it
-# is NOT, by itself, a safe auto-accept threshold above 0.15 either. Full
-# distributions and the reasoning: .plans/state/orchestrator/plan-7/
-# margin-calibration.md.
-MARGIN_FLOOR = 0.15
 
 
 def district_in_oblast(
@@ -375,9 +341,21 @@ def district_in_oblast(
     # «Костанай Г.А.» and «Костанайский район». **They are different
     # jurisdictions with different maslikhats**, so two independent sources
     # must say which, exactly as the oblast needs two.
-    from_title = jurisdiction_from_title(text)
-    from_maslikhat = jurisdiction_from_maslikhat(text)
-    if from_title is None or from_maslikhat is None:
+    title_found = _title_kind_and_span(text)
+    maslikhat_found = _maslikhat_kind_and_span(text)
+    if title_found is None or maslikhat_found is None:
+        return JURISDICTION_UNKNOWN, candidates
+    from_title, title_span = title_found
+    from_maslikhat, maslikhat_span = maslikhat_found
+
+    # Two sources reading one substring are one source, not two — the same
+    # rule the rate readers live under. «Решение маслихата города Костаная
+    # Костанайской области»: TITLE_CITY matches «города К» and
+    # MASLIKHAT_CITY_GENITIVE matches «маслихата города», both anchored on
+    # the same «города» token. Comparing match SPANS catches this even
+    # though the two patterns are textually distinct regexes; comparing only
+    # the booleans they produce cannot, because both happily return True.
+    if _spans_overlap(title_span, maslikhat_span):
         return JURISDICTION_UNKNOWN, candidates
     if from_title != from_maslikhat:
         return JURISDICTION_DISAGREEMENT, candidates
@@ -436,11 +414,15 @@ def map_row(
     # not repeat its own oblast's name, so its text names none — and the text
     # is the source that fails there, not the facet. When the text is silent,
     # the registry facet alone is accepted; when the text DOES speak, both
-    # sources must still agree, exactly as before. See
-    # .claude/decisions/kato/the-title-is-a-second-district-source.md.
+    # sources must still agree, exactly as before. Measured over 159 rows
+    # where the text spoke: facet and text agreed 159/159, never once
+    # disagreed — the facet is structured registry metadata, not a parse of
+    # prose, so it fails differently from the text reader. That measurement
+    # is agreement on rows where the text spoke; it is not proof for the rows
+    # where the text stays silent and the facet decides alone.
     if from_text is None:
         if from_body is None:
-            return {**result, "outcome": NO_OBLAST_IN_TEXT, "body": body}
+            return {**result, "outcome": NO_OBLAST_NAMED_BY_EITHER_SOURCE, "body": body}
         oblast_kato = from_body
         oblast_source = "body-only"
     else:
@@ -476,17 +458,24 @@ def map_row(
             "name_ru": oblasts[oblast_kato],
             "candidates": [oblasts[oblast_kato]],
             "oblast_source": oblast_source,
+            "district_source": "oblast-level",
         }
 
     outcome, candidates = district_in_oblast(text, oblast_kato, grouped, oblasts[oblast_kato])
     district_source = "citation" if outcome == MAPPED_ONE else None
 
-    # The title as a SECOND district source: a fallback when the citation
-    # resolves nothing, a veto when both resolve and disagree. Measured over
-    # the 150 already-mapped rows: 133 agree, 0 disagree, 17 silent — the
-    # title never contradicts the citation, which is the only safe shape for
-    # a second source. See .claude/decisions/kato/the-title-is-a-second-
-    # district-source.md.
+    # The title as a SECOND district source: a fallback ONLY when the citation
+    # resolves NOTHING (NO_DISTRICT), a veto when both resolve and disagree.
+    # Measured over the 150 already-mapped rows: 133 agree, 0 disagree, 17
+    # silent — the title never contradicts the citation, which is the only
+    # safe shape for a second source.
+    #
+    # The gate is `outcome == NO_DISTRICT`, not `outcome != MAPPED_ONE`. The
+    # citation can also refuse as SEVERAL_DISTRICTS, JURISDICTION_UNKNOWN or
+    # JURISDICTION_DISAGREEMENT — those are not silence, they are the
+    # citation naming candidates and this module refusing to choose among
+    # them. Falling back to the title there let the title choose alone, with
+    # nothing checking its pick was even among the citation's candidates.
     title_text = (titles or {}).get(row["document_id"])
     if title_text:
         title_outcome, title_candidates = district_in_oblast(
@@ -499,9 +488,17 @@ def map_row(
                 outcome = TITLE_CONTRADICTS_CITATION
                 candidates = candidates + title_candidates
                 district_source = None
-        elif outcome != MAPPED_ONE and title_outcome == MAPPED_ONE:
-            outcome, candidates = title_outcome, title_candidates
-            district_source = "title"
+        elif outcome == NO_DISTRICT and title_outcome == MAPPED_ONE:
+            # Belt-and-suspenders: even here, if the citation had somehow
+            # produced named candidates, a title pick outside that set would
+            # not be trusted. NO_DISTRICT always carries an empty candidate
+            # list today, so this can only ever pass through, not silently
+            # loosen if that ever changes.
+            if candidates and title_candidates[0]["kato"] not in {c["kato"] for c in candidates}:
+                pass
+            else:
+                outcome, candidates = title_outcome, title_candidates
+                district_source = "title"
 
     mapped = {
         **result,
@@ -515,7 +512,14 @@ def map_row(
         mapped["kato"] = candidates[0]["kato"]
         mapped["name_ru"] = candidates[0]["name_ru"]
         mapped["name_kk"] = candidates[0]["name_kk"]
-        mapped["district_source"] = district_source or "citation"
+        # Unconditional, not `district_source or "citation"`: whenever outcome
+        # is MAPPED_ONE here, district_source has already been set to
+        # "citation" or "title" above — never None. A fallback default would
+        # be unreachable today, and if the veto logic above ever loosened to
+        # let a vetoed row reach here with district_source left None, a
+        # silent `or "citation"` would mislabel it as citation-sourced
+        # instead of raising. Assign directly so that failure is loud.
+        mapped["district_source"] = district_source
     return mapped
 
 
@@ -536,7 +540,11 @@ def main() -> int:
     MAPPED.write_text(
         json.dumps(
             {
-                "rule": "oblast from two agreeing sources, then exactly one district inside it",
+                "rule": (
+                    "oblast from two agreeing sources when the text names one, else the "
+                    "registry facet alone; then exactly one district inside it from the "
+                    "citation, or from the title when the citation names none"
+                ),
                 "counts": counts,
                 # No mapped-percentage. A number mixing "we found a document"
                 # with "we can attribute it" is what made 11% look like 95%.

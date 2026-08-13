@@ -1,8 +1,9 @@
 {
-  "rule": "oblast from two agreeing sources, then exactly one district inside it",
+  "rule": "oblast from two agreeing sources when the text names one, else the registry facet alone; then exactly one district inside it from the citation, or from the title when the citation names none",
   "counts": {
-    "mapped": 158,
-    "unmapped-no-district-matched": 5
+    "mapped": 156,
+    "unmapped-no-district-matched": 5,
+    "unmapped-jurisdiction-type-not-stated": 2
   },
   "rows": [
     {
@@ -19,7 +20,8 @@
       "candidates": [
         "г.Астана"
       ],
-      "oblast_source": "both"
+      "oblast_source": "both",
+      "district_source": "oblast-level"
     },
     {
       "document_id": "G25BA00262M",
@@ -731,7 +733,8 @@
       "candidates": [
         "г.Шымкент"
       ],
-      "oblast_source": "both"
+      "oblast_source": "both",
+      "district_source": "oblast-level"
     },
     {
       "document_id": "G25FA51272M",
@@ -1669,17 +1672,14 @@
       "year": 2026,
       "decision_ref": "Решение маслихата города Костаная Костанайской области от 24 ноября 2025 года № 200",
       "source_url": "https://adilet.zan.kz/rus/docs/G25NA00200M",
-      "outcome": "mapped",
+      "outcome": "unmapped-jurisdiction-type-not-stated",
       "oblast_kato": "390000000",
       "oblast_name": "Костанайская область",
       "candidates": [
-        "Костанай Г.А."
+        "Костанай Г.А.",
+        "Костанайский район"
       ],
-      "oblast_source": "both",
-      "kato": "391000000",
-      "name_ru": "Костанай Г.А.",
-      "name_kk": "Қостанай Қ.Ә.",
-      "district_source": "citation"
+      "oblast_source": "both"
     },
     {
       "document_id": "G25NB00249M",
@@ -1759,17 +1759,14 @@
       "year": 2026,
       "decision_ref": "Решение маслихата Костанайского района Костанайской области от 19 ноября 2025 года № 309",
       "source_url": "https://adilet.zan.kz/rus/docs/G25NN00309M",
-      "outcome": "mapped",
+      "outcome": "unmapped-jurisdiction-type-not-stated",
       "oblast_kato": "390000000",
       "oblast_name": "Костанайская область",
       "candidates": [
+        "Костанай Г.А.",
         "Костанайский район"
       ],
-      "oblast_source": "both",
-      "kato": "395400000",
-      "name_ru": "Костанайский район",
-      "name_kk": "Қостанай ауданы",
-      "district_source": "citation"
+      "oblast_source": "both"
     },
     {
       "document_id": "G25NQ00359M",
@@ -2019,7 +2016,8 @@
       "candidates": [
         "г.Алматы"
       ],
-      "oblast_source": "both"
+      "oblast_source": "both",
+      "district_source": "oblast-level"
     },
     {
       "document_id": "G25SA00529M",

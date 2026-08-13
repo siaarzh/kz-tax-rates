@@ -8,15 +8,12 @@ carefully as the matches.
 
 from __future__ import annotations
 
-from difflib import SequenceMatcher
-
 from map_districts import (
     CITY,
     DISTRICT,
     JURISDICTION_DISAGREEMENT,
     JURISDICTION_UNKNOWN,
     MAPPED_ONE,
-    MARGIN_FLOOR,
     NO_DISTRICT,
     OBLAST_DISAGREEMENT,
     TITLE_CONTRADICTS_CITATION,
@@ -25,9 +22,7 @@ from map_districts import (
     jurisdiction_from_maslikhat,
     jurisdiction_from_title,
     map_row,
-    name_margin,
     name_matches,
-    normalize_for_margin,
     oblast_codes,
     oblast_from_body,
     oblast_from_text,
@@ -238,9 +233,12 @@ def test_disagreeing_jurisdiction_sources_refuse_rather_than_pick() -> None:
 
 # --- The title as a second district source: fallback + veto -----------------
 #
-# .claude/decisions/kato/the-title-is-a-second-district-source.md — the title
-# is used only when the citation resolves nothing (fallback), or when both
-# resolve and disagree (veto). It never overrides an agreeing citation.
+# The title is used only when the citation resolves NOTHING — NO_DISTRICT,
+# specifically, not any other refusal — as a fallback, or when both resolve
+# and disagree, as a veto. It never overrides an agreeing citation. Measured
+# over 150 already-mapped rows: 133 agree, 0 disagree, 17 silent — the title
+# never contradicts the citation, which is the only safe shape for a second
+# source.
 
 CITATION_NAMES_NO_DISTRICT = (
     "Решение маслихата Западно-Казахстанской области от 28 ноября 2025 года № 24-9"
@@ -323,6 +321,101 @@ def test_a_row_that_was_previously_mapped_now_refuses_on_a_corrupted_title() -> 
     assert corrupted_result["outcome"] == TITLE_CONTRADICTS_CITATION
 
 
+# The title fallback must only fire on NO_DISTRICT (the citation named zero
+# candidates), never on a refusal that already named some. A refusal that
+# names candidates — SEVERAL_DISTRICTS, JURISDICTION_UNKNOWN,
+# JURISDICTION_DISAGREEMENT — is the citation naming candidates and this
+# module deliberately refusing to choose among them, not silence for the
+# title to fill.
+JURISDICTION_AMBIGUOUS_CITATION = (
+    "Решение маслихата города Костаная Костанайского районного маслихата "
+    "Костанайской области от 1 января 2026 года"
+)
+
+
+def test_a_jurisdiction_ambiguous_refusal_does_not_fall_back_to_the_title() -> None:
+    """This citation names BOTH city and district forms in source B alone —
+    «маслихата города» and «районного маслихата» both match — so
+    jurisdiction_from_maslikhat refuses on its own, before the overlap check
+    even applies, and district_in_oblast returns JURISDICTION_UNKNOWN with
+    two named candidates (Костанай Г.А. and Костанайский район).
+
+    A title that resolves cleanly — to a THIRD district neither citation
+    source named — must not be allowed to pick for a citation that named
+    candidates and refused among them. The old gate (`outcome != MAPPED_ONE`)
+    let exactly this through: it read every refusal as silence, took the
+    title alone, and never checked the title's pick was even among the
+    citation's own candidates. Reproduced: the row mapped to Алтынсаринский
+    район 393200000 — a district the citation never named at all."""
+    row = {
+        "document_id": "TEST-JURISDICTION-AMBIGUOUS",
+        "rate": 0.03,
+        "year": 2026,
+        "decision_ref": JURISDICTION_AMBIGUOUS_CITATION,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-JURISDICTION-AMBIGUOUS": "Костанайская область"}
+    titles = {"TEST-JURISDICTION-AMBIGUOUS": "О понижении ставки по Алтынсаринскому району"}
+
+    # The citation alone is ambiguous, not silent, and it names candidates.
+    citation_outcome, citation_candidates = district_in_oblast(
+        JURISDICTION_AMBIGUOUS_CITATION, "390000000", GROUPED, OBLASTS["390000000"]
+    )
+    assert citation_outcome == JURISDICTION_UNKNOWN
+    assert len(citation_candidates) > 0
+
+    result = map_row(row, bodies, OBLASTS, GROUPED, titles)
+    assert result["outcome"] == JURISDICTION_UNKNOWN
+    assert "kato" not in result
+    assert "district_source" not in result
+
+
+DISAGREEMENT_CITATION_KOSTANAY = "Решение по городу Костанай, Костанайского районного маслихата"
+DISAGREEING_ROW_TITLE_THAT_PICKS_A_REAL_CANDIDATE = (
+    "О понижении ставки по городу Костанай, Костанайского городского маслихата"
+)
+
+
+def test_a_jurisdiction_disagreement_does_not_fall_back_even_to_a_titles_valid_candidate() -> None:
+    """Isolates the OUTER gate from the inner "is the title's pick even among
+    the citation's candidates" check: here the title's pick (Костанай Г.А.)
+    genuinely IS one of the citation's own two candidates, so the inner check
+    alone would let it through. Only the outer gate — the fallback firing on
+    NO_DISTRICT and nothing else — stops it: JURISDICTION_DISAGREEMENT is the
+    citation naming candidates and disagreeing about which, not silence."""
+    row = {
+        "document_id": "TEST-DISAGREEMENT-VALID-TITLE-PICK",
+        "rate": 0.03,
+        "year": 2026,
+        "decision_ref": DISAGREEMENT_CITATION_KOSTANAY,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-DISAGREEMENT-VALID-TITLE-PICK": "Костанайская область"}
+    titles = {
+        "TEST-DISAGREEMENT-VALID-TITLE-PICK": DISAGREEING_ROW_TITLE_THAT_PICKS_A_REAL_CANDIDATE
+    }
+
+    citation_outcome, citation_candidates = district_in_oblast(
+        DISAGREEMENT_CITATION_KOSTANAY, "390000000", GROUPED, OBLASTS["390000000"]
+    )
+    assert citation_outcome == JURISDICTION_DISAGREEMENT
+    title_outcome, title_candidates = district_in_oblast(
+        DISAGREEING_ROW_TITLE_THAT_PICKS_A_REAL_CANDIDATE,
+        "390000000",
+        GROUPED,
+        OBLASTS["390000000"],
+    )
+    assert title_outcome == MAPPED_ONE
+    # The title's pick really is among the citation's own candidates.
+    assert title_candidates[0]["kato"] in {c["kato"] for c in citation_candidates}
+
+    result = map_row(row, bodies, OBLASTS, GROUPED, titles)
+    assert result["outcome"] == JURISDICTION_DISAGREEMENT
+    assert "kato" not in result
+
+
 # «Решение Карагандинского городского маслихата от 28 ноября 2025 года № 318» —
 # an oblast capital's own citation never repeats its oblast's name, so
 # oblast_from_text has nothing to read here. This is the real text of
@@ -354,6 +447,33 @@ def test_a_row_whose_text_names_no_oblast_maps_from_the_facet_alone() -> None:
     assert result["oblast_source"] == "body-only"
 
 
+ASTANA_TEXT = "Решение маслихата города Астаны от 12 ноября 2025 года № 100"
+
+
+def test_a_republican_city_row_carries_district_source_too() -> None:
+    """The three cities of republican significance (Астана, Алматы,
+    Шымкент) have no district-level codes under them: the oblast-level code
+    IS the district. That branch of map_row() used to set oblast_source but
+    never district_source, so 3 mapped rows lacked the key while 155 had it
+    — an inconsistent row shape. It must be explicit: "oblast-level", not
+    the citation-derived value, because no citation-level district match
+    was ever attempted for these rows."""
+    row = {
+        "document_id": "TEST-ASTANA",
+        "rate": 0.02,
+        "year": 2026,
+        "decision_ref": ASTANA_TEXT,
+        "sentence": "",
+        "source_url": "https://example",
+    }
+    bodies = {"TEST-ASTANA": "город Астана"}
+
+    result = map_row(row, bodies, OBLASTS, GROUPED)
+    assert result["outcome"] == MAPPED_ONE
+    assert result["kato"] == "710000000"
+    assert result["district_source"] == "oblast-level"
+
+
 def test_both_sources_speaking_and_disagreeing_still_refuses() -> None:
     """The new body-only path must never swallow a genuine disagreement: when
     the text DOES name an oblast, both sources are still required to agree,
@@ -376,11 +496,9 @@ def test_both_sources_speaking_and_disagreeing_still_refuses() -> None:
 
 # --- A name shorter than the stem floor matches whole ------------------------
 #
-# .claude/decisions/kato/name-matching-widens-three-ways-and-each-widening-
-# carries-its-own-guard.md, section 1. «Аксу» is four characters and produces
-# NO stem at STEM=5, so it could never match at any spelling. The global
-# floor is not lowered; a name with no stem instead matches as a complete
-# word.
+# «Аксу» is four characters and produces NO stem at STEM=5, so it could
+# never match at any spelling. The global floor is not lowered; a name with
+# no stem instead matches as a complete word.
 
 AKSU_TEXT = "О понижении размера ставки налогов в городе Аксу"
 
@@ -421,11 +539,12 @@ def test_a_name_at_or_above_the_stem_floor_still_matches_by_stem() -> None:
 
 # --- The jurisdiction reader learns the genitive word order ------------------
 #
-# Same decision record, section 2. «маслихата города Костаная» and «маслихата
-# Костанайского района» are Kostanay's own citations; the adjective-only
-# patterns («городского маслихата» / «районного маслихата») never fire on
-# either, so jurisdiction_from_maslikhat returned None for both and the rows
-# refused as JURISDICTION_UNKNOWN.
+# «маслихата города Костаная» and «маслихата Костанайского района» are
+# Kostanay's own citations; the adjective-only patterns («городского
+# маслихата» / «районного маслихата») never fire on either, so
+# jurisdiction_from_maslikhat returned None for both and the rows refused as
+# JURISDICTION_UNKNOWN. jurisdiction_from_maslikhat() alone — SOURCE B in
+# isolation — correctly reads both, and these two tests guard that reading.
 
 KOSTANAY_CITY_REAL = (
     "Решение маслихата города Костаная Костанайской области от 24 ноября 2025 года № 200"
@@ -443,68 +562,55 @@ def test_the_genitive_word_order_is_recognised_for_the_district() -> None:
     assert jurisdiction_from_maslikhat(KOSTANAY_DISTRICT_REAL) == DISTRICT
 
 
-def test_both_kostanay_rows_map_end_to_end_from_their_real_citations() -> None:
-    city_outcome, city = district_in_oblast(
+# But SOURCE A (the title reader) and SOURCE B (the maslikhat reader) are
+# supposed to be independent, and on these exact citations they are not:
+# TITLE_CITY matches «города К» and MASLIKHAT_CITY_GENITIVE matches
+# «маслихата города» in KOSTANAY_CITY_REAL — both anchored on the same
+# «города» token. TITLE_DISTRICT matches «района» and
+# MASLIKHAT_DISTRICT_GENITIVE matches «маслихата Костанайского района» in
+# KOSTANAY_DISTRICT_REAL — again the same «района» token. Two sources
+# reading one substring are one source, not two, so district_in_oblast()
+# must refuse both rather than treat this as corroboration. Losing these two
+# rows is the correct trade: a wrong district beside a real citation is
+# worse than a missing one, and a separate mechanism (the title fallback,
+# should a future citation revision add one) is where they are meant to be
+# recovered, not this jurisdiction step.
+def test_both_kostanay_rows_refuse_because_the_two_sources_read_one_span() -> None:
+    city_outcome, _ = district_in_oblast(
         KOSTANAY_CITY_REAL, "390000000", GROUPED, OBLASTS["390000000"]
     )
-    assert city_outcome == MAPPED_ONE
-    assert city[0]["kato"] == "391000000"
+    assert city_outcome == JURISDICTION_UNKNOWN
 
-    district_outcome, district = district_in_oblast(
+    district_outcome, _ = district_in_oblast(
         KOSTANAY_DISTRICT_REAL, "390000000", GROUPED, OBLASTS["390000000"]
     )
-    assert district_outcome == MAPPED_ONE
-    assert district[0]["kato"] == "395400000"
+    assert district_outcome == JURISDICTION_UNKNOWN
 
 
-def test_an_invented_word_order_still_refuses() -> None:
-    """Widening the pattern is safe only because unrecognised input still
-    returns None. A word order neither the adjective nor the genitive form
-    uses — «маслихата района Костанайского» — must not be guessed."""
-    assert jurisdiction_from_maslikhat("Решение маслихата района Костанайского области") is None
+def test_a_genuinely_two_source_citation_with_non_overlapping_spans_still_resolves() -> None:
+    """The overlap guard must not become a blanket refusal on every city
+    match: when the title's clue and the maslikhat's clue come from
+    genuinely different substrings — «по городу Костанай» (title, source A)
+    and «Костанайского городского маслихата» (maslikhat adjective form,
+    source B) — they are two real, independent readings, agree, and the row
+    still maps."""
+    text = "Решение по городу Костанай, Костанайского городского маслихата от 1 января 2026 года"
+    outcome, candidates = district_in_oblast(text, "390000000", GROUPED, OBLASTS["390000000"])
+    assert outcome == MAPPED_ONE
+    assert "Г.А." in candidates[0]["name_ru"]
 
 
-# --- name_margin(): the reusable primitive for the spelling-divergence
-# widening, calibrated but NOT wired into district_in_oblast() in this slice.
-# See .plans/state/orchestrator/plan-7/margin-calibration.md.
+def test_a_district_named_rayon_x_is_a_known_unread_form_not_an_invented_one() -> None:
+    """«маслихата района X» is refused today, but it is not a made-up word
+    order: 18 of the 209 КАТО districts are literally named «район X» —
+    район Ақсуат, район Бәйтерек, район Турара Рыскулова, район Аққулы, among
+    others — so «Решение маслихата района Аққулы» is their genuine citation
+    form, not an invented one, and jurisdiction_from_maslikhat correctly
+    returns None for it because MASLIKHAT_DISTRICT_GENITIVE only recognises
+    «маслихата <word> района», not «маслихата района <word>».
 
-
-def test_name_margin_picks_best_and_runner_up_by_the_derived_ratio() -> None:
-    """A constructed case, not one of the calibration rows: the declined
-    form of «Хобдинский район» should beat every unrelated district name in
-    the same oblast by a wide, computable margin."""
-    candidates = ["Хобдинский район", "Мартукский район", "Каргалинский район"]
-    target = "Кобдинскому"
-
-    best, runner_up, margin = name_margin(target, candidates)
-
-    expected_ratios = sorted(
-        SequenceMatcher(None, normalize_for_margin(target), normalize_for_margin(c)).ratio()
-        for c in candidates
-    )
-    assert best == expected_ratios[-1]
-    assert runner_up == expected_ratios[-2]
-    assert margin == best - runner_up
-    assert best > runner_up
-
-
-def test_name_margin_with_a_single_candidate_has_no_runner_up() -> None:
-    best, runner_up, margin = name_margin("Аксу", ["Аксу"])
-    assert best == 1.0
-    assert runner_up == 0.0
-    assert margin == 1.0
-
-
-def test_normalize_for_margin_strips_the_declared_suffixes() -> None:
-    assert normalize_for_margin("Хобдинский район") == normalize_for_margin("хобдинский")
-    assert normalize_for_margin("Рудный Г.А.") == normalize_for_margin("рудный")
-
-
-def test_margin_floor_is_a_derived_constant_not_a_guess() -> None:
-    """The floor is measured, not typed to agree with an answer: it must sit
-    at or below the 5th percentile of the correct-answer margin distribution
-    the calibration recorded (0.150), never above it — a floor above that
-    line would reject known-correct rows outright."""
-    CALIBRATED_CORRECT_P5 = 0.150
-    assert MARGIN_FLOOR <= CALIBRATED_CORRECT_P5
-    assert 0.0 < MARGIN_FLOOR < 1.0
+    The refusal itself is correct and safe — a rate withheld, never a rate
+    misattributed. What this test records is that it is a known coverage gap
+    affecting those 18 named districts, so a later session does not read the
+    refusal as proof the input cannot occur and skip re-checking it."""
+    assert jurisdiction_from_maslikhat("Решение маслихата района Аққулы") is None
