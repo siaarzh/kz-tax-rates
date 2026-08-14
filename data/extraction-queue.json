@@ -14,7 +14,7 @@
         {
           "reader": "kazakh",
           "rate_percent": null,
-          "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
+          "detail": "UNAVAILABLE: URLError: <urlopen error timed out>",
           "kind": "unavailable"
         }
       ],
@@ -208,202 +208,6 @@
       "terminal": false
     },
     {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/704/g25fk28198m.28-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "1e8139dd51bd692b528ec13ebd676c217debb7b6ab8aaac20f44f55e1bf07858",
-      "document_id": "G25FK28198M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25FK28198M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/288/g25fk28198m.28-11-2025.rus.pdf",
-      "pdf_sha256": "b331f8e4b7abe00076271858d515c2bafd4d1e8be2016aeffee7c5e19fff11b7",
-      "pdf_bytes": 45807,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 2,
-          "detail": "(два) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": null,
-          "detail": "no statutory base known for year None — the origin check cannot run",
-          "kind": "substantive"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 ( төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации за отчетный налоговый период в районе Мақаншы с 4 (четырех) процентов на 2 (два) процента.",
-      "year": null,
-      "year_source": null,
-      "decision_ref": "Решение маслихата района Мақаншы области Абай от 28 ноября 2025 года № 28-198/ VIII",
-      "in_force_from": null,
-      "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/840/g25ga00334m.31-10-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "885c9dc167c23c67912b250fbe3f785019f7e60a97f6f8c6608fb1025e45ad7e",
-      "document_id": "G25GA00334M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GA00334M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/168/g25ga00334m.31-10-2025.rus.pdf",
-      "pdf_sha256": "3902915b4efaeb9f00a565211202ffc8a85ee1750349728d92fb8e7f765edf89",
-      "pdf_bytes": 44181,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 4,
-          "detail": "(четырех) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": 2,
-          "detail": "с 4 (четырех) процентов на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в городе Тараз.",
-      "year": 2026,
-      "year_source": "in-force-date",
-      "decision_ref": "Решение Таразского городского маслихата Жамбылской области от 31 октября 2025 года № 33-4",
-      "in_force_from": "2026-01-01",
-      "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/g25gb00533m.27-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "9d28ed44bba1b41b4bc9f46ec818b65dd57830ec2ff4f2c4c4393a39d8da0bf0",
-      "document_id": "G25GB00533M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GB00533M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/488/g25gb00533m.27-11-2025.rus.pdf",
-      "pdf_sha256": "cdcda5238ad46aed73dfec3b6d4c24a0e965d3bae488f6ab82d7e884f1e68ab9",
-      "pdf_bytes": 44401,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 2,
-          "detail": "(два) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": null,
-          "detail": "no statutory base known for year None — the origin check cannot run",
-          "kind": "substantive"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации по Байзакскому району с 4 (четырех) процентов на 2 (два) процента по доходам, полученным ( подлежащим получению) за налоговый период.",
-      "year": null,
-      "year_source": null,
-      "decision_ref": "Решение Байзакского районного маслихата Жамбылской области от 27 ноября 2025 года № 53-3",
-      "in_force_from": null,
-      "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/448/g25gc00462m.28-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "aa4661275f733fe6642dcab278a6b10103377473ddbef422c75d4a2a6a66a3e5",
-      "document_id": "G25GC00462M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GC00462M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/544/g25gc00462m.28-11-2025.rus.pdf",
-      "pdf_sha256": "7dc9f9819b27a94a3541221ed4e243946ee9682a5f48fad9850624e21b899cb9",
-      "pdf_bytes": 43949,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 4,
-          "detail": "(четырех) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": 2,
-          "detail": "с 4 (четырех) процентов на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процентов в Жамбылском районе.",
-      "year": 2026,
-      "year_source": "in-force-date",
-      "decision_ref": "Решение Жамбылского районного маслихата Жамбылской области от 28 ноября 2025 года № 46-2",
-      "in_force_from": "2026-01-01",
-      "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]",
-      "terminal": false
-    },
-    {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/480/g25gd00552m.26-11-2025.kaz.pdf",
       "kazakh_pdf_sha256": "529c521eec8f8e424362eb39b6fa3540711243c8794aa2e5dd102fc3471de5eb",
       "document_id": "G25GD00552M",
@@ -451,202 +255,6 @@
       "outcome": "conflict",
       "reason": "regime objected: sentence governs the retail tax regime (розничного налога) — a separate special regime under the same article, not a simplified-declaration rate: 'Понизить ставку корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима розничного налога в Жуалынском районе с 4% на 2% по доходам, полученным (подлежащим получению) за налоговый период.'",
       "terminal": true
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/776/g25ge00514m.12-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "665a3c16ff757524fd2f7597b7a275f9f2208bffc3d9d09813fde34faba46107",
-      "document_id": "G25GE00514M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GE00514M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/232/g25ge00514m.12-11-2025.rus.pdf",
-      "pdf_sha256": "5eaa7e1bc247ae53b7a10239bff661d8af632609940dddba5902ec6ae673b100",
-      "pdf_bytes": 43833,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 4,
-          "detail": "(четырех) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": 2,
-          "detail": "с 4 (четырех) процентов на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в Кордайском районе.",
-      "year": 2026,
-      "year_source": "in-force-date",
-      "decision_ref": "Решение Кордайского районного маслихата Жамбылской области от 12 ноября 2025 года № 51-4",
-      "in_force_from": "2026-01-01",
-      "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/g25gf00492m.27-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "11e7c7b6a83890cc2d2d950b3c4453324d74b00ac484067bcdae6587f2d4455b",
-      "document_id": "G25GF00492M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GF00492M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/488/g25gf00492m.27-11-2025.rus.pdf",
-      "pdf_sha256": "0e57f78e04aec6aeb6624608ba92373da7d2ecc007ee1b5c32a7548baf893378",
-      "pdf_bytes": 44312,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 4,
-          "detail": "(четырех) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": 2,
-          "detail": "с 4 (четырех) процентов на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процентов в Меркенском районе.",
-      "year": 2026,
-      "year_source": "in-force-date",
-      "decision_ref": "Решение Меркенского районного маслихата Жамбылской области от 27 ноября 2025 года № 49-2",
-      "in_force_from": "2026-01-01",
-      "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/616/g25gj00472m.24-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "212ebbbb98286424bfa35cb8a2d9f7b6f581cc6d3a9931cf6206d945f3a9cd35",
-      "document_id": "G25GJ00472M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GJ00472M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/392/g25gj00472m.24-11-2025.rus.pdf",
-      "pdf_sha256": "dece6e803e9fd5dcdca7464a83090856f4bb436cf7359e549859bae99b1601b7",
-      "pdf_bytes": 43759,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 2,
-          "detail": "(два) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": null,
-          "detail": "no statutory base known for year None — the origin check cannot run",
-          "kind": "substantive"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального режима на основе упрощенной декларации в Таласском районе с 4 ( четырех) процентов на 2 (два) процента.",
-      "year": null,
-      "year_source": null,
-      "decision_ref": "Решение Таласского районного маслихата Жамбылской области от 24 ноября 2025 года № 47-2",
-      "in_force_from": null,
-      "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/104/g25gk00462m.28-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "8982c40ad30e6cd1a742a69980f71a8c38843b8090993f18ff1db9a82f6bbe2a",
-      "document_id": "G25GK00462M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25GK00462M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/904/g25gk00462m.28-11-2025.rus.pdf",
-      "pdf_sha256": "33c16cac3106c8c85413f5fe2ca5718ab96afdd49d3d602372ac102a458854b9",
-      "pdf_bytes": 44647,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 4,
-          "detail": "(четырех) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": 2,
-          "detail": "с 4 (четырех) процентов на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогооблажения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в Шуском районе.",
-      "year": 2026,
-      "year_source": "in-force-date",
-      "decision_ref": "Решение Шуского районного маслихата Жамбылской области от 28 ноября 2025 года № 46-2",
-      "in_force_from": "2026-01-01",
-      "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]",
-      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/032/g25ha37799m.26-12-2025.kaz.pdf",
@@ -856,55 +464,6 @@
       "sentence": null,
       "year": 2026,
       "year_source": "in-force-date",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/960/g25kq27239m.21-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "985730b6b1db51905eb7ab20214e9a757e67767522845bfb69450690895e0a8b",
-      "document_id": "G25KQ27239M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25KQ27239M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/032/g25kq27239m.21-11-2025.rus.pdf",
-      "pdf_sha256": "f6204a07290b1210c0a886a087cfb6ed14a7e91299cb4f80175b565174ffaa7d",
-      "pdf_bytes": 43722,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 2,
-          "detail": "(два) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": null,
-          "detail": "no statutory base known for year None — the origin check cannot run",
-          "kind": "substantive"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального режима на основе упрощенной декларации в Шетском районе с 4 ( четырех) процентов на 2 (два) процента.",
-      "year": null,
-      "year_source": null,
-      "decision_ref": "Решение Шетского районного маслихата Карагандинской области от 21 ноября 2025 года № 27/239",
-      "in_force_from": null,
-      "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
       "terminal": false
     },
     {
@@ -1119,8 +678,8 @@
         }
       ],
       "sentence": null,
-      "year": null,
-      "year_source": null,
+      "year": 2026,
+      "year_source": "retroactive-effect",
       "terminal": false
     },
     {
@@ -1142,8 +701,8 @@
         }
       ],
       "sentence": null,
-      "year": null,
-      "year_source": null,
+      "year": 2026,
+      "year_source": "retroactive-effect",
       "terminal": false
     },
     {
@@ -1308,55 +867,6 @@
       "sentence": null,
       "year": 2026,
       "year_source": "in-force-date",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/136/g25pf02058m.28-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "d40f1590e38e19963c103dba058fd9ee2f8f623394b3997b3acea543870dc79d",
-      "document_id": "G25PF02058M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25PF02058M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/872/g25pf02058m.28-11-2025.rus.pdf",
-      "pdf_sha256": "b4627d01edee8403706bc992f5622359da0c950fa241eacbdd0c3388866b6666",
-      "pdf_bytes": 45344,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 3,
-          "detail": "на 3 %",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": null,
-          "detail": "no `(<слово>) процент` in the sentence",
-          "kind": "no-match"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": null,
-          "detail": "no statutory base known for year None — the origin check cannot run",
-          "kind": "substantive"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 3,
-          "detail": "4%-дан 3%",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации в Железинском районе с 4 % на 3 % к объекту налогообложения за отчетный налоговый период.",
-      "year": null,
-      "year_source": null,
-      "decision_ref": "Решение Железинского районного маслихата Павлодарской области от 28 ноября 2025 года № 205/8",
-      "in_force_from": null,
-      "outcome": "conflict",
-      "reason": "transition objected: no statutory base known for year None — the origin check cannot run",
       "terminal": false
     },
     {
@@ -1564,55 +1074,6 @@
       "sentence": null,
       "year": 2026,
       "year_source": "in-force-date",
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/896/g25td00203m.26-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "40c634eb5b299a75377d013a53e67decd78fd918d0ca1d9dc3d4f35dd4138c94",
-      "document_id": "G25TD00203M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25TD00203M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/096/g25td00203m.26-11-2025.rus.pdf",
-      "pdf_sha256": "48a2f13e25df4738896224692e5d8810c98a247e36f6c38b031b4f25ff430aeb",
-      "pdf_bytes": 44576,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": 4,
-          "detail": "(четырех) процент",
-          "kind": "read"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": 2,
-          "detail": "с 4 (четырех) процентов на 2 (",
-          "kind": "read"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "governs the simplified declaration regime",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки с 4 (четырех) процентов на 2 ( два) процента в Исатайском районе.",
-      "year": 2026,
-      "year_source": "in-force-date",
-      "decision_ref": "Решение Исатайского районного маслихата Атырауской области от 26 ноября 2025 года № 203-VIII",
-      "in_force_from": "2026-01-01",
-      "outcome": "conflict",
-      "reason": "readers disagree: [2, 4]",
       "terminal": false
     },
     {
@@ -2273,8 +1734,8 @@
         }
       ],
       "sentence": null,
-      "year": null,
-      "year_source": null,
+      "year": 2026,
+      "year_source": "retroactive-effect",
       "terminal": false
     },
     {
@@ -2296,8 +1757,8 @@
         }
       ],
       "sentence": null,
-      "year": null,
-      "year_source": null,
+      "year": 2026,
+      "year_source": "retroactive-effect",
       "terminal": false
     },
     {
@@ -4550,8 +4011,8 @@
         }
       ],
       "sentence": null,
-      "year": null,
-      "year_source": null,
+      "year": 2026,
+      "year_source": "retroactive-effect",
       "terminal": false
     },
     {

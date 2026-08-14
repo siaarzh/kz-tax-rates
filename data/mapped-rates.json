@@ -1,8 +1,8 @@
 {
   "rule": "oblast from two agreeing sources when the text names one, else the registry facet alone; then exactly one district inside it from the citation, or from the title when the citation names none",
   "counts": {
-    "mapped": 148,
-    "unmapped-no-district-matched": 5,
+    "mapped": 158,
+    "unmapped-no-district-matched": 6,
     "unmapped-jurisdiction-type-not-stated": 2
   },
   "rows": [
@@ -893,6 +893,24 @@
       "district_source": "citation"
     },
     {
+      "document_id": "G25FK28198M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение маслихата района Мақаншы области Абай от 28 ноября 2025 года № 28-198/ VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25FK28198M",
+      "outcome": "mapped",
+      "oblast_kato": "100000000",
+      "oblast_name": "область Абай",
+      "candidates": [
+        "район Мақаншы"
+      ],
+      "oblast_source": "both",
+      "kato": "104500000",
+      "name_ru": "район Мақаншы",
+      "name_kk": "Мақаншы ауданы",
+      "district_source": "citation"
+    },
+    {
       "document_id": "G25FL22251M",
       "rate": 0.02,
       "year": 2026,
@@ -908,6 +926,96 @@
       "kato": "104100000",
       "name_ru": "район Жаңасемей",
       "name_kk": "Жаңасемей ауданы",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25GA00334M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Таразского городского маслихата Жамбылской области от 31 октября 2025 года № 33-4",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GA00334M",
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "Тараз Г.А."
+      ],
+      "oblast_source": "both",
+      "kato": "311000000",
+      "name_ru": "Тараз Г.А.",
+      "name_kk": "Тараз Қ.Ә.",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25GB00533M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Байзакского районного маслихата Жамбылской области от 27 ноября 2025 года № 53-3",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GB00533M",
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "Байзакский район"
+      ],
+      "oblast_source": "both",
+      "kato": "313600000",
+      "name_ru": "Байзакский район",
+      "name_kk": "Байзақ ауданы",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25GC00462M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Жамбылского районного маслихата Жамбылской области от 28 ноября 2025 года № 46-2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GC00462M",
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "Жамбылский район"
+      ],
+      "oblast_source": "both",
+      "kato": "314000000",
+      "name_ru": "Жамбылский район",
+      "name_kk": "Жамбыл ауданы",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25GE00514M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Кордайского районного маслихата Жамбылской области от 12 ноября 2025 года № 51-4",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GE00514M",
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "Кордайский район"
+      ],
+      "oblast_source": "both",
+      "kato": "314800000",
+      "name_ru": "Кордайский район",
+      "name_kk": "Қордай ауданы",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25GF00492M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Меркенского районного маслихата Жамбылской области от 27 ноября 2025 года № 49-2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GF00492M",
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "Меркенский район"
+      ],
+      "oblast_source": "both",
+      "kato": "315400000",
+      "name_ru": "Меркенский район",
+      "name_kk": "Мерке ауданы",
       "district_source": "citation"
     },
     {
@@ -963,6 +1071,36 @@
       "name_ru": "Сарысуский район",
       "name_kk": "Сарысу ауданы",
       "district_source": "citation"
+    },
+    {
+      "document_id": "G25GJ00472M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Таласского районного маслихата Жамбылской области от 24 ноября 2025 года № 47-2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GJ00472M",
+      "outcome": "mapped",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [
+        "Таласский район"
+      ],
+      "oblast_source": "both",
+      "kato": "316200000",
+      "name_ru": "Таласский район",
+      "name_kk": "Талас ауданы",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25GK00462M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Шуского районного маслихата Жамбылской области от 28 ноября 2025 года № 46-2",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25GK00462M",
+      "outcome": "unmapped-no-district-matched",
+      "oblast_kato": "310000000",
+      "oblast_name": "Жамбылская область",
+      "candidates": [],
+      "oblast_source": "both"
     },
     {
       "document_id": "G25HA36207M",
@@ -1397,6 +1535,24 @@
       "district_source": "citation"
     },
     {
+      "document_id": "G25KQ27239M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Шетского районного маслихата Карагандинской области от 21 ноября 2025 года № 27/239",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25KQ27239M",
+      "outcome": "mapped",
+      "oblast_kato": "350000000",
+      "oblast_name": "Карагандинская область",
+      "candidates": [
+        "Шетский район"
+      ],
+      "oblast_source": "both",
+      "kato": "356400000",
+      "name_ru": "Шетский район",
+      "name_kk": "Шет ауданы",
+      "district_source": "citation"
+    },
+    {
       "document_id": "G25KR34255M",
       "rate": 0.02,
       "year": 2026,
@@ -1820,6 +1976,24 @@
       "kato": "553600000",
       "name_ru": "Баянаульский район",
       "name_kk": "Баянауыл ауданы",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25PF02058M",
+      "rate": 0.03,
+      "year": 2026,
+      "decision_ref": "Решение Железинского районного маслихата Павлодарской области от 28 ноября 2025 года № 205/8",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25PF02058M",
+      "outcome": "mapped",
+      "oblast_kato": "550000000",
+      "oblast_name": "Павлодарская область",
+      "candidates": [
+        "Железинский район"
+      ],
+      "oblast_source": "both",
+      "kato": "554200000",
+      "name_ru": "Железинский район",
+      "name_kk": "Железин ауданы",
       "district_source": "citation"
     },
     {
@@ -2251,6 +2425,24 @@
       "kato": "235600000",
       "name_ru": "Махамбетский район",
       "name_kk": "Махамбет ауданы",
+      "district_source": "citation"
+    },
+    {
+      "document_id": "G25TD00203M",
+      "rate": 0.02,
+      "year": 2026,
+      "decision_ref": "Решение Исатайского районного маслихата Атырауской области от 26 ноября 2025 года № 203-VIII",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25TD00203M",
+      "outcome": "mapped",
+      "oblast_kato": "230000000",
+      "oblast_name": "Атырауская область",
+      "candidates": [
+        "Исатайский район"
+      ],
+      "oblast_source": "both",
+      "kato": "234200000",
+      "name_ru": "Исатайский район",
+      "name_kk": "Исатай ауданы",
       "district_source": "citation"
     },
     {

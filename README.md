@@ -19,7 +19,7 @@ The base rate is 4% under НК РК art. 726. A local maslikhat can move it by u
 
 ## What's in it, and what isn't
 
-**148 districts** for 2026. There are roughly 200 that could publish a decision, so this is partial and says so: `dist/rates.json` carries its own coverage count on every build.
+**158 districts** for 2026. There are roughly 200 that could publish a decision, so this is partial and says so: `dist/rates.json` carries its own coverage count on every build.
 
 **A missing district is not a district paying the base rate.** It means we found no decision for it. Those two look identical in an empty row, and telling them apart is the hard part of this problem, not the easy part.
 

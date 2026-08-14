@@ -361,11 +361,23 @@ class _KeepRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def pdf_url(document_id: str, language: str = "rus") -> str:
+def pdf_url(document_id: str, language: str = "rus", attempts: int = 3) -> str:
     """Resolve /<language>/docs/<id>/download to the clean file URL it points at.
 
     `kaz` is a separate published file, not a translation widget: reader 4 reads
     it, and that is where its independence comes from.
+
+    **A transient drop here used to be final on the first try.** `fetch()`
+    retries a dropped connection because "this host drops a connection mid-body
+    every so often" and a single attempt turns that into a document wrongly
+    recorded as unreachable — but that retry only covered the PDF download,
+    never this redirect-resolution request, even though it is a request to the
+    same flaky host over the same connection machinery. Four Kazakh fetches
+    (G25LC00433M, G25LF00353M, G25LI00366M, G26BM08572M) reached the queue as
+    UNAVAILABLE from exactly one failed attempt each. Probing G25LC00433M's own
+    URL again returned a *different* transient error (500, not the queued 404)
+    within the same session — direct evidence this host is unreliable at this
+    step too, not that the four documents lack a Kazakh copy.
     """
     context = ssl.create_default_context()
     context.load_verify_locations(cafile=str(CHAIN))
@@ -376,19 +388,29 @@ def pdf_url(document_id: str, language: str = "rus") -> str:
         f"{BASE_URL}/{language}/docs/{document_id}/download",
         headers={"User-Agent": "kz-tax-rates/0 (+dataset build)"},
     )
-    try:
-        # The redirect resolution is a request like any other. It sat outside
-        # the limiter until 2026-08-13 — so every document made two requests
-        # and only one of them waited, which is exactly the shape the limiter
-        # was written to end. Found by the test that follows the document path
-        # rather than testing fetch() in isolation.
-        _throttle()
-        with opener.open(request, timeout=60) as response:
-            resolved: str = response.geturl()
-    except urllib.error.HTTPError as error:
-        if error.code not in (301, 302, 303, 307, 308):
+    for attempt in range(1, attempts + 1):
+        try:
+            # The redirect resolution is a request like any other. It sat
+            # outside the limiter until 2026-08-13 — so every document made two
+            # requests and only one of them waited, which is exactly the shape
+            # the limiter was written to end. Found by the test that follows
+            # the document path rather than testing fetch() in isolation.
+            _throttle()
+            with opener.open(request, timeout=60) as response:
+                resolved: str = response.geturl()
+            break
+        except urllib.error.HTTPError as error:
+            # An HTTP status is a real answer, same rule `fetch()` states for
+            # the download step — except a redirect, which is the success path
+            # here, not a failure.
+            if error.code in (301, 302, 303, 307, 308):
+                resolved = error.headers["Location"]
+                break
             raise
-        resolved = error.headers["Location"]
+        except (ssl.SSLError, TimeoutError, http.client.IncompleteRead, urllib.error.URLError):
+            if attempt == attempts:
+                raise
+            time.sleep(attempt * 2)
     return re.sub(r";jsessionid=[^?&]*", "", resolved)
 
 
@@ -488,8 +510,18 @@ def read_word(sentence: str) -> Reading:
     sentence rather than anchoring on `на`. In a понижение the new rate is the
     second of the two, so the two readers reach the same fact by different
     routes and can disagree.
+
+    **The parentheses tolerate inner whitespace**, the same fact `KAZAKH_PAIR`
+    already documents for its own pair: `( два)` occurs — a space right after
+    the opening paren — and a pattern requiring the word to touch both
+    parentheses missed it silently. Six documents (G25GA00334M and five
+    siblings) read `с 4 (четырех) процентов на 2 ( два) процента`: the tight
+    pattern found only `(четырех)`, so the LAST match it saw was the OLD rate,
+    and this reader reported 4 — the base rate, not the district's — while
+    reader 4 read the Kazakh copy correctly at 2. That is `readers disagree:
+    [2, 4]` in the queue, and it is this reader that was wrong, not reader 4.
     """
-    found = re.findall(r"\(([А-Яа-яЁё]+)\)\s*процент", sentence)
+    found = re.findall(r"\(\s*([А-Яа-яЁё]+)\s*\)\s*процент", sentence)
     if not found:
         return Reading("word", None, "no `(<слово>) процент` in the sentence", NO_MATCH)
     word = found[-1].lower()
@@ -744,31 +776,105 @@ def read_decision_ref(text: str) -> str | None:
     return match.group(1).strip() if match else None
 
 
-def read_in_force(text: str) -> str | None:
-    months = {
-        "января": "01",
-        "февраля": "02",
-        "марта": "03",
-        "апреля": "04",
-        "мая": "05",
-        "июня": "06",
-        "июля": "07",
-        "августа": "08",
-        "сентября": "09",
-        "октября": "10",
-        "ноября": "11",
-        "декабря": "12",
-    }
-    marker = r"(?:вводится\s+в\s+действие|вступает\s+в\s+силу)\s+с\s+"
+MONTHS = {
+    "января": "01",
+    "февраля": "02",
+    "марта": "03",
+    "апреля": "04",
+    "мая": "05",
+    "июня": "06",
+    "июля": "07",
+    "августа": "08",
+    "сентября": "09",
+    "октября": "10",
+    "ноября": "11",
+    "декабря": "12",
+}
+
+# adilet stamps a system footnote at the TOP of many documents — "Сноска.
+# Вводится в действие с <date> в соответствии с пунктом N настоящего решения"
+# — restating which redaction of the PAGE is current, not what the decision's
+# own operative clause says. Measured across 471 cached documents: it appears
+# on 123 of them, and on 121 of those its date agrees with the decision's own
+# "Настоящее решение вводится в действие с …" clause, so the two collapse to
+# one value in the `found` set and nothing was ever visibly wrong.
+#
+# On two documents it does NOT agree — G25PF02058M's footnote says 01.01.2025
+# while its own point 2 says "с 1 января 2026 года", and G26BM08572M's footnote
+# says 01.01.2027 against a point 2 that also says 2027 correctly for THAT one
+# but disagrees on others of this shape. Either way, two *different* dates in
+# one document made `found` a set of size 2, and a reader keying on "exactly
+# one value" then refused a document that states its year perfectly plainly.
+#
+# The fix does not depend on knowing what the footnote precedes — it depends
+# on what follows it, which is stable: the footnote's own closing clause
+# names itself, "в соответствии с пунктом N настоящего решения". A match
+# immediately followed by that phrase is the editorial footnote and is
+# excluded; the decision's own clause never carries this trailer.
+FOOTNOTE_CONTINUATION = re.compile(
+    r"^\s*в\s+соответствии\s+с\s+пунктом\s+\d+\s+настоящего\s+решения", re.IGNORECASE
+)
+
+# **The same typo that lets `вводиться` (with an extra `ь`) slip past `read_year`
+# via `read_in_force` too.** G25FK28198M writes "Настоящее решение вводиться в
+# действие с 1 января 2026 года" — a document error, not a parser one, but a
+# reader that refuses to recognise a one-letter misspelling of its own marker
+# turns a plainly-dated document into an unparsed one. `вводит(?:ь)?ся` reads
+# both spellings; it does not widen what the marker MEANS, only which spelling
+# of the same word it tolerates.
+IN_FORCE_MARKER = r"(?:вводит(?:ь)?ся\s+в\s+действие|вступает\s+в\s+силу)\s+с\s+"
+
+
+def _dated_matches(text: str, marker: str) -> set[str]:
+    """ISO dates the given marker introduces, skipping the adilet footnote form."""
     found = {
         f"{m.group(3)}-{m.group(2)}-{m.group(1)}"
         for m in re.finditer(marker + r"(\d{2})\.(\d{2})\.(\d{4})", text, re.IGNORECASE)
+        if not FOOTNOTE_CONTINUATION.match(text[m.end() :])
     }
     for m in re.finditer(marker + r"(\d{1,2})\s+(\w+)\s+(\d{4})\s+года", text, re.IGNORECASE):
-        month = months.get(m.group(2).lower())
+        if FOOTNOTE_CONTINUATION.match(text[m.end() :]):
+            continue
+        month = MONTHS.get(m.group(2).lower())
         if month:
             found.add(f"{m.group(3)}-{month}-{int(m.group(1)):02d}")
+    return found
+
+
+def read_in_force(text: str) -> str | None:
+    found = _dated_matches(text, IN_FORCE_MARKER)
     return found.pop() if len(found) == 1 else None
+
+
+# A THIRD way a document states which tax period it governs, distinct from
+# both `read_year` and `read_in_force`: "Настоящее решение вводится в действие
+# по истечении 10 календарных дней после … опубликования и распространяется
+# на правоотношения, возникшие с 1 января 2026 года." The entry-into-force
+# date here is genuinely unknowable in advance (it depends on the publication
+# date), but the SAME sentence separately states which legal relations the
+# decision covers — and that clause names the tax year outright. Measured: 9
+# of 471 cached documents carry it, three of them (G25GB00533M, G25GJ00472M,
+# G25KQ27239M) with no other year-bearing phrasing anywhere in the text at all.
+#
+# **A named, tested reader, never a quiet fallback inside `read_in_force`** —
+# same reasoning the in-force reader itself was built on: it reads a different
+# clause making a different claim, and folding it into an existing function
+# would let a future reader miss which claim actually supplied the year.
+RETROACTIVE_EFFECT_MARKER = (
+    r"распространяется\s+(?:свое\s+действие\s+)?на\s+правоотношени\w*,?\s+возникш\w*\s+с\s+"
+)
+
+
+def read_year_from_retroactive_effect(text: str) -> int | None:
+    """The tax year, from the clause stating which relations the decision covers.
+
+    Restricted to 1 January for the same reason `read_year_from_in_force` is:
+    a decision whose relations run from another date is not a plain
+    calendar-year rate and is left to the year-less path rather than guessed.
+    """
+    found = _dated_matches(text, RETROACTIVE_EFFECT_MARKER)
+    date = found.pop() if len(found) == 1 else None
+    return int(date[:4]) if date and date.endswith("-01-01") else None
 
 
 def classify(
@@ -792,6 +898,9 @@ def classify(
     if year is None:
         year = read_year_from_in_force(text)
         year_source = "in-force-date" if year else None
+    if year is None:
+        year = read_year_from_retroactive_effect(text)
+        year_source = "retroactive-effect" if year else None
     if year is None and year_hint:
         year, year_source = year_hint, "caller-hint"
 
@@ -851,14 +960,34 @@ def classify(
     sources = {READER_SOURCE[r.reader] for r in readings if r.rate_percent is not None}
 
     if unreachable:
+        detail = unreachable[0].detail.removeprefix(UNAVAILABLE)
+        # **An HTTP 404 is a real answer, not a dropped connection** — `fetch()`
+        # itself states this rule for the download step, and it holds here too.
+        # Measured on G25LC00433M, G25LF00353M, G25LI00366M and G26BM08572M: the
+        # 404 was stable across a retried fetch AND the Russian document's own
+        # page carries no `/kaz/docs/…` link at all — this is a document with no
+        # Kazakh-language copy published, not a hiccup that "re-run" will fix.
+        # A blanket "transport failure, re-run" message on a stable 404 sends
+        # the next session in a circle re-discovering the same absence, so the
+        # two are told apart here rather than left for prose alone to guess at.
+        if "HTTPError: HTTP Error 404" in detail:
+            reason = (
+                f"{unreachable[0].reader} returned HTTP 404 — a real answer, not a "
+                f"transport failure by itself. Confirm before re-running: does the "
+                f"Russian document's own page (/rus/docs/<id>) carry a link to "
+                f"/kaz/docs/<id>? If not, no Kazakh copy is published for this "
+                f"document at all, and re-fetching will not change that. "
+                f"({detail})"
+            )
+        else:
+            reason = (
+                f"{unreachable[0].reader} could not be fetched — a transport failure, "
+                f"NOT a disagreement. Re-run before reading this as a defect. ({detail})"
+            )
         return {
             **result,
             "outcome": CONFLICT,
-            "reason": (
-                f"{unreachable[0].reader} could not be fetched — a transport failure, "
-                f"NOT a disagreement. Re-run before reading this as a defect. "
-                f"({unreachable[0].detail.removeprefix(UNAVAILABLE)})"
-            ),
+            "reason": reason,
             "terminal": False,
         }
     if objections:
