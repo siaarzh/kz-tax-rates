@@ -24,7 +24,7 @@
   "@type": "Dataset",
   "name": "Ставки налога по упрощённой декларации по районам Казахстана",
   "alternateName": "kz-tax-rates",
-  "description": "Ставка налога по упрощённой декларации («упрощёнка») по районам и городам Казахстана за 2026 год: 148 районов и городов, поиск по названию или коду КАТО. В каждой строке стоит ссылка на решение маслихата, из которого взята ставка. Бесплатно, в JSON и CSV. Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date, so read the linked decision before relying on it.",
+  "description": "Ставка налога по упрощённой декларации («упрощёнка») по районам и городам Казахстана за 2026 год: 148 районов и городов, поиск по названию или коду КАТО. В каждой строке стоит ссылка на решение маслихата, из которого взята ставка. Бесплатно, в JSON и CSV. Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. Read the linked decision before relying on a rate.",
   "url": "https://siaarzh.github.io/kz-tax-rates/dist/",
   "sameAs": "https://github.com/siaarzh/kz-tax-rates",
   "identifier": "https://github.com/siaarzh/kz-tax-rates",
@@ -40,7 +40,7 @@
     "name": "Serzhan Akhmetov",
     "url": "https://github.com/siaarzh"
   },
-  "dateModified": "2026-08-14T05:23:38Z",
+  "dateModified": "2026-08-14T05:46:30Z",
   "version": "1.0",
   "inLanguage": [
     "ru",
@@ -292,14 +292,13 @@
 
 <script type="application/json" id="payload">{
   "schema_version": "1.0",
-  "generated_at": "2026-08-14T05:23:38Z",
+  "generated_at": "2026-08-14T05:46:30Z",
   "kato_version": "NK RK 11-2025",
   "licence": "MIT",
-  "not_tax_advice": "Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date, so read the linked decision before relying on it.",
-  "not_tax_advice_ru": "Не является налоговой консультацией. Это машиночитаемая копия сведений из опубликованных нормативных правовых актов; в каждой строке стоит ссылка на первоисточник. Здесь нет ни толкования норм, ни расчёта налога. Ставка достоверна только по состоянию на дату verified_at, поэтому прежде чем полагаться на неё, откройте само решение.",
+  "not_tax_advice": "Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. Read the linked decision before relying on a rate.",
+  "not_tax_advice_ru": "Не является налоговой консультацией. Это машиночитаемая копия сведений из опубликованных нормативных правовых актов; в каждой строке стоит ссылка на первоисточник. Здесь нет ни толкования норм, ни расчёта налога. Прежде чем полагаться на ставку, откройте само решение.",
   "verification": {
     "rows": 148,
-    "human_verified": 1,
     "machine_extracted": 148
   },
   "years": {
@@ -573,7 +572,7 @@
           "oblast_ru": "Акмолинская область",
           "oblast_kk": "Ақмола облысы",
           "rate": 0.02,
-          "decision_ref": "Решение Шортандинского района Акмолинской области от 21 ноября 2025 года № 8С- 44/3",
+          "decision_ref": "None",
           "source_url": "https://adilet.zan.kz/rus/docs/G25BR08443M"
         },
         {
@@ -853,7 +852,7 @@
           "oblast_ru": "Жамбылская область",
           "oblast_kk": "Жамбыл облысы",
           "rate": 0.02,
-          "decision_ref": "Решение маслихата района Т. Рыскулова Жамбылской области от 26 ноября 2025 года № 41-5",
+          "decision_ref": "None",
           "source_url": "https://adilet.zan.kz/rus/docs/G25GH00415M"
         },
         {
@@ -1804,7 +1803,7 @@
   "future_note_ru": "",
   "author": "Serzhan Akhmetov",
   "repo_url": "https://github.com/siaarzh/kz-tax-rates",
-  "provenance_ru": "Часть ставок прочитал из решения человек, остальные извлечены программой. Кто проверил конкретную строку, записано в столбце verified_by файла data/rates.csv.",
+  "provenance_ru": "Ставки извлечены из решений маслихатов программой, по одному и тому же правилу. Прежде чем полагаться на ставку, откройте решение по ссылке рядом с ней.",
   "files": [
     [
       "rates.json",

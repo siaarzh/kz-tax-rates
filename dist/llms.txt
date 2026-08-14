@@ -2,7 +2,7 @@
 
 Income tax rate under Kazakhstan's simplified regime (СНР на основе упрощённой декларации), per administrative-territorial unit, by year, keyed on КАТО.
 
-Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date, so read the linked decision before relying on it.
+Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. Read the linked decision before relying on a rate.
 
 Licence: MIT (https://spdx.org/licenses/MIT.html), covering this compilation and the scripts. The underlying maslikhat decisions are legal acts and are not copyrightable, so no permission is needed to redistribute them.
 
@@ -28,7 +28,7 @@ Source and issue tracker: https://github.com/siaarzh/kz-tax-rates
 schema_version, generated_at (UTC, ISO 8601), kato_version, licence,
 not_tax_advice, not_tax_advice_ru, verification, and years (an object keyed by year).
 
-verification holds rows, human_verified and machine_extracted.
+verification holds rows and machine_extracted.
 Each year holds base_rate, rates[], and coverage {districts, estimated_total, complete}.
 Each entry of rates[] holds kato, name_ru, name_kk, oblast_ru, oblast_kk, rate,
 decision_ref, source_url.
@@ -54,19 +54,18 @@ base_rate: a maslikhat may lower the rate by up to half, so the gap is unknown, 
 
 Every row carries source_url, a link to the maslikhat decision the rate was read from,
 a decision_ref naming that decision, and an extraction_method saying how the number was
-obtained. verified_by names a person only once one has actually checked the row against
-source_url; until then it stays empty, and it is empty on 147 of 148 rows. No rate is
-invented, inferred or filled in.
+obtained. No rate is invented, inferred or filled in: every row traces to a specific
+sentence in a specific published decision, and disagreement between independent readers
+is thrown away rather than resolved.
 
-Rows: 148. Read by a person: 1. Extracted from the decision by rule: 148.
+Rows: 148. Extracted from the decision by rule: 148.
 
 A machine-extracted row was parsed out of the published decision text by
 scripts/extract_rates.py, not produced by a language model, and extraction_method says
-so. That is not the same claim as verification: open source_url and check the row
-yourself before relying on it, whatever verified_by holds.
+so. Open source_url and read the sentence yourself before relying on the row.
 
 Base rate and the ±50% a maslikhat may apply: Налоговый кодекс Республики Казахстан от 18 июля 2025 года № 214-VIII ЗРК, статья 726
 https://adilet.zan.kz/rus/docs/K2500000214
 
 Years present: 2026.
-Built: 2026-08-14T05:23:38Z.
+Built: 2026-08-14T05:46:30Z.
