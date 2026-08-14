@@ -35,6 +35,31 @@ RATES_CSV = REPO_ROOT / "data" / "rates.csv"
 
 MAPPED_OUTCOME = "mapped"
 
+# What `json.dumps(None)` and its neighbours look like once something naively
+# stringifies them. A citation this script would otherwise publish as the
+# literal text "None" is not a citation — it is a missing one wearing a
+# string's clothes, so it is refused here rather than written.
+NULL_LIKE = {"none", "null", "nan", ""}
+
+
+def _required_citation_field(entry: dict[str, Any], field: str) -> str:
+    """decision_ref / source_url, refused if null or a stringified null.
+
+    A row without a real citation does not belong in the published dataset —
+    the citation is the product. This fails the whole publish loudly rather
+    than dropping the row silently, because a silent drop changes the row
+    count with nothing to notice it: the same failure mode the mapping and
+    validation guards elsewhere in this pipeline are built to avoid.
+    """
+    value = entry.get(field)
+    text = str(value).strip() if value is not None else ""
+    if not text or text.strip().lower() in NULL_LIKE:
+        raise SystemExit(
+            f"kato {entry.get('kato')!r}: {field} is missing (mapped-rates.json holds "
+            f"{value!r}) — refusing to publish a row without a real citation"
+        )
+    return text
+
 
 def kato_version() -> str:
     """The single edition every row in data/kato.csv is written against.
@@ -109,8 +134,8 @@ def rows_from_mapped() -> list[dict[str, str]]:
                 "base_rate": f"{base_percent / 100:.2f}",
                 "valid_from": f"{year}-01-01",
                 "valid_to": f"{year}-12-31",
-                "decision_ref": str(entry["decision_ref"]),
-                "source_url": str(entry["source_url"]),
+                "decision_ref": _required_citation_field(entry, "decision_ref"),
+                "source_url": _required_citation_field(entry, "source_url"),
                 "extraction_method": method,
             }
         )
