@@ -26,6 +26,9 @@ Principles carry the checklist's own two tiers: `[S]` for the foundational, reac
 
 ## What was already honoured, and where
 
+> **Superseded 2026-08-14 on the human half.** The owner settled that nobody will hand-confirm a row, so `verified_by` is deleted rather than left as a promise. A rate is now published on its citation, the deterministic reading, the regime check and the cross-check against the mapper. The code/agent split below still stands.
+
+
 | Principle | Where |
 |---|---|
 | `[S]` verifiability determines autonomy | Assembling the full ~200-row dataset is routed to the human, because an agent cannot verify it. The work was sliced along the verifiability frontier rather than by value ordering. |
