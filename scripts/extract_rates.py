@@ -722,8 +722,25 @@ def read_year_from_in_force(text: str) -> int | None:
 
 
 def read_decision_ref(text: str) -> str | None:
-    """The citation as the document writes it, for a human to look up."""
-    match = re.search(r"(Решение [^.]*?маслихата[^.]*?от \d{1,2} \w+ \d{4} года № [\w\-/]+)", text)
+    """The citation as the document writes it, for a human to look up.
+
+    Two structural variants exist. Most decisions read "Решение маслихата
+    ... от ... года № ..."; a few omit «маслихата» entirely and say
+    "Решение <район>ского района ... от ... года № ..." instead (например
+    Шортандинский район). The middle segment tolerates one abbreviation
+    period — "района Т. Рыскулова" — by only treating a period as a stop
+    when it is not followed by a capitalised word; a genuine sentence
+    boundary still ends the (lazy) match before it reaches the next
+    "Решение". The decision number itself may contain a single space after
+    a hyphen or slash (e.g. "№ 8С- 44/3", "№ 54- 177"), which the previous
+    space-free character class silently truncated.
+    """
+    match = re.search(
+        r"(Решение(?: маслихата)?"
+        r"(?:[^.]|\.(?=\s?[А-ЯЁ]))*?"
+        r"от \d{1,2} \w+ \d{4} года № [\w]+(?:[-/]\s?[\w]+)*)",
+        text,
+    )
     return match.group(1).strip() if match else None
 
 

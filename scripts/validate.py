@@ -26,6 +26,12 @@ KATO_CSV = REPO_ROOT / "data" / "kato.csv"
 
 KATO_RE = re.compile(r"^\d{9}$")
 
+# What a missing value looks like once something naively stringifies it —
+# Python's str(None), and JSON's/CSV's usual spellings of the same absence.
+# A row carrying one of these is not empty, so the blank check below cannot
+# catch it, and it is not a citation either.
+NULL_LIKE_STRINGS = {"none", "null", "nan"}
+
 # The statutory band. НК РК art. 726 sets a 0.04 base which a maslikhat may move
 # by +-50%, so nothing outside 0.02..0.06 can be a real rate.
 RATE_MIN = 0.02
@@ -135,6 +141,24 @@ def validate_row(row: dict[str, str], line: int) -> list[str]:
     for field in ("decision_ref", "source_url", "extraction_method", "kato_version"):
         if not (row.get(field) or "").strip():
             fail(f"{field} is empty")
+
+    # A field this row's writer never checked can hold the literal text
+    # "None"/"null"/"nan" — a stringified null, not a citation — and the
+    # blank check above cannot see it because that text is non-empty. Both
+    # rejections below caught real published rows once: `decision_ref` (a
+    # stringified null from a JSON `null` decision_ref) and, defensively,
+    # `source_url` the same way.
+    decision_ref = (row.get("decision_ref") or "").strip()
+    if decision_ref and decision_ref.lower() in NULL_LIKE_STRINGS:
+        fail(f"decision_ref {decision_ref!r} is a stringified null, not a citation")
+    elif decision_ref and ("Решение" not in decision_ref or "№" not in decision_ref):
+        fail(f"decision_ref {decision_ref!r} is not a real citation (no «Решение» / «№»)")
+
+    source_url = (row.get("source_url") or "").strip()
+    if source_url and source_url.lower() in NULL_LIKE_STRINGS:
+        fail(f"source_url {source_url!r} is a stringified null, not a URL")
+    elif source_url and not source_url.startswith("https://adilet.zan.kz/"):
+        fail(f"source_url {source_url!r} is not a real adilet.zan.kz URL")
 
     raw_rate = (row.get("rate") or "").strip()
     try:
