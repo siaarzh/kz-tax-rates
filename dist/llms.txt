@@ -55,7 +55,7 @@ base_rate: a maslikhat may lower the rate by up to half, so the gap is unknown, 
 Every row carries source_url, a link to the maslikhat decision the rate was read from,
 a decision_ref naming that decision, and an extraction_method saying how the number was
 obtained. verified_by names a person only once one has actually checked the row against
-source_url; until then it stays empty, and it is empty on every row today. No rate is
+source_url; until then it stays empty, and it is empty on 147 of 148 rows. No rate is
 invented, inferred or filled in.
 
 Rows: 148. Read by a person: 1. Extracted from the decision by rule: 148.

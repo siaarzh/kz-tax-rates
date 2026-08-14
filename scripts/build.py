@@ -798,7 +798,12 @@ def render_llms_txt(payload: dict[str, Any]) -> str:
         "Every row carries source_url, a link to the maslikhat decision the rate was read from,",
         "a decision_ref naming that decision, and an extraction_method saying how the number was",
         "obtained. verified_by names a person only once one has actually checked the row against",
-        "source_url; until then it stays empty, and it is empty on every row today. No rate is",
+        # Derived, never asserted. This sentence said "it is empty on every row today" as a
+        # literal until 2026-08-14, and became false the moment the first row was verified —
+        # inside the same build that emitted it. A claim about the data must be computed
+        # from the data, or it is a claim about the day somebody typed it.
+        f"source_url; until then it stays empty, and it is empty on "
+        f"{counts['rows'] - counts['human_verified']} of {counts['rows']} rows. No rate is",
         "invented, inferred or filled in.",
         "",
         f"Rows: {counts['rows']}. Read by a person: {counts['human_verified']}. "
