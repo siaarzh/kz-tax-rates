@@ -20,17 +20,48 @@ ones above them. A test that writes `== 0.03` asserts a number its author
 supplied; these assert that the readers agree with each other and that the
 number the parser produced is written in the sentence the parser kept. That
 holds whatever the document says, so it cannot pass on a remembered answer.
+
+`tests/fixtures/G25GA00334M.txt` (sha256
+3902915b4efaeb9f00a565211202ffc8a85ee1750349728d92fb8e7f765edf89) and its
+Kazakh copy `G25GA00334M.kaz.txt` (sha256
+885c9dc167c23c67912b250fbe3f785019f7e60a97f6f8c6608fb1025e45ad7e) are Тараз
+city's decision. It reached the queue as `readers disagree: [2, 4]`: reader 2
+(the spelled word) read 4, reader 4 (Kazakh) read 2 — and it was reader 2 that
+was wrong, not reader 4. The sentence writes `на 2 ( два) процента` with a
+space right after the opening paren, which the word reader's pattern did not
+tolerate, so it missed that parenthetical entirely and returned the OLD rate's
+word (`четырех`) as if it were the last one in the sentence.
+
+`tests/fixtures/G25GB00533M.txt` (sha256
+cdcda5238ad46aed73dfec3b6d4c24a0e965d3bae488f6ab82d7e884f1e68ab9) and its
+Kazakh copy `G25GB00533M.kaz.txt` (sha256
+9d28ed44bba1b41b4bc9f46ec818b65dd57830ec2ff4f2c4c4393a39d8da0bf0) are
+Байзакский район's decision. It states no year `read_year` or
+`read_year_from_in_force` can read — its entry-into-force clause reads
+"по истечении 10 календарных дней после … опубликования", a date that is not
+knowable in advance — but the same sentence separately states
+"распространяется на правоотношения, возникшие с 1 января 2026 года", which
+is where `read_year_from_retroactive_effect` reads 2026 from.
+
+`tests/fixtures/G25FK28198M.txt` (sha256
+b331f8e4b7abe00076271858d515c2bafd4d1e8be2016aeffee7c5e19fff11b7) is Мақаншы
+район's decision. Its own text misspells "вводится" as "вводиться" — a
+document typo, not a parser one — and reached the queue because the in-force
+reader's marker did not tolerate it.
 """
 
 from __future__ import annotations
 
+import email.message
 import hashlib
 import json
 import time
+import urllib.error
 from pathlib import Path
 
 import discover_decisions
 import enumerate_decisions
+import pytest
 import validate_readings
 from extract_rates import (
     CONFIRMED,
@@ -45,6 +76,7 @@ from extract_rates import (
     read_word,
     read_year,
     read_year_from_in_force,
+    read_year_from_retroactive_effect,
 )
 
 
@@ -70,6 +102,21 @@ PERCENT_ONLY_KAZ = _fixture("G25NJ00343M.kaz.txt")
 CLAUSE = "с 4 (четырех) процентов на 3 (три) процента"
 # The same movement as the Щербактинский district writes it.
 DO_CLAUSE = "с 4 (четырех) процентов до 3 (трех) процентов"
+
+# Тараз — `readers disagree: [2, 4]` on the queue, and it was the word reader
+# that was wrong: a space right after the opening paren, `( два)`, that its
+# pattern did not tolerate.
+SPACED_PAREN = _fixture("G25GA00334M.txt")
+SPACED_PAREN_KAZ = _fixture("G25GA00334M.kaz.txt")
+
+# Байзакский район — no year `read_year` or `read_year_from_in_force` can
+# read; the year is stated only via "распространяется на правоотношения,
+# возникшие с 1 января 2026 года".
+RETROACTIVE_ONLY = _fixture("G25GB00533M.txt")
+RETROACTIVE_ONLY_KAZ = _fixture("G25GB00533M.kaz.txt")
+
+# Мақаншы район — "вводиться" (typo, extra ь) instead of "вводится".
+IN_FORCE_TYPO = _fixture("G25FK28198M.txt")
 
 
 def test_the_real_decision_is_confirmed_at_three_percent() -> None:
@@ -113,6 +160,27 @@ def test_the_word_reader_reads_words_only_and_does_not_consult_the_digit() -> No
     assert read_word(CLAUSE).rate_percent == 3
     assert read_word("с 4 (четырех) процентов на 3 (два) процента").rate_percent == 2
     assert read_word("с 4 процентов на 3 процента").rate_percent is None
+
+
+def test_the_word_reader_tolerates_a_space_after_the_opening_paren() -> None:
+    """G25GA00334M and five siblings: `на 2 ( два) процента` — a space `(` did not cross.
+
+    Reached the queue as `readers disagree: [2, 4]`. It was reader 2 that was
+    wrong: its pattern required the word to touch both parentheses, so it never
+    saw `( два)` at all and returned the OLD rate's word — the last (and only)
+    one it could find — while reader 4 (Kazakh) read the new rate correctly.
+    """
+    assert read_word("с 4 (четырех) процентов на 2 ( два) процента").rate_percent == 2
+    assert read_word("с 4 (четырех) процентов на 2 (два ) процента").rate_percent == 2
+
+
+def test_the_real_taraz_decision_confirms_at_two_percent() -> None:
+    result = classify(SPACED_PAREN, kazakh_text=SPACED_PAREN_KAZ)
+    readings = {r["reader"]: r["rate_percent"] for r in result["readings"]}
+    assert readings["word"] == 2
+    assert readings["kazakh"] == 2
+    assert result["outcome"] == CONFIRMED
+    assert result["rate"] == 0.02
 
 
 def test_the_transition_reader_refuses_a_rise_and_a_wrong_starting_point() -> None:
@@ -480,6 +548,23 @@ def test_a_kazakh_fetch_failure_is_reported_as_transport_not_as_disagreement() -
     assert "NOT a disagreement" in result["reason"]
 
 
+def test_a_stable_kazakh_404_is_told_apart_from_a_transport_failure() -> None:
+    """G25LC00433M and three siblings: a 404 that survived a retried fetch.
+
+    Their Russian pages carry no `/kaz/docs/…` link at all — the document has
+    no Kazakh copy published, which "re-run before reading this as a defect"
+    actively misleads about. An HTTP status is a real answer, same rule
+    `fetch()` states for the download step, so this is told apart from a
+    genuine dropped connection rather than sharing its wording.
+    """
+    result = classify(REAL, kazakh_error="HTTPError: HTTP Error 404: ")
+    assert result["outcome"] == CONFLICT
+    assert "404" in result["reason"]
+    assert "not a transport failure by itself" in result["reason"]
+    assert "kaz/docs" in result["reason"]
+    assert "NOT a disagreement" not in result["reason"]
+
+
 def test_a_document_the_russian_readers_cannot_read_still_reports_what_kazakh_says() -> None:
     """Reporting a reading is not confirming it. One reading is never a row."""
     result = classify("Решение маслихата. Ставка не указана.", kazakh_text=ONCE_ONLY_KAZ)
@@ -625,6 +710,86 @@ def test_the_in_force_reader_reads_both_written_forms_and_only_january() -> None
     assert read_year_from_in_force("вводится в действие с 1 января 2026 года") == 2026
     # Not a plain calendar-year enactment, so it declines rather than assuming.
     assert read_year_from_in_force("вводится в действие с 15.07.2026") is None
+
+
+def test_the_in_force_reader_skips_the_adilet_footnote() -> None:
+    """adilet stamps "Сноска. Вводится в действие с <date> в соответствии с
+    пунктом N настоящего решения" on 123 of 471 cached documents — a system
+    footnote, not the decision's own clause. On 121 of those its date agrees
+    with the decision's real clause, so the two collapse to one value and
+    nothing was visibly wrong. On two it does not: G25PF02058M's footnote says
+    01.01.2025 while its point 2 says 2026, and the mismatch made `found` a
+    set of size 2 — a document stating its year perfectly plainly refused for
+    having "two years".
+    """
+    footnote_then_real = (
+        "Сноска. Вводится в действие с 01.01.2025 в соответствии с пунктом 2 "
+        "настоящего решения. Далее следует текст. Настоящее решение вводится "
+        "в действие с 1 января 2026 года и подлежит официальному опубликованию."
+    )
+    assert read_year_from_in_force(footnote_then_real) == 2026
+    # The footnote alone, unaccompanied by a real clause, still yields nothing
+    # — it is excluded outright, not merely outvoted by a second match.
+    footnote_only = (
+        "Сноска. Вводится в действие с 01.01.2025 в соответствии с пунктом 2 настоящего решения."
+    )
+    assert read_year_from_in_force(footnote_only) is None
+
+
+def test_the_in_force_reader_tolerates_the_documents_own_typo() -> None:
+    """G25FK28198M writes "вводиться" (with an extra ь) — a document error,
+    not a parser one, but the marker refusing a one-letter misspelling of
+    itself turned a plainly-dated document into an unparsed one.
+    """
+    typo_text = "Настоящее решение вводиться в действие с 1 января 2026 года."
+    assert read_year_from_in_force(typo_text) == 2026
+
+
+def test_the_real_makanshy_decision_confirms_via_the_typo_tolerant_marker() -> None:
+    result = classify(IN_FORCE_TYPO)
+    assert result["year"] == 2026
+    assert result["year_source"] == "in-force-date"
+
+
+def test_the_retroactive_effect_reader_is_named_and_reads_only_january() -> None:
+    assert (
+        read_year_from_retroactive_effect(
+            "распространяется на правоотношения, возникшие с 1 января 2026 года."
+        )
+        == 2026
+    )
+    assert (
+        read_year_from_retroactive_effect(
+            "распространяется на правоотношения, возникшие с 01.01.2026."
+        )
+        == 2026
+    )
+    # Not 1 January, so this is not a plain calendar-year period — declined
+    # rather than assumed, the same rule `read_year_from_in_force` follows.
+    assert (
+        read_year_from_retroactive_effect(
+            "распространяется на правоотношения, возникшие с 15 июля 2026 года."
+        )
+        is None
+    )
+    assert read_year_from_retroactive_effect("не содержит такой фразы вовсе.") is None
+
+
+def test_the_real_baizak_decision_confirms_via_the_retroactive_effect_reader() -> None:
+    """G25GB00533M: no year `read_year` or `read_year_from_in_force` can read.
+
+    Its entry-into-force date depends on the publication date and states no
+    fixed date at all, so the in-force reader has nothing to read either — the
+    year is stated only via the separate retroactive-effect clause in the same
+    sentence.
+    """
+    assert read_year(RETROACTIVE_ONLY) is None
+    assert read_year_from_in_force(RETROACTIVE_ONLY) is None
+    result = classify(RETROACTIVE_ONLY, kazakh_text=RETROACTIVE_ONLY_KAZ)
+    assert result["year"] == 2026
+    assert result["year_source"] == "retroactive-effect"
+    assert result["outcome"] == CONFIRMED
+    assert result["rate"] == 0.02
 
 
 def test_a_year_with_no_known_statutory_base_is_refused() -> None:
@@ -780,3 +945,67 @@ def test_every_request_on_the_document_path_is_throttled(tmp_path: Path, monkeyp
     assert ";jsessionid=" not in url
     # Two requests happen on a cache miss: resolve the redirect, then download.
     assert len(calls) == 2, f"one of the document's requests skipped the limiter: {calls}"
+
+
+def test_pdf_url_retries_a_transient_drop_but_not_an_http_status(  # type: ignore[no-untyped-def]
+    monkeypatch,
+) -> None:
+    """`fetch()` retries a dropped connection; `pdf_url()` did not, on a request
+    to the same flaky host. Four Kazakh fetches (G25LC00433M, G25LF00353M,
+    G25LI00366M, G26BM08572M) reached the queue as UNAVAILABLE from exactly
+    one failed attempt — and re-probing G25LC00433M's own URL during this
+    session returned a *different* transient error on a later try, which is
+    evidence this step is as unreliable as the download step, not that these
+    four documents lack a Kazakh copy.
+
+    A genuine HTTP status is still never retried — a 404 is a real answer,
+    same rule `fetch()` states for the download step.
+    """
+    import extract_rates
+
+    monkeypatch.setattr(extract_rates.time, "sleep", lambda *a, **k: None)
+    monkeypatch.setattr(extract_rates, "_last_request_at", 0.0)
+
+    class _Response:
+        def __enter__(self) -> _Response:
+            return self
+
+        def __exit__(self, *args: object) -> None:
+            return None
+
+        def geturl(self) -> str:
+            return "https://adilet.zan.kz/files/pdf/1/x.kaz.pdf"
+
+    class _FlakyThenOK:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def open(self, *args: object, **kwargs: object) -> _Response:
+            self.calls += 1
+            if self.calls == 1:
+                raise TimeoutError("simulated transient drop")
+            return _Response()
+
+    opener = _FlakyThenOK()
+    monkeypatch.setattr(extract_rates.urllib.request, "build_opener", lambda *a, **k: opener)
+
+    url = extract_rates.pdf_url("TESTDOC", language="kaz")
+    assert url == "https://adilet.zan.kz/files/pdf/1/x.kaz.pdf"
+    assert opener.calls == 2, "a transient drop must be retried, not treated as final"
+
+    class _AlwaysNotFound:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def open(self, *args: object, **kwargs: object) -> _Response:
+            self.calls += 1
+            raise urllib.error.HTTPError(
+                "https://x", 404, "Not Found", email.message.Message(), None
+            )
+
+    not_found = _AlwaysNotFound()
+    monkeypatch.setattr(extract_rates.urllib.request, "build_opener", lambda *a, **k: not_found)
+    with pytest.raises(urllib.error.HTTPError) as raised:
+        extract_rates.pdf_url("TESTDOC", language="kaz")
+    assert raised.value.code == 404
+    assert not_found.calls == 1, "a real HTTP status must not be retried"

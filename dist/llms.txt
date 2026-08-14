@@ -58,7 +58,7 @@ obtained. No rate is invented, inferred or filled in: every row traces to a spec
 sentence in a specific published decision, and disagreement between independent readers
 is thrown away rather than resolved.
 
-Rows: 148. Extracted from the decision by rule: 148.
+Rows: 158. Extracted from the decision by rule: 158.
 
 A machine-extracted row was parsed out of the published decision text by
 scripts/extract_rates.py, not produced by a language model, and extraction_method says
@@ -68,4 +68,4 @@ Base rate and the ±50% a maslikhat may apply: Налоговый кодекс �
 https://adilet.zan.kz/rus/docs/K2500000214
 
 Years present: 2026.
-Built: 2026-08-14T07:07:58Z.
+Built: 2026-08-14T07:47:08Z.
