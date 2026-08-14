@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-14T05:46:30Z",
+  "generated_at": "2026-08-14T07:07:58Z",
   "kato_version": "NK RK 11-2025",
   "licence": "MIT",
   "not_tax_advice": "Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. Read the linked decision before relying on a rate.",
@@ -40,7 +40,7 @@
           "oblast_ru": "область Абай",
           "oblast_kk": "Абай облысы",
           "rate": 0.02,
-          "decision_ref": "Решение Абайского районного маслихата области Абай от 26 ноября 2025 года № 33/3-",
+          "decision_ref": "Решение Абайского районного маслихата области Абай от 26 ноября 2025 года № 33/3- VIII",
           "source_url": "https://adilet.zan.kz/rus/docs/G25FD00333M"
         },
         {
@@ -50,7 +50,7 @@
           "oblast_ru": "область Абай",
           "oblast_kk": "Абай облысы",
           "rate": 0.02,
-          "decision_ref": "Решение Аягозского районного маслихата области Абай от 26 ноября 2025 года № 30/",
+          "decision_ref": "Решение Аягозского районного маслихата области Абай от 26 ноября 2025 года № 30/ 522-VIII",
           "source_url": "https://adilet.zan.kz/rus/docs/G25FE30522M"
         },
         {
@@ -80,7 +80,7 @@
           "oblast_ru": "область Абай",
           "oblast_kk": "Абай облысы",
           "rate": 0.02,
-          "decision_ref": "Решение маслихата района Жаңасемей области Абай от 27 ноября 2025 года № 22/251-",
+          "decision_ref": "Решение маслихата района Жаңасемей области Абай от 27 ноября 2025 года № 22/251- VIII",
           "source_url": "https://adilet.zan.kz/rus/docs/G25FL22251M"
         },
         {
@@ -280,7 +280,7 @@
           "oblast_ru": "Акмолинская область",
           "oblast_kk": "Ақмола облысы",
           "rate": 0.02,
-          "decision_ref": "None",
+          "decision_ref": "Решение Шортандинского района Акмолинской области от 21 ноября 2025 года № 8С- 44/3",
           "source_url": "https://adilet.zan.kz/rus/docs/G25BR08443M"
         },
         {
@@ -410,7 +410,7 @@
           "oblast_ru": "Алматинская область",
           "oblast_kk": "Алматы облысы",
           "rate": 0.02,
-          "decision_ref": "Решение маслихата города Қонаев Алматинской области от 27 ноября 2025 года № 54-",
+          "decision_ref": "Решение маслихата города Қонаев Алматинской области от 27 ноября 2025 года № 54- 177",
           "source_url": "https://adilet.zan.kz/rus/docs/G25DB54177M"
         },
         {
@@ -420,7 +420,7 @@
           "oblast_ru": "Алматинская область",
           "oblast_kk": "Алматы облысы",
           "rate": 0.03,
-          "decision_ref": "Решение маслихата города Алатау Алматинской области от 27 ноября 2025 года № 24-",
+          "decision_ref": "Решение маслихата города Алатау Алматинской области от 27 ноября 2025 года № 24- 65",
           "source_url": "https://adilet.zan.kz/rus/docs/G25DU02465M"
         },
         {
@@ -560,7 +560,7 @@
           "oblast_ru": "Жамбылская область",
           "oblast_kk": "Жамбыл облысы",
           "rate": 0.02,
-          "decision_ref": "None",
+          "decision_ref": "Решение маслихата района Т. Рыскулова Жамбылской области от 26 ноября 2025 года № 41-5",
           "source_url": "https://adilet.zan.kz/rus/docs/G25GH00415M"
         },
         {
@@ -590,7 +590,7 @@
           "oblast_ru": "область Жетісу",
           "oblast_kk": "Жетісу облысы",
           "rate": 0.02,
-          "decision_ref": "Решение маслихата города Талдыкорган области Жетісу от 25 ноября 2025 года № 46-",
+          "decision_ref": "Решение маслихата города Талдыкорган области Жетісу от 25 ноября 2025 года № 46- 254",
           "source_url": "https://adilet.zan.kz/rus/docs/G25IA46254M"
         },
         {
@@ -610,7 +610,7 @@
           "oblast_ru": "область Жетісу",
           "oblast_kk": "Жетісу облысы",
           "rate": 0.03,
-          "decision_ref": "Решение Аксуского районного маслихата области Жетісу от 26 ноября 2025 года № 61-",
+          "decision_ref": "Решение Аксуского районного маслихата области Жетісу от 26 ноября 2025 года № 61- 259",
           "source_url": "https://adilet.zan.kz/rus/docs/G25IC61259M"
         },
         {
