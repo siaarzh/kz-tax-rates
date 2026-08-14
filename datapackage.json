@@ -72,6 +72,14 @@
             }
           },
           {
+            "name": "kazakh_source_url",
+            "type": "string",
+            "format": "uri",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
             "name": "extraction_method",
             "type": "string",
             "constraints": {

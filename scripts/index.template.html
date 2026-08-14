@@ -301,9 +301,10 @@
     ? "Каждую ставку вносит человек, который прочитал решение маслихата. Пустая таблица честнее, чем заполненная наугад."
     : "Если района нет в таблице, для него не подтверждена сниженная ставка. Это не значит, что " +
       "там действует базовая ставка " + percent(base) + ": решение могло существовать и остаться " +
-      "непрочитанным, а могло быть прочитано и не подтверждено (не о том режиме, утратило силу, " +
-      "не удалось привязать к району). Ищите район выше: если для него есть конкретная причина, " +
-      "страница покажет её; иначе ниже приведён полный список того, что прочитано и почему.";
+      "непрочитанным, а могло быть прочитано и не подтверждено (например, регулирует другой режим, " +
+      "утратило силу, не удалось привязать к району). Ищите район выше: если для него есть " +
+      "конкретная причина, страница покажет её; иначе ниже приведён полный список того, что " +
+      "прочитано и почему.";
   var coverageHead = total === 0
     ? "В таблице пока нет ни одной ставки."
     : "Таблица неполная: " + total + " из примерно " +
@@ -333,8 +334,8 @@
     disclosure.appendChild(disclosureSummary);
     disclosure.appendChild(text(
       "p",
-      "Каждое из этих решений программа прочитала и не смогла превратить в строку таблицы: " +
-      "с причиной, которую дал сам разбор, и ссылкой на первоисточник."
+      "Каждое из этих решений программа прочитала и не смогла превратить в строку таблицы. " +
+      "Ниже, для каждого, причина отказа, которую дал сам разбор, и ссылка на первоисточник."
     ));
     refusals.forEach(function (group) {
       var groupDetails = document.createElement("details");
@@ -776,7 +777,7 @@
         "p",
         "Для этого района или города не найдено решение маслихата, понижающее ставку. Это не " +
         "значит, что здесь действует базовая ставка" + (base ? " " + percent(base) : "") +
-        ": решение могло быть принято, но остаться непрочитанным или непрошедшим проверку. " +
+        ": решение могло быть принято, но остаться непрочитанным или не пройти проверку. " +
         "Полный список того, что было прочитано и почему не опубликовано, приведён в разделе ниже."
       ));
     }
@@ -833,7 +834,14 @@
     // letter from «Алмалы», and eleven villages called Алмалы standing above
     // the city is a worse answer than none of them. So a near miss is only
     // drawn when nothing matched outright.
-    var aliasHits = (exact.length ? exact : near).slice(0, ALIAS_SHOWN);
+    //
+    // "Outright" means anywhere, not just among aliases. The rule read only its
+    // own bucket until 2026-08-15, so «Жалагашский» drew three villages ending
+    // «-гашский» above Жалагашский район itself: no ALIAS matched exactly, and
+    // the district that did match exactly was in another bucket the rule could
+    // not see. A near miss ranked above the word the reader actually typed.
+    var matchedOutright = exact.length > 0 || absentExact.length > 0 || found.length > 0;
+    var aliasHits = (exact.length ? exact : (matchedOutright ? [] : near)).slice(0, ALIAS_SHOWN);
     aliasHits.forEach(function (pair) {
       var target = pair[1];
       if (!picked[target.r.kato]) { picked[target.r.kato] = true; found.push(target); }
@@ -841,8 +849,16 @@
     var absentHits = (absentExact.length ? absentExact : absentNear).slice(0, ABSENT_SHOWN);
 
     count.textContent = "Найдено: " + (found.length + absentHits.length);
-    aliasHits.forEach(function (pair) { results.appendChild(aliasNode(pair[0], pair[1])); });
-    absentHits.forEach(function (district) { results.appendChild(absentNode(district)); });
+    // A district the reader named exactly comes before an alias that only
+    // resembles it. Aliases still lead when they are the exact match and the
+    // district is the near one.
+    if (absentExact.length) {
+      absentHits.forEach(function (district) { results.appendChild(absentNode(district)); });
+      aliasHits.forEach(function (pair) { results.appendChild(aliasNode(pair[0], pair[1])); });
+    } else {
+      aliasHits.forEach(function (pair) { results.appendChild(aliasNode(pair[0], pair[1])); });
+      absentHits.forEach(function (district) { results.appendChild(absentNode(district)); });
+    }
 
     if (found.length === 0 && aliasHits.length === 0 && absentHits.length === 0) {
       results.appendChild(text("p", "Ничего не найдено. Возможно, решение по этому району ещё не внесено или в запросе опечатка.", "empty"));

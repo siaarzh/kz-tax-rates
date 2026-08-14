@@ -31,7 +31,7 @@ not_tax_advice, not_tax_advice_ru, verification, and years (an object keyed by y
 verification holds rows and machine_extracted.
 Each year holds base_rate, rates[], and coverage {districts, estimated_total, complete}.
 Each entry of rates[] holds kato, name_ru, name_kk, oblast_ru, oblast_kk, rate,
-decision_ref, source_url.
+decision_ref, source_url, kazakh_source_url.
 
 dist/rates-<year>.json is the same object with years narrowed to one key.
 
@@ -45,10 +45,14 @@ dist/rates-<year>.json is the same object with years narrowed to one key.
 
 ## What an absent district means
 
-It means nobody has read that district's decision yet. It does NOT mean the district
-charges the base rate, and it does NOT mean the district has no rate. coverage.complete
-is false and stays false while districts < estimated_total. Do not fill a gap with
-base_rate: a maslikhat may lower the rate by up to half, so the gap is unknown, not 4%.
+No decision lowering the rate was FOUND for it. It does NOT mean the district charges
+the base rate, and it does NOT mean no such decision exists. Some absences were read
+and refused (the decision was repealed, governs the retail tax instead, or could not be
+attached to a district); most are simply not yet confirmed. Which reason applies to
+which district is not in this JSON: the page at dist/ carries it, in its disclosure
+section, generated the same way this file is. Do not fill a gap with base_rate: a
+maslikhat may lower the rate by up to half, so the gap is unknown, not 4%.
+coverage.complete is false and stays false while districts < estimated_total.
 
 ## Provenance
 
@@ -68,4 +72,4 @@ Base rate and the ±50% a maslikhat may apply: Налоговый кодекс �
 https://adilet.zan.kz/rus/docs/K2500000214
 
 Years present: 2026.
-Built: 2026-08-14T07:47:08Z.
+Built: 2026-08-14T20:34:34Z.
