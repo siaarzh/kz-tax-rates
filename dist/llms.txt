@@ -58,7 +58,7 @@ obtained. verified_by names a person only once one has actually checked the row 
 source_url; until then it stays empty, and it is empty on every row today. No rate is
 invented, inferred or filled in.
 
-Rows: 148. Read by a person: 0. Extracted from the decision by rule: 148.
+Rows: 148. Read by a person: 1. Extracted from the decision by rule: 148.
 
 A machine-extracted row was parsed out of the published decision text by
 scripts/extract_rates.py, not produced by a language model, and extraction_method says
@@ -69,4 +69,4 @@ Base rate and the ±50% a maslikhat may apply: Налоговый кодекс �
 https://adilet.zan.kz/rus/docs/K2500000214
 
 Years present: 2026.
-Built: 2026-08-13T21:41:39Z.
+Built: 2026-08-14T05:23:38Z.
