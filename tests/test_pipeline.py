@@ -1158,3 +1158,21 @@ def test_the_guard_above_actually_fires() -> None:
     assert _write_targets('open("data/rates.csv", mode="a")') == ['"data/rates.csv"']
     assert _write_targets("RATES_CSV.write_text(x)") == ["RATES_CSV"]
     assert _write_targets('RATES_CSV.open("r")') == []
+
+
+def test_the_provenance_text_counts_empty_verifiers_instead_of_asserting_them() -> None:
+    """The sentence about an empty `verified_by` must be derived, never typed.
+
+    It read "it is empty on every row today" as a literal until 2026-08-14 and
+    went false inside the same build that emitted it, the moment one row was
+    verified. A claim about the data computed from the data cannot go stale;
+    a claim typed beside it always can.
+    """
+    payload = build([_for_year(2026)])
+    page = render_llms_txt(payload)
+    counts = payload["verification"]
+    unverified = counts["rows"] - counts["human_verified"]
+
+    assert f"empty on {unverified} of {counts['rows']} rows" in page
+    if unverified != counts["rows"]:
+        assert "empty on every row" not in page

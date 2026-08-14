@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/</loc><lastmod>2026-08-13</lastmod></url>
-  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/rates.json</loc><lastmod>2026-08-13</lastmod></url>
-  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/rates-2026.json</loc><lastmod>2026-08-13</lastmod></url>
-  <url><loc>https://siaarzh.github.io/kz-tax-rates/data/rates.csv</loc><lastmod>2026-08-13</lastmod></url>
-  <url><loc>https://siaarzh.github.io/kz-tax-rates/datapackage.json</loc><lastmod>2026-08-13</lastmod></url>
-  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/llms.txt</loc><lastmod>2026-08-13</lastmod></url>
+  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/</loc><lastmod>2026-08-14</lastmod></url>
+  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/rates.json</loc><lastmod>2026-08-14</lastmod></url>
+  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/rates-2026.json</loc><lastmod>2026-08-14</lastmod></url>
+  <url><loc>https://siaarzh.github.io/kz-tax-rates/data/rates.csv</loc><lastmod>2026-08-14</lastmod></url>
+  <url><loc>https://siaarzh.github.io/kz-tax-rates/datapackage.json</loc><lastmod>2026-08-14</lastmod></url>
+  <url><loc>https://siaarzh.github.io/kz-tax-rates/dist/llms.txt</loc><lastmod>2026-08-14</lastmod></url>
 </urlset>

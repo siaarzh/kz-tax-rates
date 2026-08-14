@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-13T21:41:39Z",
+  "generated_at": "2026-08-14T05:23:38Z",
   "kato_version": "NK RK 11-2025",
   "licence": "MIT",
   "not_tax_advice": "Not tax advice. This is a machine-readable copy of published legal facts, each row citing its primary source. It interprets nothing and does not say what you owe. A rate is only as current as its verified_at date, so read the linked decision before relying on it.",
   "not_tax_advice_ru": "Не является налоговой консультацией. Это машиночитаемая копия сведений из опубликованных нормативных правовых актов; в каждой строке стоит ссылка на первоисточник. Здесь нет ни толкования норм, ни расчёта налога. Ставка достоверна только по состоянию на дату verified_at, поэтому прежде чем полагаться на неё, откройте само решение.",
   "verification": {
     "rows": 148,
-    "human_verified": 0,
+    "human_verified": 1,
     "machine_extracted": 148
   },
   "years": {
