@@ -48,6 +48,7 @@ FIELDS = [
     "valid_to",
     "decision_ref",
     "source_url",
+    "kazakh_source_url",
     "extraction_method",
 ]
 
@@ -138,7 +139,13 @@ def validate_row(row: dict[str, str], line: int) -> list[str]:
     if not KATO_RE.match(kato):
         fail(f"kato {kato!r} is not nine digits")
 
-    for field in ("decision_ref", "source_url", "extraction_method", "kato_version"):
+    for field in (
+        "decision_ref",
+        "source_url",
+        "kazakh_source_url",
+        "extraction_method",
+        "kato_version",
+    ):
         if not (row.get(field) or "").strip():
             fail(f"{field} is empty")
 
@@ -159,6 +166,12 @@ def validate_row(row: dict[str, str], line: int) -> list[str]:
         fail(f"source_url {source_url!r} is a stringified null, not a URL")
     elif source_url and not source_url.startswith("https://adilet.zan.kz/"):
         fail(f"source_url {source_url!r} is not a real adilet.zan.kz URL")
+
+    kazakh_source_url = (row.get("kazakh_source_url") or "").strip()
+    if kazakh_source_url and kazakh_source_url.lower() in NULL_LIKE_STRINGS:
+        fail(f"kazakh_source_url {kazakh_source_url!r} is a stringified null, not a URL")
+    elif kazakh_source_url and not kazakh_source_url.startswith("https://adilet.zan.kz/"):
+        fail(f"kazakh_source_url {kazakh_source_url!r} is not a real adilet.zan.kz URL")
 
     raw_rate = (row.get("rate") or "").strip()
     try:

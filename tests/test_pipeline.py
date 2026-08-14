@@ -29,9 +29,12 @@ from build import (
     REPO_URL,
     SITE,
     TAX_CODE_URL,
+    absent_districts,
     artefacts,
     build,
+    categorize_refusal,
     datapackage,
+    grouped_refusals,
     read_aliases,
     render_index,
     render_llms_txt,
@@ -64,6 +67,7 @@ VALID = {
     "valid_to": "2026-12-31",
     "decision_ref": "Тестовое решение №1 от 28.11.2025",
     "source_url": "https://adilet.zan.kz/rus/docs/EXAMPLE",
+    "kazakh_source_url": "https://adilet.zan.kz/files/pdf/1/example.kaz.pdf",
     "extraction_method": "deterministic-readers",
 }
 
@@ -75,6 +79,24 @@ def test_the_real_csv_has_the_agreed_header() -> None:
 
 def test_the_real_csv_validates() -> None:
     assert validate_file() == []
+
+
+def test_every_published_row_carries_both_language_citations() -> None:
+    """CHANGE 1's guarantee, checked against the real published data.
+
+    By construction a rate is confirmed only when two readings from two
+    different-language files agree (SPEC.md §6.2), so every row today has
+    both a Russian and a Kazakh source. This is the guard the brief asked
+    for instead of an "if missing" branch on the page: if that stops being
+    true — a future extraction path confirms without a Kazakh reading —
+    this fails loudly rather than a Kazakh link quietly rendering broken.
+    """
+    with RATES_CSV.open(encoding="utf-8", newline="") as handle:
+        for line, row in enumerate(csv.DictReader(handle), start=2):
+            assert (row.get("source_url") or "").strip(), f"line {line}: no source_url"
+            assert (row.get("kazakh_source_url") or "").strip(), (
+                f"line {line}: no kazakh_source_url"
+            )
 
 
 MAPPED_RATES_JSON = REPO_ROOT / "data" / "mapped-rates.json"
@@ -171,6 +193,16 @@ def test_a_rate_outside_the_statutory_band_is_rejected() -> None:
 
 def test_a_row_without_a_source_is_rejected() -> None:
     assert any("source_url" in error for error in validate_row({**VALID, "source_url": ""}, line=2))
+
+
+def test_a_row_without_a_kazakh_source_is_rejected() -> None:
+    errors = validate_row({**VALID, "kazakh_source_url": ""}, line=2)
+    assert any("kazakh_source_url" in error for error in errors)
+
+
+def test_a_kazakh_source_not_on_adilet_is_rejected() -> None:
+    errors = validate_row({**VALID, "kazakh_source_url": "https://example.com/x.pdf"}, line=2)
+    assert any("kazakh_source_url" in error for error in errors)
 
 
 def test_a_kato_that_lost_its_leading_zero_is_rejected() -> None:
@@ -322,7 +354,7 @@ def test_the_page_carries_the_citation_of_every_row() -> None:
     page = render_index(build([VALID]))
     assert VALID["source_url"] in page
     assert VALID["decision_ref"] in page
-    assert "link.href = rate.source_url" in page
+    assert "ruLink.href = rate.source_url" in page
 
 
 # Anything that would make the browser open a connection: a link with a rel
@@ -386,30 +418,38 @@ def test_the_alias_index_is_inlined_and_the_two_places_named_medeu_both_survive(
 def test_every_decision_link_opens_in_a_new_tab_and_cannot_reach_back() -> None:
     """A citation followed mid-search must not cost the reader their place."""
     page = render_index(build([VALID]))
-    assert 'link.target = "_blank"' in page
-    assert 'link.rel = "noopener noreferrer"' in page
-    assert 'kazLink.target = "_blank"' in page
-    assert 'kazLink.rel = "noopener noreferrer"' in page
+    assert 'ruLink.target = "_blank"' in page
+    assert 'ruLink.rel = "noopener noreferrer"' in page
+    assert 'kkLink.target = "_blank"' in page
+    assert 'kkLink.rel = "noopener noreferrer"' in page
 
 
-def test_the_kazakh_url_is_derived_and_omitted_when_the_shape_does_not_match() -> None:
-    """adilet serves the same act at /rus/ and /kaz/, so the second URL is derived.
+def test_the_kazakh_link_is_the_real_url_the_pipeline_confirmed_the_rate_from() -> None:
+    """CHANGE 1: the Kazakh link is carried through, never guessed.
 
-    A source_url of another shape gets no Kazakh link at all. Guessing one would
-    publish a plausible URL that 404s, and that reads as a fact until somebody
-    clicks it.
+    An earlier version derived it by swapping /rus/ for /kaz/ in source_url,
+    which is a plausible URL that can 404. rate.kazakh_source_url is instead
+    the actual file scripts/extract_rates.py fetched and read to help confirm
+    the row (data/mapped-rates.json -> data/rates.csv, kazakh_source_url), so
+    the page must use it directly and no derivation function should exist.
     """
     page = render_index(build([VALID]))
-    body = page.split("function kazakhUrl")[1].split("}")[0]
-    assert 'url.replace("/rus/", "/kaz/")' in body
-    assert "null" in body
-    assert "data/rates.csv" not in body
+    assert "function kazakhUrl" not in page
+    assert "kkLink.href = rate.kazakh_source_url" in page
+    assert VALID["kazakh_source_url"] in page
 
 
 def test_the_kazakh_link_is_marked_as_kazakh_for_a_screen_reader() -> None:
     page = render_index(build([VALID]))
-    assert 'kazLink.setAttribute("lang", "kk")' in page
+    assert 'kkLink.setAttribute("lang", "kk")' in page
     assert "Текст решения на казахском языке" in page
+
+
+def test_both_language_links_are_labelled_in_their_own_scripts() -> None:
+    """Рус / Қаз, not a parenthetical abbreviation borrowed from one language."""
+    page = render_index(build([VALID]))
+    assert 'ruLink.textContent = "Рус"' in page
+    assert 'kkLink.textContent = "Қаз"' in page
 
 
 def test_an_alias_carries_no_rate_of_its_own() -> None:
@@ -1159,3 +1199,110 @@ def test_publish_rates_reproduces_the_committed_rates_csv(tmp_path: Path) -> Non
     regenerated = tmp_path / "rates.csv"
     publish_rates.write(publish_rates.rows_from_mapped(), regenerated)
     assert regenerated.read_bytes() == RATES_CSV.read_bytes()
+
+
+# ---------------------------------------------------------------------------
+# CHANGE 2: why an absent district has no rate, without overclaiming.
+# ---------------------------------------------------------------------------
+
+
+def test_categorize_refusal_sorts_the_pipelines_own_fixed_reasons() -> None:
+    """Matched against extract_rates.py's own templates, not decision text.
+
+    See the comment above build.REFUSAL_LABELS for why that distinction
+    matters here specifically.
+    """
+    assert categorize_refusal("document is amended or repealed: 'Утратило силу'") == "repealed"
+    assert (
+        categorize_refusal("no single sentence lowers a rate — none matched, or several did")
+        == "no-sentence"
+    )
+    assert categorize_refusal("regime objected: sentence governs the retail tax regime") == (
+        "other-regime"
+    )
+    assert categorize_refusal("kazakh returned HTTP 404 — a real answer") == "no-kazakh-text"
+    assert categorize_refusal("readers disagree: [2, 3]") == "other"
+
+
+def test_the_real_refusal_counts_match_the_pipelines_own_output() -> None:
+    """Pinned against the real data, so a categorisation regression is visible.
+
+    These are the numbers the ui-explain-absence brief itself reports (150 no
+    sentence lowers a rate, 8 governing a different regime, 4 repealed, 4 with
+    no Kazakh text, and 8 confirmed rates data/mapped-rates.json could not
+    attach to a district: 6 with no candidate district at all and 2 the
+    Kostanay city/district ambiguity). A rerun of the pipeline changes these
+    numbers legitimately; this test exists to make that change visible rather
+    than silent, per CLAUDE.md's "make the counts derived" — the count itself
+    is still computed by grouped_refusals(), never typed into the page.
+    """
+    counts = {group["category"]: group["count"] for group in grouped_refusals()}
+    assert counts == {
+        "no-sentence": 150,
+        "other-regime": 8,
+        "unmapped-no-district-matched": 6,
+        "repealed": 4,
+        "no-kazakh-text": 4,
+        "unmapped-jurisdiction-type-not-stated": 2,
+    }
+    assert sum(counts.values()) == 174
+
+
+def test_every_refused_document_is_counted_exactly_once() -> None:
+    """No document appears in two categories and none is dropped."""
+    items = [item for group in grouped_refusals() for item in group["items"]]
+    document_ids = [item["document_id"] for item in items]
+    assert len(document_ids) == len(set(document_ids))
+
+
+def test_absent_districts_are_exactly_the_ones_missing_from_the_real_csv() -> None:
+    """54 of 209 district-level КАТО codes have no published rate today."""
+    payload = build(list(csv.DictReader(RATES_CSV.open(encoding="utf-8", newline=""))))
+    absent = absent_districts(payload)
+    assert len(absent) == 54
+    published = {row["kato"] for group in payload["years"].values() for row in group["rates"]}
+    assert published.isdisjoint({district["kato"] for district in absent})
+
+
+def test_the_kostanay_ambiguity_is_attributed_by_name_and_nothing_else_is_invented() -> None:
+    """The one case the brief calls out by name: two candidate districts, one
+
+    confirmed rate each cannot be told apart from the other by decision text
+    alone. Both absent districts get told about both documents; a district
+    nothing names a candidate for gets no attribution at all.
+    """
+    payload = build(list(csv.DictReader(RATES_CSV.open(encoding="utf-8", newline=""))))
+    absent = absent_districts(payload)
+    by_kato = {district["kato"]: district for district in absent}
+
+    kostanay_city = by_kato["391000000"]
+    kostanay_district = by_kato["395400000"]
+    assert kostanay_city["name_ru"] == "Костанай Г.А."
+    assert kostanay_district["name_ru"] == "Костанайский район"
+    assert {a["document_id"] for a in kostanay_city["attribution"]} == {
+        "G25NA00200M",
+        "G25NN00309M",
+    }
+    assert kostanay_city["attribution"] == kostanay_district["attribution"]
+
+    unattributed = [d for d in absent if d["kato"] not in ("391000000", "395400000")]
+    assert unattributed, "every other absent district should carry no invented attribution"
+    assert all(district["attribution"] == [] for district in unattributed)
+
+
+def test_the_disclosure_section_is_rendered_with_a_derived_total() -> None:
+    page = render_index(build([VALID]))
+    assert "Прочитано, но не опубликовано" in page
+    assert "174" in page
+    assert REFUSAL_LABEL_NO_SENTENCE in page
+
+
+REFUSAL_LABEL_NO_SENTENCE = "Ни одно предложение решения не понижает ставку"
+
+
+def test_the_absent_district_search_result_never_states_a_rate() -> None:
+    """The honesty constraint: no percentage anywhere in absentNode()'s markup."""
+    template = (REPO_ROOT / "scripts" / "index.template.html").read_text(encoding="utf-8")
+    body = template.split("function absentNode")[1].split("\n  var ALIAS_SHOWN")[0]
+    assert "percent(shown" not in body
+    assert "percent(rate" not in body
