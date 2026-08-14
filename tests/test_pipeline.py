@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any
 
 import build as build_module
+import publish_rates
 import pytest
 from build import (
     PAGE_URL,
@@ -40,6 +41,8 @@ from fetch_kato import TYPE_CODE_LEGEND, find_workbook_url, level_of, read_sheet
 from validate import (
     FIELDS,
     KATO_RE,
+    RATE_MAX,
+    RATE_MIN,
     RATES_CSV,
     REPO_ROOT,
     check_deferred,
@@ -62,8 +65,6 @@ VALID = {
     "decision_ref": "Тестовое решение №1 от 28.11.2025",
     "source_url": "https://adilet.zan.kz/rus/docs/EXAMPLE",
     "extraction_method": "deterministic-readers",
-    "verified_by": "fixture",
-    "verified_at": "2026-08-12",
 }
 
 
@@ -181,48 +182,6 @@ def test_a_row_without_an_extraction_method_is_rejected() -> None:
     """Plan 9: extraction_method is the one of the pair that is always required."""
     errors = validate_row({**VALID, "extraction_method": ""}, line=2)
     assert any("extraction_method" in error for error in errors)
-
-
-def test_an_empty_verified_by_is_accepted() -> None:
-    """Unlike extraction_method, verified_by is optional — nobody has to have checked yet."""
-    assert validate_row({**VALID, "verified_by": ""}, line=2) == []
-
-
-def test_a_verified_by_that_regresses_to_the_old_status_sentence_is_rejected() -> None:
-    """The exact failure plan 9 fixes: a sentence sitting where a name belongs."""
-    errors = validate_row({**VALID, "verified_by": "machine-extracted, NOT human-verified"}, line=2)
-    assert any("not a person's name" in error for error in errors)
-
-
-@pytest.mark.parametrize(
-    "bad",
-    [
-        "extract_rates.py",
-        "scripts/extract_rates.py",
-        "agent",
-        "auto-extracted",
-        "claude",
-        "deterministic-readers",
-        "gpt-4",
-    ],
-)
-def test_verified_by_refuses_the_class_of_value_not_just_the_two_known_phrasings(
-    bad: str,
-) -> None:
-    """F6: the old guard matched two literal substrings and validated every value
-    above clean. SPEC.md says verified_by is never an agent identifier — this
-    checks the class (filename, path, process word, known tool name, a version
-    string) is refused however it is phrased, not the two sentences seen once.
-    """
-    errors = validate_row({**VALID, "verified_by": bad}, line=2)
-    assert errors, f"{bad!r} should have been rejected"
-    assert any("not a person's name" in error for error in errors)
-
-
-def test_a_real_persons_name_is_still_accepted_by_the_widened_guard() -> None:
-    """The widened F6 guard must not start rejecting the ordinary case."""
-    assert validate_row({**VALID, "verified_by": "Serzhan Akhmetov"}, line=2) == []
-    assert validate_row({**VALID, "verified_by": "Иванов И.И."}, line=2) == []
 
 
 def test_coverage_is_published_and_never_claims_completeness() -> None:
@@ -827,22 +786,21 @@ def test_the_footer_names_the_author_and_links_the_repository() -> None:
     assert 'attribution.appendChild(document.createTextNode(". Лицензия " + payload.licence' in body
 
 
-def test_the_footer_says_no_person_verified_the_rates_while_none_has() -> None:
-    """Counted from verified_by, so it corrects itself rather than standing stale."""
-    machine = {**_for_year(2026), "verified_by": ""}
+def test_the_footer_states_the_extraction_method_derived_not_asserted() -> None:
+    """Counted from extraction_method, so it corrects itself the day a new method
+    is added rather than standing as a stale claim. There is no human-verification
+    tier any more: the sentence never promises a person checked the row."""
+    machine = _for_year(2026)
     view = _view_of(render_index(build([machine])))
-    assert "Ни одну строку не проверял человек" in str(view["provenance_ru"])
+    assert "решений маслихатов программой" in str(view["provenance_ru"])
+    assert "человек" not in str(view["provenance_ru"])
 
-    # "Every rate read by a human" means no row was machine-extracted (plan 9,
-    # F2): extraction_method has to say so too, not merely verified_by — a row
-    # can be machine-extracted and later human-verified, which is a different,
-    # mixed state.
-    human_row = {**_for_year(2026), "extraction_method": "human-transcribed"}
-    human = _view_of(render_index(build([human_row])))
-    assert human["provenance_ru"] == "Каждую ставку прочитал из решения человек."
-
-    mixed = _view_of(render_index(build([machine, _for_year(2026, kato="751000000")])))
-    assert "Часть ставок" in str(mixed["provenance_ru"])
+    # A row whose extraction_method is not in MACHINE_EXTRACTION_METHODS is not
+    # counted as machine-extracted, and the sentence says so rather than
+    # silently rounding it in.
+    unknown_method = {**_for_year(2026), "extraction_method": "unrecognised-method"}
+    mixed = _view_of(render_index(build([machine, {**unknown_method, "kato": "751000000"}])))
+    assert "extraction_method" in str(mixed["provenance_ru"])
 
     assert _view_of(render_index(build([])))["provenance_ru"] == ""
 
@@ -869,34 +827,23 @@ def test_the_page_lists_its_machine_readable_files_near_the_top() -> None:
 
 
 def test_the_verification_count_reaches_the_published_json() -> None:
-    """A consumer of rates.json alone cannot see verified_by, so it is counted here.
-
-    Both rows carry extraction_method "deterministic-readers", so both count
-    as machine_extracted regardless of whether either has been verified —
-    human_verified and machine_extracted are independent counts, not a
-    complementary pair (plan 9, F2).
-    """
-    machine = {**VALID, "verified_by": ""}
-    payload = build([VALID, machine])
-    assert payload["verification"] == {"rows": 2, "human_verified": 1, "machine_extracted": 2}
-    assert build([])["verification"] == {"rows": 0, "human_verified": 0, "machine_extracted": 0}
+    """A consumer of rates.json alone cannot see extraction_method on the row
+    entries themselves, so the count is published at the top level."""
+    other = {**VALID, "kato": "751000000"}
+    payload = build([VALID, other])
+    assert payload["verification"] == {"rows": 2, "machine_extracted": 2}
+    assert build([])["verification"] == {"rows": 0, "machine_extracted": 0}
 
 
-def test_machine_extracted_is_read_from_extraction_method_not_from_an_absent_verifier() -> None:
-    """F2: extraction_method was threaded through the schema but never read.
+def test_machine_extracted_is_read_from_extraction_method_not_asserted() -> None:
+    """A method never added to MACHINE_EXTRACTION_METHODS does not count, so a
+    new extraction path has to be taught to that set explicitly."""
+    unrecognised = {**VALID, "extraction_method": "unrecognised-method"}
+    assert build([unrecognised])["verification"]["machine_extracted"] == 0
 
-    A human-transcribed row with no verified_by used to publish as
-    machine_extracted purely because nobody had checked it yet — this proves
-    the count now tracks the method actually recorded on the row.
-    """
-    unverified_human_row = {**VALID, "extraction_method": "human-transcribed", "verified_by": ""}
-    assert build([unverified_human_row])["verification"]["machine_extracted"] == 0
-
-    unverified_machine_row = {**VALID, "verified_by": ""}
-    assert build([unverified_machine_row])["verification"]["machine_extracted"] == 1
-
-    mixed = build([unverified_human_row, unverified_machine_row])["verification"]
-    assert mixed == {"rows": 2, "human_verified": 0, "machine_extracted": 1}
+    recognised = {**VALID, "kato": "751000000"}
+    mixed = build([unrecognised, recognised])["verification"]
+    assert mixed == {"rows": 2, "machine_extracted": 1}
 
 
 def test_the_datapackage_types_every_column_of_both_csvs() -> None:
@@ -945,33 +892,18 @@ def test_llms_txt_gives_a_fetch_url_for_every_published_artefact() -> None:
     assert REPO_URL in text
 
 
-def test_llms_txt_states_what_an_absent_district_means_and_who_verified_the_rows() -> None:
-    """The two things an agent gets wrong when it has only the numbers.
-
-    A gap is not the base rate, and a machine-extracted row is not a verified
-    one. Both are counted from the data rather than asserted, so the sentences
-    correct themselves the day a person verifies a row.
-    """
+def test_llms_txt_states_what_an_absent_district_means_and_how_many_rows_were_extracted() -> None:
+    """A gap is not the base rate. Counted from the data rather than asserted."""
     text = render_llms_txt(build([VALID, {**VALID, "kato": "751000000"}]))
     assert "does NOT mean the district charges the base rate" in text.replace("\n", " ")
-    # Both rows carry extraction_method "deterministic-readers" (from VALID),
-    # so both count as machine-extracted regardless of verified_by — the two
-    # counts are independent (plan 9, F2), not complementary.
-    assert "Rows: 2. Read by a person: 2. Extracted from the decision by rule: 2." in text
-
-    machine = {**VALID, "verified_by": ""}
-    assert "Read by a person: 0." in render_llms_txt(build([machine]))
+    assert "Rows: 2. Extracted from the decision by rule: 2." in text
 
 
-def test_llms_txt_provenance_does_not_promise_more_than_the_schema_gives(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """F1: verified_by is empty on every machine-extracted row, so the provenance
-    paragraph must not claim every row already carries a name saying who read
-    it — that claim is only true once a person has, and human_verified is 0
-    across the real data.
-    """
-    machine = {**VALID, "verified_by": ""}
-    text = render_llms_txt(build([machine]))
-    assert "verified_by, naming who read it" not in text
+def test_llms_txt_provenance_does_not_claim_a_human_verification_step() -> None:
+    """There is no human-verification tier. The text must not invent one."""
+    text = render_llms_txt(build([VALID]))
+    assert "verified_by" not in text
+    assert "human_verified" not in text
     assert "extraction_method" in text
     assert "Extracted from the decision by rule: 1." in text
 
@@ -1133,19 +1065,22 @@ def _write_targets(source: str) -> list[str]:
     return targets
 
 
-def test_no_python_file_writes_to_the_rates_csv() -> None:
-    """Only a human edits data/rates.csv. A script that opens it for writing is the bug.
+def test_only_publish_rates_writes_to_the_rates_csv() -> None:
+    """`scripts/publish_rates.py` is the dataset's one deliberate writer.
 
-    Walks the AST rather than grepping for two spellings, because the earlier
-    substring version passed for `open("data/rates.csv", "w")` — a guard that
-    read as stronger than it was.
+    Nobody hand-confirms a row any more, so the earlier blanket ban on any
+    script writing data/rates.csv is retired — but every OTHER script must
+    still refuse to touch it. Walks the AST rather than grepping for two
+    spellings, because a substring check passed for `open("data/rates.csv",
+    "w")` while reading as stronger than it was.
 
-    What it still cannot catch: a script that shells out, or one that builds the
-    path at runtime from parts. The reviewer's diff read is what covers those,
-    which is why data/rates.csv is the first file to open in any diff — a
-    one-line change there is easy to miss inside a large one.
+    What it still cannot catch: a script that shells out, or one that builds
+    the path at runtime from parts. The reviewer's diff read is what covers
+    those, which is why data/rates.csv is the first file to open in any diff.
     """
     for path in Path(REPO_ROOT / "scripts").glob("*.py"):
+        if path.stem == "publish_rates":
+            continue
         for target in _write_targets(path.read_text(encoding="utf-8")):
             assert "RATES_CSV" not in target, f"{path.name} writes to the rates CSV"
             assert "rates.csv" not in target, f"{path.name} writes to the rates CSV"
@@ -1160,19 +1095,67 @@ def test_the_guard_above_actually_fires() -> None:
     assert _write_targets('RATES_CSV.open("r")') == []
 
 
-def test_the_provenance_text_counts_empty_verifiers_instead_of_asserting_them() -> None:
-    """The sentence about an empty `verified_by` must be derived, never typed.
+# ---------------------------------------------------------------------------
+# publish_rates.py — the dataset's only writer. What actually protects a row
+# now that nobody hand-confirms it: every published row cites its source and
+# stays inside the statutory band, no rate value is ever typed by this script
+# (it all comes from data/mapped-rates.json), and КАТО codes stay strings.
+# The cross-check that a published row is still what the mapper currently
+# concludes lives above, in test_published_rows_match_the_currently_mapped_set_exactly.
+# ---------------------------------------------------------------------------
 
-    It read "it is empty on every row today" as a literal until 2026-08-14 and
-    went false inside the same build that emitted it, the moment one row was
-    verified. A claim about the data computed from the data cannot go stale;
-    a claim typed beside it always can.
-    """
-    payload = build([_for_year(2026)])
-    page = render_llms_txt(payload)
-    counts = payload["verification"]
-    unverified = counts["rows"] - counts["human_verified"]
 
-    assert f"empty on {unverified} of {counts['rows']} rows" in page
-    if unverified != counts["rows"]:
-        assert "empty on every row" not in page
+def test_every_published_row_cites_a_source() -> None:
+    with RATES_CSV.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            assert row["source_url"].strip(), row
+            assert row["decision_ref"].strip(), row
+
+
+def test_every_published_rate_is_inside_the_statutory_band() -> None:
+    with RATES_CSV.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            rate = float(row["rate"])
+            assert RATE_MIN <= rate <= RATE_MAX, row
+
+
+def test_every_published_kato_is_a_nine_digit_string() -> None:
+    """A code parsed as an integer anywhere upstream would have already lost a
+    leading zero by the time it reached the CSV; this is what would catch it."""
+    with RATES_CSV.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            assert isinstance(row["kato"], str)
+            assert KATO_RE.match(row["kato"]), row["kato"]
+
+
+def test_publish_rates_takes_every_value_from_mapped_rates_json() -> None:
+    """rows_from_mapped() must not invent a rate, a citation or a name: every
+    field traces back to the mapper's own output (or, for the two fields it
+    does not carry, to data/kato.csv and extract_rates.BASE_RATE_PERCENT)."""
+    mapped = json.loads(MAPPED_RATES_JSON.read_text(encoding="utf-8"))
+    mapped_rates_by_kato = {
+        row["kato"]: round(float(row["rate"]), 4)
+        for row in mapped["rows"]
+        if row.get("outcome") == "mapped"
+    }
+
+    for row in publish_rates.rows_from_mapped():
+        assert round(float(row["rate"]), 4) == mapped_rates_by_kato[row["kato"]]
+
+
+def test_publish_rates_is_byte_stable_on_an_unchanged_rerun(tmp_path: Path) -> None:
+    """Regenerating from an unchanged data/mapped-rates.json must reproduce the
+    same bytes, so a rebuild with no upstream change leaves no diff."""
+    first = tmp_path / "rates-a.csv"
+    second = tmp_path / "rates-b.csv"
+    publish_rates.write(publish_rates.rows_from_mapped(), first)
+    publish_rates.write(publish_rates.rows_from_mapped(), second)
+    assert first.read_bytes() == second.read_bytes()
+
+
+def test_publish_rates_reproduces_the_committed_rates_csv(tmp_path: Path) -> None:
+    """The committed data/rates.csv must be exactly what publish_rates.py would
+    write today — otherwise the file on disk and its generator have drifted."""
+    regenerated = tmp_path / "rates.csv"
+    publish_rates.write(publish_rates.rows_from_mapped(), regenerated)
+    assert regenerated.read_bytes() == RATES_CSV.read_bytes()

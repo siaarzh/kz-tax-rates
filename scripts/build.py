@@ -76,18 +76,13 @@ TAX_CODE_NAME = (
 TAX_CODE_URL = "https://adilet.zan.kz/rus/docs/K2500000214"
 
 # extract_rates.py writes "deterministic-readers" into extraction_method for
-# a row it read by rule rather than a person reading it (plan 9 split this out
-# of verified_by, which now holds a person's name or stays empty — never a
-# status sentence). The footer and llms.txt say which of the two a reader is
-# looking at, and they count from extraction_method and verified_by rather
-# than assert it, so the sentence changes by itself the day a person verifies
-# a row or a new extraction method is added.
+# a row it read by rule. There is no human-verification tier any more: the
+# citation, the deterministic reader and the cross-check against
+# data/mapped-rates.json are what protect a row, not a person's name beside it.
 #
 # extraction_method values an automated reader actually writes. New methods
-# must be added here explicitly (plan 9, F2): counting `machine_extracted`
-# from the ABSENCE of a verifier let a human-transcribed, unverified row
-# publish as machine-extracted with nothing going red, because "human
-# verified" and "how the number was obtained" are two different questions.
+# must be added here explicitly, so a method nobody taught this set about
+# reports honestly as not machine-extracted rather than silently passing.
 MACHINE_EXTRACTION_METHODS = {"deterministic-readers"}
 
 # Searchable in both languages, because the reader typing «упрощенка ставка
@@ -126,17 +121,15 @@ THEME_DARK = "#14161a"
 NOT_TAX_ADVICE = (
     "Not tax advice. This is a machine-readable copy of published legal facts, "
     "each row citing its primary source. It interprets nothing and does not say "
-    "what you owe. A rate is only as current as its verified_at date, so read "
-    "the linked decision before relying on it."
+    "what you owe. Read the linked decision before relying on a rate."
 )
 # «правовых фактов» was a calque colliding with «юридический факт», which means
 # something else in Kazakh and Russian law, so the notice now names the acts.
 NOT_TAX_ADVICE_RU = (
     "Не является налоговой консультацией. Это машиночитаемая копия сведений из "
     "опубликованных нормативных правовых актов; в каждой строке стоит ссылка на "
-    "первоисточник. Здесь нет ни толкования норм, ни расчёта налога. Ставка "
-    "достоверна только по состоянию на дату verified_at, поэтому прежде чем "
-    "полагаться на неё, откройте само решение."
+    "первоисточник. Здесь нет ни толкования норм, ни расчёта налога. Прежде чем "
+    "полагаться на ставку, откройте само решение."
 )
 
 
@@ -229,22 +222,16 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
         }
 
     # Counted, never asserted. A consumer reading rates.json alone cannot see
-    # verified_by or extraction_method (they are CSV columns, not part of a
-    # rate entry), so without this they would have no way to tell a row a
-    # person checked from a row a machine produced — and that difference is
-    # the whole subject of the project.
+    # extraction_method (it is a CSV column, not part of a rate entry), so
+    # without this they would have no way to tell how a row was obtained.
     #
-    # human_verified: a row is human-verified when verified_by actually names
-    # someone. machine_extracted: read from extraction_method itself, not from
-    # the absence of a verifier — the two are independent questions (a machine
-    # can extract a row a person later verifies; a person can transcribe a row
-    # nobody has separately verified), and conflating them let a row obtained
-    # by a method never added to MACHINE_EXTRACTION_METHODS publish as
-    # "machine-extracted" purely because nobody had checked it yet.
+    # machine_extracted is read from extraction_method itself, never inferred:
+    # a method never added to MACHINE_EXTRACTION_METHODS publishes as NOT
+    # machine-extracted, so a new extraction path has to be taught to this set
+    # explicitly rather than being counted for free.
     #
     # Additive and top level, so schema_version stays 1.0: a consumer reading
     # the keys it already knows is unaffected.
-    human = sum(1 for row in rows if (row.get("verified_by") or "").strip())
     machine = sum(
         1
         for row in rows
@@ -260,7 +247,6 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
         "not_tax_advice_ru": NOT_TAX_ADVICE_RU,
         "verification": {
             "rows": len(rows),
-            "human_verified": human,
             "machine_extracted": machine,
         },
         "years": years,
@@ -307,25 +293,22 @@ def page_view(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def provenance_ru(payload: dict[str, Any]) -> str:
-    """How the rates in this build got here, counted from verified_by.
+    """How the rates in this build got here, counted from extraction_method.
 
-    Counted rather than declared, so the sentence corrects itself the first time
-    a person verifies a row instead of standing as a stale confession.
+    Counted rather than declared, so the sentence changes by itself the day a
+    new extraction method is added, instead of standing as a stale claim.
     """
     counts = payload["verification"]
     if not counts["rows"]:
         return ""
-    if not counts["machine_extracted"]:
-        return "Каждую ставку прочитал из решения человек."
-    if not counts["human_verified"]:
+    if counts["machine_extracted"] < counts["rows"]:
         return (
-            "Ставки извлечены из решений маслихатов программой, по одному и тому же правилу. "
-            "Ни одну строку не проверял человек, поэтому перед тем, как полагаться на ставку, "
-            "откройте решение по ссылке рядом с ней."
+            "Часть ставок получена методом, который здесь не описан. Смотрите extraction_method "
+            "в data/rates.csv для каждой строки."
         )
     return (
-        "Часть ставок прочитал из решения человек, остальные извлечены программой. "
-        "Кто проверил конкретную строку, записано в столбце verified_by файла data/rates.csv."
+        "Ставки извлечены из решений маслихатов программой, по одному и тому же правилу. "
+        "Прежде чем полагаться на ставку, откройте решение по ссылке рядом с ней."
     )
 
 
@@ -657,15 +640,8 @@ RATES_FIELDS: list[dict[str, Any]] = [
     {"name": "valid_to", "type": "date"},
     {"name": "decision_ref", "type": "string"},
     {"name": "source_url", "type": "string", "format": "uri", "constraints": {"required": True}},
-    # How the number was obtained. Always set — unlike verified_by below, this
-    # one is required, because every row has a method even before anyone has
-    # checked it (plan 9).
+    # How the number was obtained. Always set — every row has a method.
     {"name": "extraction_method", "type": "string", "constraints": {"required": True}},
-    # A person's name, or empty until someone has actually checked the row.
-    # Not required: the schema promises a name here, never a status sentence,
-    # and "nobody has verified this yet" is a legitimate, common state.
-    {"name": "verified_by", "type": "string"},
-    {"name": "verified_at", "type": "date"},
 ]
 
 KATO_FIELDS: list[dict[str, Any]] = [
@@ -771,7 +747,7 @@ def render_llms_txt(payload: dict[str, Any]) -> str:
         "schema_version, generated_at (UTC, ISO 8601), kato_version, licence,",
         "not_tax_advice, not_tax_advice_ru, verification, and years (an object keyed by year).",
         "",
-        "verification holds rows, human_verified and machine_extracted.",
+        "verification holds rows and machine_extracted.",
         "Each year holds base_rate, rates[], and coverage {districts, estimated_total, complete}.",
         "Each entry of rates[] holds kato, name_ru, name_kk, oblast_ru, oblast_kk, rate,",
         "decision_ref, source_url.",
@@ -797,22 +773,16 @@ def render_llms_txt(payload: dict[str, Any]) -> str:
         "",
         "Every row carries source_url, a link to the maslikhat decision the rate was read from,",
         "a decision_ref naming that decision, and an extraction_method saying how the number was",
-        "obtained. verified_by names a person only once one has actually checked the row against",
-        # Derived, never asserted. This sentence said "it is empty on every row today" as a
-        # literal until 2026-08-14, and became false the moment the first row was verified —
-        # inside the same build that emitted it. A claim about the data must be computed
-        # from the data, or it is a claim about the day somebody typed it.
-        f"source_url; until then it stays empty, and it is empty on "
-        f"{counts['rows'] - counts['human_verified']} of {counts['rows']} rows. No rate is",
-        "invented, inferred or filled in.",
+        "obtained. No rate is invented, inferred or filled in: every row traces to a specific",
+        "sentence in a specific published decision, and disagreement between independent readers",
+        "is thrown away rather than resolved.",
         "",
-        f"Rows: {counts['rows']}. Read by a person: {counts['human_verified']}. "
+        f"Rows: {counts['rows']}. "
         f"Extracted from the decision by rule: {counts['machine_extracted']}.",
         "",
         "A machine-extracted row was parsed out of the published decision text by",
         "scripts/extract_rates.py, not produced by a language model, and extraction_method says",
-        "so. That is not the same claim as verification: open source_url and check the row",
-        "yourself before relying on it, whatever verified_by holds.",
+        "so. Open source_url and read the sentence yourself before relying on the row.",
         "",
         f"Base rate and the ±50% a maslikhat may apply: {TAX_CODE_NAME}",
         f"{TAX_CODE_URL}",

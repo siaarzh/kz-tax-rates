@@ -29,7 +29,7 @@ Read out of the decision document itself, by code, never recalled by a model and
 
 Each act is published in Russian and in Kazakh as separate files. Independent readers work over both, and a rate is recorded only when readings from two different files agree. Disagreement is thrown away rather than resolved, because picking the more plausible number is how a wrong rate gets in wearing a real citation. Every row keeps the exact sentence it came from, so you can check it without trusting the parser.
 
-**No person has read these decisions.** Every row's `extraction_method` says `deterministic-readers`, meaning a script read it by rule. The `verified_by` column exists to hold a human's name once one has actually checked the row, and on every row today it is empty.
+**No person has read these decisions.** Every row's `extraction_method` says `deterministic-readers`, meaning a script read it by rule. There is no human verification step: what protects a row is the citation next to it, the two-reader agreement that confirmed it, and the check that every published row still matches what the parser currently concludes — open `source_url` and read the sentence yourself before relying on it.
 
 Two things that bite everyone: rates are fractions, so `0.03` and never `3` or `"3%"`. КАТО codes are strings. Parse one as an integer and you lose a leading zero, which quietly hands you a different district's rate.
 
@@ -42,6 +42,7 @@ Two things that bite everyone: rates are fractions, so `0.03` and never `3` or `
 | `dist/` | Built from `data/`. Committed on purpose, because Pages and jsDelivr serve it straight from the repository. |
 | `scripts/extract_rates.py` | Fetches a decision and reads a rate out of it, or refuses and says why. |
 | `scripts/map_districts.py` | Attaches a decision to one КАТО code, or leaves it unattached and counts it. |
+| `scripts/publish_rates.py` | Writes `data/rates.csv` from `data/mapped-rates.json`. The dataset's only writer. |
 | `scripts/validate.py` | Blocking checks. Also names the checks it doesn't make. |
 | `scripts/build.py` | CSV to JSON. Validates first; a failure writes nothing. |
 | `docs/SPEC.md` | Data model, КАТО handling, ingestion, correctness rules, distribution. |
@@ -49,8 +50,9 @@ Two things that bite everyone: rates are fractions, so `0.03` and never `3` or `
 ## Running it
 
 ```sh
-python scripts/validate.py     # check data/rates.csv
-python scripts/build.py        # regenerate dist/
+python scripts/publish_rates.py  # regenerate data/rates.csv from data/mapped-rates.json
+python scripts/validate.py       # check data/rates.csv
+python scripts/build.py          # regenerate dist/
 ```
 
 Gates: `pytest`, `ruff check scripts tests`, `ruff format --check scripts tests`, `mypy`.
