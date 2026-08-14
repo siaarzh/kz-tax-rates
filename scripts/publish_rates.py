@@ -99,11 +99,51 @@ def extraction_method() -> str:
     return str(method)
 
 
+def kazakh_urls() -> dict[str, str]:
+    """document_id -> the Kazakh-language PDF that document was confirmed from.
+
+    Read from data/extracted-rates.json rather than mapped-rates.json, because
+    that is where scripts/extract_rates.py wrote it down the moment it fetched
+    the file — the same file the Kazakh reading that helped confirm the rate
+    was taken from. A rate is only confirmed when two readings from two
+    different files agree (SPEC.md §6.2), and empirically every one of the 166
+    confirmed rows in the current extracted-rates.json carries a real
+    kazakh_pdf_url — so a row missing one here is a broken assumption worth
+    stopping the publish for, not something to paper over with an empty field.
+    """
+    payload = json.loads(EXTRACTED_RATES_JSON.read_text(encoding="utf-8"))
+    urls: dict[str, str] = {}
+    for entry in payload.get("rows", []):
+        document_id = entry.get("document_id")
+        url = entry.get("kazakh_pdf_url")
+        if document_id and url:
+            urls[str(document_id)] = str(url)
+    return urls
+
+
+def _required_kazakh_url(entry: dict[str, Any], urls: dict[str, str]) -> str:
+    """The Kazakh PDF for a mapped row's document, refused if it never confirmed with one.
+
+    Mirrors `_required_citation_field`: a row that reaches `data/rates.csv`
+    without a working Kazakh link is a Kazakh-reading user silently handed
+    nothing, and that is the exact failure CHANGE 1 exists to close.
+    """
+    document_id = str(entry.get("document_id") or "")
+    url = urls.get(document_id, "")
+    if not url or url.strip().lower() in NULL_LIKE:
+        raise SystemExit(
+            f"kato {entry.get('kato')!r} (document {document_id!r}): no kazakh_pdf_url in "
+            f"{EXTRACTED_RATES_JSON.name} — refusing to publish a row with no Kazakh citation"
+        )
+    return url
+
+
 def rows_from_mapped() -> list[dict[str, str]]:
     mapped_payload = json.loads(MAPPED_RATES_JSON.read_text(encoding="utf-8"))
     names = kato_names()
     version = kato_version()
     method = extraction_method()
+    kazakh = kazakh_urls()
 
     rows: list[dict[str, str]] = []
     for entry in mapped_payload["rows"]:
@@ -136,6 +176,7 @@ def rows_from_mapped() -> list[dict[str, str]]:
                 "valid_to": f"{year}-12-31",
                 "decision_ref": _required_citation_field(entry, "decision_ref"),
                 "source_url": _required_citation_field(entry, "source_url"),
+                "kazakh_source_url": _required_kazakh_url(entry, kazakh),
                 "extraction_method": method,
             }
         )

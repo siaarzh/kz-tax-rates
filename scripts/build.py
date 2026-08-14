@@ -25,6 +25,15 @@ SCRIPTS = Path(__file__).resolve().parent
 # one: villages, rural okrugs, city boroughs. They are searchable, never rows.
 ALIASES_JSON = REPO_ROOT / "data" / "place-aliases.json"
 
+# The pipeline's own record of every document it read and could not turn into
+# a row (data/extraction-queue.json), and every confirmed rate it could not
+# attach to a district (data/mapped-rates.json, outcome != "mapped"). Read
+# here so the disclosure section and the per-district attribution below are
+# generated from the pipeline's own output rather than hand-typed — see
+# CHANGE 2 of the ui-explain-absence brief.
+EXTRACTION_QUEUE_JSON = REPO_ROOT / "data" / "extraction-queue.json"
+MAPPED_RATES_JSON = REPO_ROOT / "data" / "mapped-rates.json"
+
 # MiniSearch 7.0.0, MIT, vendored. Inlined into the page rather than fetched
 # from a CDN, because the page must issue no request at all.
 VENDOR_SEARCH = SCRIPTS / "vendor-minisearch.js"
@@ -210,6 +219,7 @@ def build(rows: list[dict[str, str]]) -> dict[str, Any]:
                 "rate": float(row["rate"]),
                 "decision_ref": row["decision_ref"],
                 "source_url": row["source_url"],
+                "kazakh_source_url": row["kazakh_source_url"],
             }
         )
 
@@ -289,6 +299,13 @@ def page_view(payload: dict[str, Any]) -> dict[str, Any]:
         # [label, relative href, hover title] for the machine-readable files,
         # shown near the top of the page and not only in the metadata.
         "files": [[file["name"], file["href"], file["title"]] for file in artefacts(payload)],
+        # CHANGE 2: districts with no published row (searchable, honest about
+        # why) and the full disclosure of refused documents (grouped, counted
+        # from the pipeline's own output). Presentation only, like the rest of
+        # this view — dist/rates.json states no opinion about why a kato is
+        # missing from it.
+        "absent": absent_districts(payload),
+        "refusals": grouped_refusals(),
     }
 
 
@@ -557,6 +574,200 @@ def render_head(payload: dict[str, Any]) -> str:
     return "\n".join(tags)
 
 
+# Refusal reason -> a stable category key, matched against the small, fixed
+# set of templates scripts/extract_rates.py's own classify() ever writes into
+# `reason` (see its docstring and the branches around UNPARSED/CONFLICT) — not
+# against the free text of a *decision*, which is the pattern that bit this
+# project before: a stopword/phrasing list keyed to decision text widens
+# without bound as the corpus grows, and a check built on it goes quietly
+# blind (.claude/evidence: "a fix that enumerates phrasings will reopen").
+# These prefixes instead track the extractor's own source code, so a category
+# nothing here recognises means the extractor changed, not that the corpus
+# did — and it is never dropped, only counted under "other" (see
+# categorize_refusal()) so the total across every group always accounts for
+# every refused document.
+REFUSAL_LABELS: dict[str, str] = {
+    "no-sentence": "Ни одно предложение решения не понижает ставку",
+    "other-regime": (
+        "Решение регулирует другой специальный режим (например, розничный налог), "
+        "а не упрощённую декларацию"
+    ),
+    "repealed": "Решение утратило силу или было изменено",
+    "no-kazakh-text": (
+        "Текст решения на казахском языке не опубликован, поэтому ставку не удалось "
+        "подтвердить двумя независимыми источниками"
+    ),
+    "unmapped-no-district-matched": (
+        "Ставка в решении подтверждена, но район или город, к которому оно относится, "
+        "определить не удалось"
+    ),
+    "unmapped-jurisdiction-type-not-stated": (
+        "Ставка в решении подтверждена, но неясно, к какой из двух одноимённых "
+        "территорий оно относится"
+    ),
+    "other": "Иная причина, не входящая в основные категории выше",
+}
+
+
+def categorize_refusal(reason: str) -> str:
+    """`reason` from data/extraction-queue.json -> one of REFUSAL_LABELS's keys.
+
+    See the module-level comment above REFUSAL_LABELS for why this is safe to
+    match against and what it is not matching against.
+    """
+    if reason.startswith("document is amended or repealed:"):
+        return "repealed"
+    if reason == "no single sentence lowers a rate — none matched, or several did":
+        return "no-sentence"
+    if reason.startswith("regime objected:"):
+        return "other-regime"
+    if reason.startswith("kazakh returned HTTP 404"):
+        return "no-kazakh-text"
+    return "other"
+
+
+def refused_documents() -> list[dict[str, Any]]:
+    """Every document the pipeline read and could not turn into a published row.
+
+    Two sources, because a document is refused in two different places: most
+    never survive scripts/extract_rates.py at all (data/extraction-queue.json,
+    `pending`), and a smaller set clears extraction but data/mapped-rates.json
+    could not say which district the confirmed rate belongs to (`outcome`
+    other than "mapped"). Missing files yield an empty list rather than a
+    build failure — the same convention read_aliases() uses — because this
+    disclosure improves the page and carries no rate of its own.
+    """
+    items: list[dict[str, Any]] = []
+
+    if EXTRACTION_QUEUE_JSON.exists():
+        queue = json.loads(EXTRACTION_QUEUE_JSON.read_text("utf-8"))
+        for entry in queue.get("pending", []):
+            reason = entry.get("reason") or ""
+            items.append(
+                {
+                    "document_id": entry.get("document_id", ""),
+                    "source_url": entry.get("source_url", ""),
+                    "category": categorize_refusal(reason),
+                    "reason": reason,
+                    "candidates": [],
+                }
+            )
+
+    if MAPPED_RATES_JSON.exists():
+        mapped = json.loads(MAPPED_RATES_JSON.read_text("utf-8"))
+        for row in mapped.get("rows", []):
+            outcome = row.get("outcome")
+            if outcome is None or outcome == "mapped":
+                continue
+            items.append(
+                {
+                    "document_id": row.get("document_id", ""),
+                    "source_url": row.get("source_url", ""),
+                    "category": outcome,
+                    "reason": "",
+                    "candidates": row.get("candidates") or [],
+                }
+            )
+    return items
+
+
+def grouped_refusals() -> list[dict[str, Any]]:
+    """refused_documents(), bucketed by category with a count derived from the bucket.
+
+    Never a typed number: the count is `len(bucket)`, so a widened corpus
+    changes this the moment the pipeline is rerun rather than leaving a
+    stale figure standing (this repeated the same defect three times before,
+    per .claude/CLAUDE.md's "make the counts derived").
+
+    Sorted by count descending, so the most common, most honest fact — most
+    absences are simply undecided, not a district that pays the base rate —
+    leads the section.
+    """
+    buckets: dict[str, list[dict[str, Any]]] = {}
+    for item in refused_documents():
+        buckets.setdefault(item["category"], []).append(item)
+
+    groups: list[dict[str, Any]] = [
+        {
+            "category": category,
+            "label_ru": REFUSAL_LABELS.get(category, category),
+            "count": len(bucket),
+            "items": [
+                {
+                    "document_id": entry["document_id"],
+                    "source_url": entry["source_url"],
+                    "candidates": entry["candidates"],
+                }
+                for entry in bucket
+            ],
+        }
+        for category, bucket in buckets.items()
+    ]
+    groups.sort(key=lambda group: group["count"], reverse=True)
+    return groups
+
+
+def absent_districts(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """Every district-level КАТО code with no published row, for the page's search.
+
+    Read as data/kato.csv (level == "district") minus the katos payload
+    actually publishes — never a separate hand-kept list, so it tracks both
+    files automatically and cannot go stale relative to either.
+
+    `attribution` is filled in only where a refused document's own candidate
+    names (data/mapped-rates.json's `candidates`) resolve, by exact name, to
+    this district — and only that. No reason is invented for a district
+    nothing here names; it is left with an empty `attribution` and the page
+    falls back to the honest general statement instead (CHANGE 2's "the
+    honesty constraint").
+    """
+    if not KATO_CSV.exists():
+        return []
+    published: set[str] = set()
+    for bucket in payload["years"].values():
+        for rate in bucket["rates"]:
+            published.add(rate["kato"])
+
+    district_rows: list[dict[str, str]] = []
+    kato_by_name: dict[str, str] = {}
+    with KATO_CSV.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row.get("level") != "district":
+                continue
+            district_rows.append(row)
+            kato_by_name[row["name_ru"]] = row["kato"]
+
+    attributions: dict[str, list[dict[str, str]]] = {}
+    for group in grouped_refusals():
+        for item in group["items"]:
+            for candidate in item["candidates"]:
+                kato = kato_by_name.get(candidate)
+                if kato and kato not in published:
+                    attributions.setdefault(kato, []).append(
+                        {
+                            "label_ru": group["label_ru"],
+                            "document_id": item["document_id"],
+                            "source_url": item["source_url"],
+                        }
+                    )
+
+    oblasts = oblast_names()
+    out: list[dict[str, Any]] = [
+        {
+            "kato": row["kato"],
+            "name_ru": row["name_ru"],
+            "name_kk": row["name_kk"],
+            "oblast_ru": oblasts.get(row["kato"][:2], {}).get("ru", ""),
+            "oblast_kk": oblasts.get(row["kato"][:2], {}).get("kk", ""),
+            "attribution": attributions.get(row["kato"], []),
+        }
+        for row in district_rows
+        if row["kato"] not in published
+    ]
+    out.sort(key=lambda entry: entry["kato"])
+    return out
+
+
 def read_aliases() -> list[list[str]]:
     """[kato, name_ru, name_kk, resolves_to_kato] for places with no decision.
 
@@ -640,6 +851,12 @@ RATES_FIELDS: list[dict[str, Any]] = [
     {"name": "valid_to", "type": "date"},
     {"name": "decision_ref", "type": "string"},
     {"name": "source_url", "type": "string", "format": "uri", "constraints": {"required": True}},
+    {
+        "name": "kazakh_source_url",
+        "type": "string",
+        "format": "uri",
+        "constraints": {"required": True},
+    },
     # How the number was obtained. Always set — every row has a method.
     {"name": "extraction_method", "type": "string", "constraints": {"required": True}},
 ]
@@ -750,7 +967,7 @@ def render_llms_txt(payload: dict[str, Any]) -> str:
         "verification holds rows and machine_extracted.",
         "Each year holds base_rate, rates[], and coverage {districts, estimated_total, complete}.",
         "Each entry of rates[] holds kato, name_ru, name_kk, oblast_ru, oblast_kk, rate,",
-        "decision_ref, source_url.",
+        "decision_ref, source_url, kazakh_source_url.",
         "",
         "dist/rates-<year>.json is the same object with years narrowed to one key.",
         "",
@@ -764,10 +981,14 @@ def render_llms_txt(payload: dict[str, Any]) -> str:
         "",
         "## What an absent district means",
         "",
-        "It means nobody has read that district's decision yet. It does NOT mean the district",
-        "charges the base rate, and it does NOT mean the district has no rate. coverage.complete",
-        "is false and stays false while districts < estimated_total. Do not fill a gap with",
-        "base_rate: a maslikhat may lower the rate by up to half, so the gap is unknown, not 4%.",
+        "No decision lowering the rate was FOUND for it. It does NOT mean the district charges",
+        "the base rate, and it does NOT mean no such decision exists. Some absences were read",
+        "and refused (the decision was repealed, governs the retail tax instead, or could not be",
+        "attached to a district); most are simply not yet confirmed. Which reason applies to",
+        "which district is not in this JSON: the page at dist/ carries it, in its disclosure",
+        "section, generated the same way this file is. Do not fill a gap with base_rate: a",
+        "maslikhat may lower the rate by up to half, so the gap is unknown, not 4%.",
+        "coverage.complete is false and stays false while districts < estimated_total.",
         "",
         "## Provenance",
         "",
