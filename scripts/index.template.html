@@ -563,10 +563,9 @@
   function bodyRow(row) { return multi ? multiRowNode(row) : rowNode(row); }
 
   // Both links open in a new tab, so following a citation does not cost a
-  // reader their place in a long table. rate.kazakh_source_url is the actual
-  // Kazakh-language file the pipeline fetched and read to confirm this row,
-  // not a guessed URL, so it is used directly rather than derived, and
-  // data/rates.csv has one for every published row (validate.py checks it).
+  // reader their place in a long table. rate.kazakh_source_url is set by
+  // publish_rates.py only for rows confirmed from a Kazakh file, so it is
+  // used directly rather than derived here (validate.py checks every row).
   // Each link is labelled in its own language: "Рус" for the Russian text,
   // "Қаз" for the Kazakh one.
   function decisionCell(rate, tag) {

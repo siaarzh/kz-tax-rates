@@ -67,7 +67,7 @@ VALID = {
     "valid_to": "2026-12-31",
     "decision_ref": "Тестовое решение №1 от 28.11.2025",
     "source_url": "https://adilet.zan.kz/rus/docs/EXAMPLE",
-    "kazakh_source_url": "https://adilet.zan.kz/files/pdf/1/example.kaz.pdf",
+    "kazakh_source_url": "https://adilet.zan.kz/kaz/docs/EXAMPLE",
     "extraction_method": "deterministic-readers",
 }
 
@@ -425,13 +425,10 @@ def test_every_decision_link_opens_in_a_new_tab_and_cannot_reach_back() -> None:
 
 
 def test_the_kazakh_link_is_the_real_url_the_pipeline_confirmed_the_rate_from() -> None:
-    """CHANGE 1: the Kazakh link is carried through, never guessed.
+    """The page carries kazakh_source_url through and never derives it.
 
-    An earlier version derived it by swapping /rus/ for /kaz/ in source_url,
-    which is a plausible URL that can 404. rate.kazakh_source_url is instead
-    the actual file scripts/extract_rates.py fetched and read to help confirm
-    the row (data/mapped-rates.json -> data/rates.csv, kazakh_source_url), so
-    the page must use it directly and no derivation function should exist.
+    publish_rates.py emits it only for rows confirmed from a Kazakh file, so
+    the page has no reason to guess, and a derivation function must not exist.
     """
     page = render_index(build([VALID]))
     assert "function kazakhUrl" not in page
@@ -1181,6 +1178,17 @@ def test_publish_rates_takes_every_value_from_mapped_rates_json() -> None:
 
     for row in publish_rates.rows_from_mapped():
         assert round(float(row["rate"]), 4) == mapped_rates_by_kato[row["kato"]]
+
+
+def test_the_kazakh_citation_is_the_act_page_and_still_needs_the_kazakh_file() -> None:
+    entry = {"kato": "750000000", "document_id": "G25XX00001M"}
+    urls = {"G25XX00001M": "https://old.adilet.zan.kz/files/pdf/1/x.kaz.pdf"}
+    assert (
+        publish_rates._required_kazakh_url(entry, urls)
+        == "https://adilet.zan.kz/kaz/docs/G25XX00001M"
+    )
+    with pytest.raises(SystemExit, match="no kazakh_pdf_url"):
+        publish_rates._required_kazakh_url(entry, {})
 
 
 def test_publish_rates_is_byte_stable_on_an_unchanged_rerun(tmp_path: Path) -> None:

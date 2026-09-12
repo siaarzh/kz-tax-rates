@@ -26,7 +26,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from extract_rates import BASE_RATE_PERCENT
+from extract_rates import BASE_RATE_PERCENT, BASE_URL
 from validate import FIELDS, KATO_CSV, REPO_ROOT
 
 MAPPED_RATES_JSON = REPO_ROOT / "data" / "mapped-rates.json"
@@ -122,11 +122,10 @@ def kazakh_urls() -> dict[str, str]:
 
 
 def _required_kazakh_url(entry: dict[str, Any], urls: dict[str, str]) -> str:
-    """The Kazakh PDF for a mapped row's document, refused if it never confirmed with one.
+    """The Kazakh act page, refused if the row never confirmed with a Kazakh file.
 
-    Mirrors `_required_citation_field`: a row that reaches `data/rates.csv`
-    without a working Kazakh link is a Kazakh-reading user silently handed
-    nothing, and that is the exact failure CHANGE 1 exists to close.
+    The PDF URL itself stopped resolving on the canonical host on 2026-09-12;
+    the act page is the durable citation. The PDF is still what gates the row.
     """
     document_id = str(entry.get("document_id") or "")
     url = urls.get(document_id, "")
@@ -135,7 +134,7 @@ def _required_kazakh_url(entry: dict[str, Any], urls: dict[str, str]) -> str:
             f"kato {entry.get('kato')!r} (document {document_id!r}): no kazakh_pdf_url in "
             f"{EXTRACTED_RATES_JSON.name} — refusing to publish a row with no Kazakh citation"
         )
-    return url
+    return f"{BASE_URL}/kaz/docs/{document_id}"
 
 
 def rows_from_mapped() -> list[dict[str, str]]:
