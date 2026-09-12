@@ -39,7 +39,7 @@ import time
 import urllib.parse
 from typing import Any
 
-from extract_rates import BASE_URL, fetch
+from extract_rates import FETCH_BASE_URL, fetch
 from validate import REPO_ROOT
 
 ENUMERATED = REPO_ROOT / "data" / "enumerated-decisions.json"
@@ -94,19 +94,19 @@ def listing_url(body: str, year: int, page: int = 1) -> str:
     query = (
         f"dt={year}-&kv={urllib.parse.quote('|')}1_{body}&va={urllib.parse.quote(FORM_DECISION)}"
     )
-    return f"{BASE_URL}/rus/search/docs/{query}&pagesize=100" + (
+    return f"{FETCH_BASE_URL}/rus/search/docs/{query}&pagesize=100" + (
         f"&page={page}" if page > 1 else ""
     )
 
 
-def parse_listing(page_html: str) -> tuple[list[tuple[str, str]], int]:
-    """(document_id, title) pairs, and the total the site reports."""
+def parse_listing(page_html: str) -> tuple[list[tuple[str, str]], int | None]:
+    """(document_id, title) pairs and the reported total; None when the page is not a listing."""
     hits = re.findall(r'/rus/docs/([A-Z0-9]+)"[^>]*>\s*([^<]{20,300})', page_html)
     stripped = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", page_html)))
     total = re.search(r"Найдено:\s*([\d ]+)\s*документ", stripped)
     return (
         [(document_id, html.unescape(title).strip()) for document_id, title in hits],
-        int(total.group(1).replace(" ", "")) if total else 0,
+        int(total.group(1).replace(" ", "")) if total else None,
     )
 
 
@@ -134,6 +134,12 @@ def enumerate_body(
                 failures.append(note)
             return sorted(found.items())
         rows, reported = parse_listing(body_html)
+        if reported is None:
+            note = f"{BODIES[body]} {year} page {page}: not a listing page (no result count)"
+            print(f"    NOT A LISTING {note}", flush=True)
+            if failures is not None:
+                failures.append(note)
+            return sorted(found.items())
         total = reported if total is None else total
         before = len(found)
         found.update(dict(rows))
@@ -275,6 +281,11 @@ def main() -> int:
     print(f"enumerating {len(arguments.bodies)} bodies x {len(arguments.years)} years", flush=True)
     failures: list[str] = []
     documents = sweep(arguments.years, arguments.bodies, failures)
+    if not documents:
+        print(
+            f"\nno documents enumerated ({len(failures)} listings failed); not writing", flush=True
+        )
+        return 1
     sample = sample_unclassified(documents, arguments.sample) if arguments.sample else None
     result = {
         "method": "issuing-body enumeration (adilet facets, no title wording used)",

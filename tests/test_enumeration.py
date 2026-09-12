@@ -8,9 +8,65 @@ is sampled and read rather than described.
 from __future__ import annotations
 
 import json
+import urllib.error
+from email.message import Message
+from typing import Any
 
-from enumerate_decisions import BODIES, classify_title, listing_url, parse_listing
+import enumerate_decisions
+import pytest
+from enumerate_decisions import BODIES, classify_title, enumerate_body, listing_url, parse_listing
+from extract_rates import BASE_URL, FETCH_BASE_URL, cite_url, pdf_url
 from validate import REPO_ROOT
+
+SHELL_PAGE = '<html><body><div id="root"></div></body></html>'
+
+
+def test_fetching_goes_to_the_legacy_host_and_citations_do_not() -> None:
+    assert listing_url("165", 2025).startswith(FETCH_BASE_URL)
+    assert (
+        cite_url(f"{FETCH_BASE_URL}/files/pdf/1/x.kaz.pdf") == f"{BASE_URL}/files/pdf/1/x.kaz.pdf"
+    )
+    assert cite_url(f"{BASE_URL}/rus/docs/X") == f"{BASE_URL}/rus/docs/X"
+
+
+def test_the_download_redirect_is_resolved_on_the_legacy_host(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    requested: list[str] = []
+
+    class Opener:
+        def open(self, request: Any, timeout: int = 0) -> Any:
+            requested.append(request.full_url)
+            headers = Message()
+            headers["Location"] = f"{FETCH_BASE_URL}/files/pdf/1/x.rus.pdf"
+            raise urllib.error.HTTPError(request.full_url, 302, "", headers, None)
+
+    monkeypatch.setattr("extract_rates.urllib.request.build_opener", lambda *a: Opener())
+    monkeypatch.setattr("extract_rates._throttle", lambda: None)
+    assert pdf_url("X") == f"{FETCH_BASE_URL}/files/pdf/1/x.rus.pdf"
+    assert requested == [f"{FETCH_BASE_URL}/rus/docs/X/download"]
+
+
+def test_a_page_without_a_result_count_is_not_a_listing() -> None:
+    assert parse_listing(SHELL_PAGE) == ([], None)
+    assert parse_listing("<div>Найдено: 0 документов</div>") == ([], 0)
+
+
+def test_a_non_listing_page_is_recorded_as_a_failure_not_as_emptiness(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(enumerate_decisions, "fetch", lambda url, attempts=3: SHELL_PAGE.encode())
+    failures: list[str] = []
+    assert enumerate_body("151", 2025, verbose=False, failures=failures) == []
+    assert failures and "not a listing" in failures[0]
+
+
+def test_an_empty_sweep_refuses_to_write(monkeypatch: pytest.MonkeyPatch, tmp_path: Any) -> None:
+    monkeypatch.setattr(enumerate_decisions, "sweep", lambda years, bodies, failures: {})
+    monkeypatch.setattr(enumerate_decisions, "ENUMERATED", tmp_path / "enumerated.json")
+    monkeypatch.setattr("sys.argv", ["enumerate_decisions.py"])
+    assert enumerate_decisions.main() == 1
+    assert not (tmp_path / "enumerated.json").exists()
 
 
 def test_the_listing_url_uses_facets_and_no_search_words() -> None:

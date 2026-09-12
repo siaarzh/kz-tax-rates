@@ -34,7 +34,7 @@ import re
 import urllib.parse
 from typing import Any
 
-from extract_rates import BASE_URL, fetch
+from extract_rates import FETCH_BASE_URL, fetch
 from validate import KATO_CSV, REPO_ROOT
 
 FOUND = REPO_ROOT / "data" / "discovered-decisions.json"
@@ -62,7 +62,7 @@ UNWANTED = ("утративш", "утратил", "внесении измене
 def search(phrase: str) -> list[tuple[str, str]]:
     """(document_id, title) for one phrase. pagesize=100 avoids pagination."""
     query = urllib.parse.quote(phrase)
-    url = f"{BASE_URL}/rus/search/docs/fulltext={query}&pagesize=100"
+    url = f"{FETCH_BASE_URL}/rus/search/docs/fulltext={query}&pagesize=100"
     page = fetch(url).decode("utf-8", errors="replace")
     hits = re.findall(r'/rus/docs/([A-Z0-9]+)"[^>]*>\s*([^<]{20,300})', page)
     return [(document_id, html.unescape(title).strip()) for document_id, title in hits]

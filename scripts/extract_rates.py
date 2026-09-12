@@ -58,6 +58,14 @@ from typing import Any, NamedTuple
 from validate import RATE_MAX, RATE_MIN, REPO_ROOT
 
 BASE_URL = "https://adilet.zan.kz"
+# Since 2026-09-12 the canonical host is a JS-only app; the server-rendered site lives here.
+FETCH_BASE_URL = "https://old.adilet.zan.kz"
+
+
+def cite_url(url: str) -> str:
+    """The canonical form of a URL that was fetched from the legacy host."""
+    return BASE_URL + url.removeprefix(FETCH_BASE_URL) if url.startswith(FETCH_BASE_URL) else url
+
 
 # The site sends only its leaf certificate, so a default trust store cannot
 # build a chain and the fetch fails with "unable to get local issuer
@@ -385,7 +393,7 @@ def pdf_url(document_id: str, language: str = "rus", attempts: int = 3) -> str:
         urllib.request.HTTPSHandler(context=context), _KeepRedirect
     )
     request = urllib.request.Request(
-        f"{BASE_URL}/{language}/docs/{document_id}/download",
+        f"{FETCH_BASE_URL}/{language}/docs/{document_id}/download",
         headers={"User-Agent": "kz-tax-rates/0 (+dataset build)"},
     )
     for attempt in range(1, attempts + 1):
@@ -1067,11 +1075,11 @@ def extract(document_id: str) -> dict[str, Any]:
         kazakh_error = f"{type(error).__name__}: {error}"
 
     return {
-        "kazakh_pdf_url": kazakh_url,
+        "kazakh_pdf_url": cite_url(kazakh_url) if kazakh_url else None,
         "kazakh_pdf_sha256": kazakh_sha,
         "document_id": document_id,
         "source_url": f"{BASE_URL}/rus/docs/{document_id}",
-        "pdf_url": url,
+        "pdf_url": cite_url(url),
         "pdf_sha256": hashlib.sha256(payload).hexdigest(),
         "pdf_bytes": len(payload),
         **classify(text, kazakh_text=kazakh_text, kazakh_error=kazakh_error),
