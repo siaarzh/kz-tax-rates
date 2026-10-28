@@ -1154,6 +1154,54 @@
       "rate": 0.02
     },
     {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/424/g25ce00267m.04-11-2025.kaz.pdf",
+      "kazakh_pdf_sha256": "4575e36d2ada85626eeeec2c123cd2dd210aca3cd1d91d8b00635eec131a3e11",
+      "document_id": "G25CE00267M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G25CE00267M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/584/g25ce00267m.04-11-2025.rus.pdf",
+      "pdf_sha256": "084c3041347298dda3d1291c0485fa38b68cec8b592676d9ac3dadf2aa93b0a1",
+      "pdf_bytes": 43953,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": null,
+          "detail": "no `на|до <digit>` clause in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "word",
+          "rate_percent": 2,
+          "detail": "(два) процент",
+          "kind": "read"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": null,
+          "detail": "new rate is spelled only, no digit to read; origin 4% matches the 4% base: с 4 ( четырех) процентов на (два) процент",
+          "kind": "no-match"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "governs the simplified declaration regime",
+          "kind": "no-match"
+        }
+      ],
+      "sentence": "Понизить размер стваки исчисление корпоративного или индивидуального подоходного налога, за исключением налогов, удерживаемых у источника выплаты, при применении специального налогового режима на основе упрощенной декларации производится налогоплательщиком самостоятельно путем применения к объекту налогообложения за отчетный налоговый период ставки в Иргизском районе с 4 ( четырех) процентов на (два) процента.",
+      "year": 2026,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Иргизского районного маслихата Актюбинской области от 4 ноября 2025 года № 267",
+      "in_force_from": "2026-01-01",
+      "outcome": "confirmed",
+      "rate": 0.02
+    },
+    {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/520/g25cf00378m.30-09-2025.kaz.pdf",
       "kazakh_pdf_sha256": "48a8797512a9b9b5c56d5d75bf093757b6982a1f492bd7eb849c28f5d4b7ff62",
       "document_id": "G25CF00378M",
@@ -7968,6 +8016,54 @@
       "in_force_from": "2026-01-01",
       "outcome": "confirmed",
       "rate": 0.03
+    },
+    {
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/544/g26bm08572m.10-07-2026.kaz.pdf",
+      "kazakh_pdf_sha256": "a963694ad6a368334d32a7ee3e4fd75d4847d83ab5cca080c9d0d4332bf1df15",
+      "document_id": "G26BM08572M",
+      "source_url": "https://adilet.zan.kz/rus/docs/G26BM08572M",
+      "pdf_url": "https://adilet.zan.kz/files/pdf/448/g26bm08572m.10-07-2026.rus.pdf",
+      "pdf_sha256": "e34fd91a5307bec19d1dfc1368b699cb51c1fac64ba415b8834c36c8fe80645d",
+      "pdf_bytes": 44553,
+      "readings": [
+        {
+          "reader": "digit",
+          "rate_percent": 2,
+          "detail": "на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "word",
+          "rate_percent": null,
+          "detail": "no `(<слово>) процент` in the sentence",
+          "kind": "no-match"
+        },
+        {
+          "reader": "transition",
+          "rate_percent": 2,
+          "detail": "с 4 % на 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "kazakh",
+          "rate_percent": 2,
+          "detail": "4%-дан 2%",
+          "kind": "read"
+        },
+        {
+          "reader": "regime",
+          "rate_percent": null,
+          "detail": "no regime named in the sentence",
+          "kind": "no-match"
+        }
+      ],
+      "sentence": "Понизить размер ставки, установленной частью первой Налогового статьи 726 кодекса Республики Казахстан в Жаксынском районе с 4 % на 2%.",
+      "year": 2027,
+      "year_source": "in-force-date",
+      "decision_ref": "Решение Жаксынского районного маслихата Акмолинской области от 10 июля 2026 года № 8С-57-2",
+      "in_force_from": "2027-01-01",
+      "outcome": "confirmed",
+      "rate": 0.02
     }
   ]
 }

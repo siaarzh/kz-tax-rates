@@ -197,6 +197,15 @@ TO_NEW_RATE = r"(?:на|до)"
 # word, exactly as `с` must.
 FROM_OLD_RATE = r"(?:с|в\s+размере)"
 
+# A new rate written only as a spelled word, with no digit before it:
+# `с 4 ( четырех) процентов на (два) процента`, Иргизский район, G25CE00267M.
+# The sentence selector demanded a digit after `на`/`до`, so the document sat in
+# the queue as unparsed although reader 2 reads it and its Kazakh copy states
+# the pair outright. **Only the selector and reader 3's origin check use this.**
+# Readers 1 and 3 still never take a rate from it: a number read out of the word
+# by either of them would be reader 2's reading counted twice.
+SPELLED_NEW_RATE = r"\(\s*[А-Яа-яЁё]+\s*\)\s*процент"
+
 # READER 4's vocabulary. Only the three numerals actually observed across the
 # nineteen 2026 decisions. **бес (5) and алты (6) are deliberately absent**:
 # adding them would be extrapolation, and an unknown word must refuse rather
@@ -272,6 +281,11 @@ REGIME_SIMPLIFIED = re.compile(r"упрощ(?:е|ё)нн\w*\s+деклараци
 # character. An unidentifiable regime refuses; it is never assumed to be the
 # one this dataset publishes.
 REGIME_MARKER = re.compile(r"специальн\w*\s+налогов\w*\s+режим\w*")
+
+# The objection `read_regime` raises when it sees a regime it cannot name. It
+# blocks like any other, but it is a limit of this reader rather than a finding
+# about the document, so `classify` never marks it `terminal`.
+REGIME_UNIDENTIFIED = "sentence names a special regime this reader cannot identify"
 
 CONFIRMED, CONFLICT, UNPARSED = "confirmed", "conflict", "unparsed"
 
@@ -493,7 +507,7 @@ def rate_sentence(text: str) -> str | None:
         for sentence in re.split(r"(?<=[.]) ", text)
         if ("процент" in sentence or "%" in sentence)
         and re.search(rf"\b{FROM_OLD_RATE}\s*\d", sentence)
-        and re.search(rf"\b{TO_NEW_RATE}\s+\d", sentence)
+        and re.search(rf"\b{TO_NEW_RATE}\s+(?:\d|{SPELLED_NEW_RATE})", sentence)
     ]
     return sentences[0] if len(sentences) == 1 else None
 
@@ -549,10 +563,20 @@ def read_transition(sentence: str, year: int | None) -> Reading:
         rf"\b{FROM_OLD_RATE}\s+(\d+)\s*(?:\(|%|процент).*?\b{TO_NEW_RATE}\s+(\d+)\s*(?:\(|%|процент)",
         sentence,
     )
-    if not match:
-        return Reading("transition", None, "no `с|в размере X … на|до Y` pair", NO_MATCH)
-    old, new = int(match.group(1)), int(match.group(2))
-    if new >= old:
+    new: int | None
+    if match:
+        old, new, clause = int(match.group(1)), int(match.group(2)), match.group(0).strip()
+    else:
+        # The new rate written only as a word (SPELLED_NEW_RATE): no rate to take,
+        # but the old digit is still here, so the origin check still runs.
+        spelled_only = re.search(
+            rf"\b{FROM_OLD_RATE}\s+(\d+)\s*(?:\(|%|процент).*?\b{TO_NEW_RATE}\s+{SPELLED_NEW_RATE}",
+            sentence,
+        )
+        if not spelled_only:
+            return Reading("transition", None, "no `с|в размере X … на|до Y` pair", NO_MATCH)
+        old, new, clause = int(spelled_only.group(1)), None, spelled_only.group(0).strip()
+    if new is not None and new >= old:
         return Reading("transition", None, f"not a понижение: {old} -> {new}", SUBSTANTIVE)
     # **A check with no input has not passed — it could not run.** The origin
     # test needs the statutory base for the document's year, so without a year
@@ -575,7 +599,15 @@ def read_transition(sentence: str, year: int | None) -> Reading:
         return Reading(
             "transition", None, f"starts from {old}%, not the {base}% base for {year}", SUBSTANTIVE
         )
-    return Reading("transition", new, match.group(0).strip())
+    if new is None:
+        return Reading(
+            "transition",
+            None,
+            f"new rate is spelled only, no digit to read; origin {old}% matches the {base}% base: "
+            f"{clause}",
+            NO_MATCH,
+        )
+    return Reading("transition", new, clause)
 
 
 def read_regime(sentence: str) -> Reading:
@@ -636,7 +668,7 @@ def read_regime(sentence: str) -> Reading:
         return Reading(
             "regime",
             None,
-            "sentence names a special regime this reader cannot identify — neither "
+            f"{REGIME_UNIDENTIFIED} — neither "
             f"'розничного налога' nor 'упрощенной декларации' matched: {sentence!r}",
             SUBSTANTIVE,
         )
@@ -1013,11 +1045,20 @@ def classify(
         # OTHER objection shape (a rise, a wrong starting point, an unknown
         # numeral) is a real candidate for a parser fix, so only an
         # objection set made up entirely of `regime` readings is terminal.
+        #
+        # An unidentifiable regime is not that shape. G25UF33195M and
+        # G25UH00373M were marked terminal and so dropped out of every reconcile
+        # run, yet their Kazakh copies lower the simplified-declaration rate
+        # (`оңайлатылған декларация`) in point 1 and mention the retail tax only
+        # to repeal a 2024 decision in point 2.
         return {
             **result,
             "outcome": CONFLICT,
             "reason": "; ".join(f"{r.reader} objected: {r.detail}" for r in objections),
-            "terminal": all(r.reader == "regime" for r in objections),
+            "terminal": all(
+                r.reader == "regime" and not r.detail.startswith(REGIME_UNIDENTIFIED)
+                for r in objections
+            ),
         }
     if not values:
         return {

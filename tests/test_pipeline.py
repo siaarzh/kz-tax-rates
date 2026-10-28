@@ -1243,17 +1243,21 @@ def test_the_real_refusal_counts_match_the_pipelines_own_output() -> None:
     numbers legitimately; this test exists to make that change visible rather
     than silent, per CLAUDE.md's "make the counts derived" — the count itself
     is still computed by grouped_refusals(), never typed into the page.
+
+    2026-10-28: no-sentence 150 -> 149 (G25CE00267M, new rate spelled only, now
+    confirmed) and no-kazakh-text 4 -> 3 (G26BM08572M, whose Kazakh copy adilet
+    has since published).
     """
     counts = {group["category"]: group["count"] for group in grouped_refusals()}
     assert counts == {
-        "no-sentence": 150,
+        "no-sentence": 149,
         "other-regime": 8,
         "unmapped-no-district-matched": 6,
         "repealed": 4,
-        "no-kazakh-text": 4,
+        "no-kazakh-text": 3,
         "unmapped-jurisdiction-type-not-stated": 2,
     }
-    assert sum(counts.values()) == 174
+    assert sum(counts.values()) == 172
 
 
 def test_every_refused_document_is_counted_exactly_once() -> None:

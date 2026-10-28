@@ -116,29 +116,6 @@
       "terminal": false
     },
     {
-      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/424/g25ce00267m.04-11-2025.kaz.pdf",
-      "kazakh_pdf_sha256": "4575e36d2ada85626eeeec2c123cd2dd210aca3cd1d91d8b00635eec131a3e11",
-      "document_id": "G25CE00267M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G25CE00267M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/584/g25ce00267m.04-11-2025.rus.pdf",
-      "pdf_sha256": "084c3041347298dda3d1291c0485fa38b68cec8b592676d9ac3dadf2aa93b0a1",
-      "pdf_bytes": 43953,
-      "outcome": "unparsed",
-      "reason": "no single sentence lowers a rate — none matched, or several did",
-      "readings": [
-        {
-          "reader": "kazakh",
-          "rate_percent": 2,
-          "detail": "4 (төрт) пайыздан 2 (екі) пайыз",
-          "kind": "read"
-        }
-      ],
-      "sentence": null,
-      "year": 2026,
-      "year_source": "in-force-date",
-      "terminal": false
-    },
-    {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/648/g25ds84521m.08-08-2025.kaz.pdf",
       "kazakh_pdf_sha256": "f4ad612962c9fc5584d21d3d38bddd4eb0eb80aff5c829d1eb43f47593c5ed76",
       "document_id": "G25DS84521M",
@@ -1146,7 +1123,7 @@
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
       "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'Установить, что на территории Казыгуртского района, за исключением налогов, удерживаемых у источника выплаты, ставка налога при применении специального налогового режима на основе упрощҰнной декларации для исчисления корпоративного подоходного налога или индивидуального подоходного налога снижается с 4% до 2%.'",
-      "terminal": true
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/992/g25uh00373m.24-11-2025.kaz.pdf",
@@ -1195,7 +1172,7 @@
       "in_force_from": "2026-01-01",
       "outcome": "conflict",
       "reason": "regime objected: sentence names a special regime this reader cannot identify — neither 'розничного налога' nor 'упрощенной декларации' matched: 'В Ордабасинском районе установить снижение ставки корпоративного или индивидуального подоходного налога (за исключением налогов, удерживаемых у источника выплаты) с 4% до 2% при применении специального налогового режима на основе упрощҰнной декларации.'",
-      "terminal": true
+      "terminal": false
     },
     {
       "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/768/g25ui28166m.21-11-2025.kaz.pdf",
@@ -1526,55 +1503,6 @@
       "sentence": null,
       "year": null,
       "year_source": null,
-      "terminal": false
-    },
-    {
-      "kazakh_pdf_url": null,
-      "kazakh_pdf_sha256": null,
-      "document_id": "G26BM08572M",
-      "source_url": "https://adilet.zan.kz/rus/docs/G26BM08572M",
-      "pdf_url": "https://adilet.zan.kz/files/pdf/448/g26bm08572m.10-07-2026.rus.pdf",
-      "pdf_sha256": "e34fd91a5307bec19d1dfc1368b699cb51c1fac64ba415b8834c36c8fe80645d",
-      "pdf_bytes": 44553,
-      "readings": [
-        {
-          "reader": "digit",
-          "rate_percent": 2,
-          "detail": "на 2%",
-          "kind": "read"
-        },
-        {
-          "reader": "word",
-          "rate_percent": null,
-          "detail": "no `(<слово>) процент` in the sentence",
-          "kind": "no-match"
-        },
-        {
-          "reader": "transition",
-          "rate_percent": 2,
-          "detail": "с 4 % на 2%",
-          "kind": "read"
-        },
-        {
-          "reader": "kazakh",
-          "rate_percent": null,
-          "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
-          "kind": "unavailable"
-        },
-        {
-          "reader": "regime",
-          "rate_percent": null,
-          "detail": "no regime named in the sentence",
-          "kind": "no-match"
-        }
-      ],
-      "sentence": "Понизить размер ставки, установленной частью первой Налогового статьи 726 кодекса Республики Казахстан в Жаксынском районе с 4 % на 2%.",
-      "year": 2027,
-      "year_source": "in-force-date",
-      "decision_ref": "Решение Жаксынского районного маслихата Акмолинской области от 10 июля 2026 года № 8С-57-2",
-      "in_force_from": "2027-01-01",
-      "outcome": "conflict",
-      "reason": "kazakh returned HTTP 404 — a real answer, not a transport failure by itself. Confirm before re-running: does the Russian document's own page (/rus/docs/<id>) carry a link to /kaz/docs/<id>? If not, no Kazakh copy is published for this document at all, and re-fetching will not change that. (HTTPError: HTTP Error 404: )",
       "terminal": false
     },
     {
@@ -3257,8 +3185,8 @@
       "terminal": false
     },
     {
-      "kazakh_pdf_url": null,
-      "kazakh_pdf_sha256": null,
+      "kazakh_pdf_url": "https://adilet.zan.kz/files/pdf/608/v26bq039356.20-07-2026.kaz.pdf",
+      "kazakh_pdf_sha256": "c71a35561a92cd5583d4b4a8c929813c4e9235918111c2e7f79b496ed63d5291",
       "document_id": "V26BQ039356",
       "source_url": "https://adilet.zan.kz/rus/docs/V26BQ039356",
       "pdf_url": "https://adilet.zan.kz/files/pdf/384/v26bq039356.20-07-2026.rus.pdf",
@@ -3270,8 +3198,8 @@
         {
           "reader": "kazakh",
           "rate_percent": null,
-          "detail": "UNAVAILABLE: HTTPError: HTTP Error 404: ",
-          "kind": "unavailable"
+          "detail": "no `N пайыздан M пайыз` pair in the Kazakh text",
+          "kind": "no-match"
         }
       ],
       "sentence": null,

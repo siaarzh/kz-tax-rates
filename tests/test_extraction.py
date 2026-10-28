@@ -306,6 +306,18 @@ def test_the_regime_reader_refuses_a_corrupted_regime_name_rather_than_confirmin
     assert "cannot identify" in reading.detail
 
 
+def test_only_a_regime_the_reader_named_is_terminal() -> None:
+    """A retail or two-regime sentence is a finding; an unreadable regime name is a parser limit."""
+    corrupted = RETAIL_ONLY.replace("розничного налога", "на основе упрощҰнной декларации")
+    unidentified = classify(corrupted, kazakh_text=NO_KAZAKH_RATE)
+    assert unidentified["outcome"] == CONFLICT
+    assert unidentified["terminal"] is False
+    for named in (RETAIL_ONLY, BOTH_REGIMES_NAMED):
+        result = classify(named, kazakh_text=NO_KAZAKH_RATE)
+        assert result["outcome"] == CONFLICT
+        assert result["terminal"] is True
+
+
 def _corrupt(replacement: str) -> str:
     return REAL.replace(CLAUSE, replacement)
 
@@ -597,6 +609,47 @@ def test_the_bare_percent_form_confirms_from_two_sources() -> None:
     assert result["outcome"] == CONFIRMED
     assert result["rate"] == 0.03
     assert "с 4% до 3%" in result["sentence"]
+
+
+# Иргизский район, G25CE00267M (sha256 of the Russian PDF
+# 084c3041347298dda3d1291c0485fa38b68cec8b592676d9ac3dadf2aa93b0a1, Kazakh
+# 4575e36d2ada85626eeeec2c123cd2dd210aca3cd1d91d8b00635eec131a3e11). The new rate
+# has no digit at all, `на (два) процента`, so the sentence selector refused it
+# and the document sat in the queue as unparsed.
+SPELLED_ONLY = _fixture("G25CE00267M.txt")
+SPELLED_ONLY_KAZ = _fixture("G25CE00267M.kaz.txt")
+
+
+def test_a_new_rate_spelled_only_confirms_from_the_word_and_the_kazakh_file() -> None:
+    """Never names the rate: the two sources must agree and the word must be in the sentence."""
+    result = classify(SPELLED_ONLY, kazakh_text=SPELLED_ONLY_KAZ)
+    readings = {r["reader"]: r for r in result["readings"]}
+    assert readings["digit"]["rate_percent"] is None
+    assert readings["transition"]["rate_percent"] is None
+    assert readings["transition"]["kind"] == "no-match"
+    assert readings["word"]["rate_percent"] is not None
+    assert readings["word"]["rate_percent"] == readings["kazakh"]["rate_percent"]
+    assert result["outcome"] == CONFIRMED
+    assert round(result["rate"] * 100) == readings["word"]["rate_percent"]
+    assert readings["word"]["detail"] in result["sentence"]
+
+
+def test_a_new_rate_spelled_only_never_confirms_on_the_russian_word_alone() -> None:
+    result = classify(SPELLED_ONLY, kazakh_text=KAZ_WITHOUT_A_RATE)
+    assert result["outcome"] == UNPARSED
+    assert "only one independent reading" in result["reason"]
+    assert "rate" not in result
+
+
+def test_the_origin_check_still_runs_when_the_new_rate_is_spelled_only() -> None:
+    """Reader 3 has no new digit to read, but the old one must still start from the base."""
+    wrong_origin = SPELLED_ONLY.replace("с 4 ( четырех) процентов", "с 5 ( пяти) процентов")
+    assert wrong_origin != SPELLED_ONLY
+    result = classify(wrong_origin, kazakh_text=SPELLED_ONLY_KAZ)
+    readings = {r["reader"]: r for r in result["readings"]}
+    assert result["year"] == 2026
+    assert readings["transition"]["kind"] == "substantive"
+    assert result["outcome"] == CONFLICT
 
 
 # A Kazakh document that is fetched and readable but states no rate pair: the
